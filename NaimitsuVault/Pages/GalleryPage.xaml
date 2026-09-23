@@ -1,0 +1,398 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="NaimitsuVault.Pages.GalleryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:NaimitsuVault.Localization"
+    xmlns:vm="using:NaimitsuVault.ViewModels"
+    AllowDrop="True"
+    DragOver="Page_DragOver"
+    Drop="Page_Drop"
+    NavigationCacheMode="Required">
+
+    <Grid x:Name="RootGrid" Background="Transparent" IsTabStop="True" Tapped="RootGrid_Tapped">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="1" />
+            <ColumnDefinition Width="260" />
+        </Grid.ColumnDefinitions>
+
+        <Grid Grid.Column="0" Padding="12,0,12,12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0" Margin="0,12,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <TextBox
+                    x:Name="SearchBox"
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    PlaceholderText="{loc:Msg Key=Gallery.SearchPlaceholder}"
+                    Text="{x:Bind ViewModel.SearchQuery, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+                <ComboBox
+                    Grid.Column="1"
+                    MinWidth="200"
+                    Margin="4,0,0,0"
+                    VerticalAlignment="Center"
+                    SelectedValue="{x:Bind ViewModel.SelectedTypeFilter, Mode=TwoWay}"
+                    SelectedValuePath="Tag">
+                    <ComboBoxItem Content="{x:Bind ViewModel.FilterLabelAll, Mode=OneTime}" Tag="all" />
+                    <ComboBoxItem Content="{x:Bind ViewModel.FilterLabelImage, Mode=OneTime}" Tag="image" />
+                    <ComboBoxItem Content="{x:Bind ViewModel.FilterLabelPdf, Mode=OneTime}" Tag="pdf" />
+                    <ComboBoxItem Content="{x:Bind ViewModel.FilterLabelCert, Mode=OneTime}" Tag="cert" />
+                    <ComboBoxItem Content="{x:Bind ViewModel.FilterLabelConfig, Mode=OneTime}" Tag="config" />
+                    <ComboBoxItem Content="{x:Bind ViewModel.FilterLabelJsonXml, Mode=OneTime}" Tag="jsonxml" />
+                    <ComboBoxItem Content="{x:Bind ViewModel.FilterLabelMarkdown, Mode=OneTime}" Tag="markdown" />
+                    <ComboBoxItem Content="{x:Bind ViewModel.FilterLabelDatabase, Mode=OneTime}" Tag="database" />
+                    <ComboBoxItem Content="{x:Bind ViewModel.FilterLabelLicense, Mode=OneTime}" Tag="license" />
+                    <ComboBoxItem Content="{x:Bind ViewModel.FilterLabelArchive, Mode=OneTime}" Tag="archive" />
+                </ComboBox>
+
+                <Grid Grid.Column="2" VerticalAlignment="Center">
+                    <!--  Combined expiry alert (expired + expiring soon): red once any certificate is
+                         actually past due, gold while it's only "expiring soon" - same rule as the
+                         Secrets filter (GetExpiryAlertForeground) and the title bar's expiry icon.  -->
+                    <ToggleButton
+                        Margin="4,0,0,0"
+                        Padding="6,4"
+                        Foreground="{x:Bind GetCertExpiryAlertForeground(ViewModel.HasCertExpiredAny), Mode=OneWay}"
+                        IsChecked="{x:Bind ViewModel.FilterExpiryOnly, Mode=TwoWay}"
+                        ToolTipService.ToolTip="{x:Bind ViewModel.CertExpiryWarningText, Mode=OneWay}"
+                        Visibility="{x:Bind ViewModel.HasCertExpiryAlert, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xEC92;" />
+                    </ToggleButton>
+                </Grid>
+
+                <Grid Grid.Column="3" VerticalAlignment="Center">
+                    <!--  Deleted-only filter (trash). Same visual pattern as the expiry toggle above;
+                         only visible when the trash actually has something in it.  -->
+                    <ToggleButton
+                        Margin="4,0,0,0"
+                        Padding="6,4"
+                        Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                        IsChecked="{x:Bind ViewModel.FilterDeletedOnly, Mode=TwoWay}"
+                        ToolTipService.ToolTip="{loc:Msg Key=Gallery.DeletedFilterLabel}"
+                        Visibility="{x:Bind ViewModel.HasAnyDeletedItem, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                        <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE74D;" />
+                    </ToggleButton>
+                </Grid>
+
+                <Button
+                    Grid.Column="4"
+                    Height="32"
+                    Margin="4,0,0,0"
+                    Padding="8,0"
+                    VerticalAlignment="Center"
+                    Command="{x:Bind ViewModel.ClearSearchCommand}"
+                    Visibility="{x:Bind ViewModel.HasSearchQuery, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE894;" />
+                </Button>
+            </Grid>
+
+            <Grid Grid.Row="1">
+                <Grid Visibility="{x:Bind ViewModel.IsEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Image
+                        Width="220"
+                        Height="220"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Opacity="0.2"
+                        Source="ms-appx:///Assets/NaimitsuVault.png"
+                        Stretch="Uniform" />
+                    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="4">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{loc:Msg Key=Common.DropZonePrompt}"
+                            TextAlignment="Center"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontSize="{StaticResource NvCaptionFontSize}"
+                            Opacity="0.6"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="JPG, PNG, PDF, PEM, JSON, XML, LIC, etc."
+                            TextAlignment="Center" />
+                    </StackPanel>
+                </Grid>
+
+                <GridView
+                    x:Name="GalleryGrid"
+                    IsItemClickEnabled="True"
+                    ItemClick="GalleryGrid_ItemClick"
+                    SelectionChanged="GalleryGrid_SelectionChanged"
+                    GotFocus="GalleryGrid_GotFocus"
+                    ItemsSource="{x:Bind ViewModel.FileItems, Mode=OneWay}"
+                    SelectedItem="{x:Bind ViewModel.SelectedFile, Mode=TwoWay}">
+                    <GridView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:FileItem">
+                            <StackPanel
+                                Width="140"
+                                Padding="8"
+                                Spacing="4"
+                                ToolTipService.ToolTip="{x:Bind FileName, Mode=OneWay}">
+                                <Grid Width="120" Height="120">
+                                    <Image
+                                        Source="{x:Bind ThumbnailData, Mode=OneWay, Converter={StaticResource ByteArrayToImageSourceConverter}}"
+                                        Stretch="UniformToFill"
+                                        Visibility="{x:Bind ThumbnailData, Mode=OneWay, Converter={StaticResource NullToVisibilityConverter}}" />
+                                    <FontIcon
+                                        FontSize="64"
+                                        Foreground="{ThemeResource AccentFillColorDefaultBrush}"
+                                        Glyph="{x:Bind FileTypeGlyph, Mode=OneWay}"
+                                        Visibility="{x:Bind ThumbnailData, Mode=OneWay, Converter={StaticResource InverseNullToVisibilityConverter}}" />
+                                    <!--  Expired badge (red)  -->
+                                    <FontIcon
+                                        Margin="0,0,4,4"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        FontSize="{StaticResource NvIconSizeDefault}"
+                                        Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                                        Glyph="&#xEC92;"
+                                        Visibility="{x:Bind IsExpired, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    <!--  Expiring-soon badge (yellow)  -->
+                                    <FontIcon
+                                        Margin="0,0,4,4"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Bottom"
+                                        FontSize="{StaticResource NvIconSizeDefault}"
+                                        Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                                        Glyph="&#xEC92;"
+                                        Visibility="{x:Bind IsExpiringSoon, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                </Grid>
+                                <Grid>
+                                    <!--  Normal (no alert)  -->
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontSize="{StaticResource NvCaptionFontSize}"
+                                        Text="{x:Bind FileName, Mode=OneWay}"
+                                        TextTrimming="CharacterEllipsis"
+                                        Visibility="{x:Bind HasExpiryAlert, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                                    <!--  Expired (red)  -->
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontSize="{StaticResource NvCaptionFontSize}"
+                                        Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                                        Text="{x:Bind FileName, Mode=OneWay}"
+                                        TextTrimming="CharacterEllipsis"
+                                        Visibility="{x:Bind IsExpired, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    <!--  Expiring-soon (yellow)  -->
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontSize="{StaticResource NvCaptionFontSize}"
+                                        Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                                        Text="{x:Bind FileName, Mode=OneWay}"
+                                        TextTrimming="CharacterEllipsis"
+                                        Visibility="{x:Bind IsExpiringSoon, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                </Grid>
+                            </StackPanel>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+            </Grid>
+
+            <StackPanel
+                Grid.Row="2"
+                Margin="0,12,0,0"
+                Orientation="Horizontal"
+                Spacing="8">
+                <!--  Right pane toggle (leftmost, Ctrl+B)  -->
+                <ToggleButton
+                    x:Name="PaneToggleButton"
+                    Click="PaneToggleButton_Click"
+                    ToolTipService.ToolTip="{loc:Msg Key=Common.ToggleRightPane}">
+                    <FontIcon x:Name="PaneToggleGlyph" FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE740;" />
+                </ToggleButton>
+
+                <!--  Divider (separates pane toggle from action buttons)  -->
+                <Border
+                    Width="1"
+                    Margin="4,0"
+                    VerticalAlignment="Stretch"
+                    Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+                <Button
+                    AutomationProperties.Name="{loc:Msg Key=Common.Export}"
+                    Command="{x:Bind ViewModel.SaveSelectedCommand}"
+                    IsEnabled="{x:Bind ViewModel.IsGalleryWriteEnabled, Mode=OneWay}"
+                    Style="{StaticResource AccentButtonStyle}"
+                    ToolTipService.ToolTip="{loc:Msg Key=Common.Export}">
+                    <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE74E;" />
+                </Button>
+                <Button
+                    AutomationProperties.Name="{loc:Msg Key=Common.Delete}"
+                    Command="{x:Bind ViewModel.DeleteSelectedCommand}"
+                    Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                    IsEnabled="{x:Bind ViewModel.IsGalleryWriteEnabled, Mode=OneWay}"
+                    ToolTipService.ToolTip="{loc:Msg Key=Common.Delete}"
+                    Visibility="{x:Bind ViewModel.SelectedFile.IsDeleted, Mode=OneWay, Converter={StaticResource InverseBoolToVisibilityConverter}}">
+                    <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE74D;" />
+                </Button>
+                <Button
+                    AutomationProperties.Name="{loc:Msg Key=Common.UndoDelete}"
+                    Command="{x:Bind ViewModel.RestoreSelectedCommand}"
+                    IsEnabled="{x:Bind ViewModel.IsGalleryWriteEnabled, Mode=OneWay}"
+                    ToolTipService.ToolTip="{loc:Msg Key=Common.UndoDelete}"
+                    Visibility="{x:Bind ViewModel.SelectedFile.IsDeleted, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE7A7;" />
+                </Button>
+                <Button
+                    AutomationProperties.Name="{loc:Msg Key=Common.PurgePermanently}"
+                    Command="{x:Bind ViewModel.PurgeSelectedCommand}"
+                    Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                    IsEnabled="{x:Bind ViewModel.IsGalleryWriteEnabled, Mode=OneWay}"
+                    ToolTipService.ToolTip="{loc:Msg Key=Common.PurgePermanently}"
+                    Visibility="{x:Bind ViewModel.SelectedFile.IsDeleted, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE75C;" />
+                </Button>
+                <TextBlock
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Center"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Text="{x:Bind ViewModel.ItemCount, Mode=OneWay}" />
+                <TextBlock
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="{StaticResource NvCaptionFontSize}"
+                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                    Text="|"
+                    Visibility="{x:Bind ViewModel.HasSelection, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <TextBlock
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="{StaticResource NvCaptionFontSize}"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    MaxWidth="240"
+                    Text="{x:Bind ViewModel.SelectedFileName, Mode=OneWay}"
+                    TextTrimming="CharacterEllipsis"
+                    Visibility="{x:Bind ViewModel.HasSelection, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                <TextBlock
+                    Margin="8,0,0,0"
+                    VerticalAlignment="Center"
+                    FontSize="{StaticResource NvCaptionFontSize}"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Text="{x:Bind ViewModel.SelectedFileSizeDisplay, Mode=OneWay}"
+                    Visibility="{x:Bind ViewModel.HasSelection, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+            </StackPanel>
+        </Grid>
+
+        <Border
+            x:Name="PaneDivider"
+            Grid.Column="1"
+            Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+
+            <Grid Grid.Row="0">
+                <TextBlock Margin="12,8,12,0"
+                           FontSize="{StaticResource NvCaptionFontSize}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                           Text="{loc:Msg Key=Common.SelectToView}"
+                           Visibility="{x:Bind ViewModel.LinkNoSelection, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                           TextWrapping="Wrap" />
+                <TextBlock Margin="12,8,12,0"
+                           FontSize="{StaticResource NvCaptionFontSize}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                           Text="{loc:Msg Key=Common.NoLinks}"
+                           Visibility="{x:Bind ViewModel.LinkSelectedButEmpty, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}"
+                           TextWrapping="Wrap" />
+
+                <!--  Unified link list: Profile row first (when linked), then linked secrets. Each
+                     row is a hyperlink jumping to the Profile screen or the secret in Secrets.  -->
+                <ListView x:Name="LinkedSecretsList"
+                          Tag="{x:Bind ViewModel}"
+                          ItemsSource="{x:Bind ViewModel.LinkItems, Mode=OneWay}"
+                          ContainerContentChanging="LinkedSecretsList_ContainerContentChanging"
+                          Visibility="{x:Bind ViewModel.LinkHasItems, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:GalleryLinkItem">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <HyperlinkButton Grid.Column="1"
+                                                  Padding="0"
+                                                  HorizontalAlignment="Stretch"
+                                                  HorizontalContentAlignment="Left"
+                                                  Command="{Binding Tag.NavigateToLinkItemCommand, ElementName=LinkedSecretsList}"
+                                                  CommandParameter="{Binding}"
+                                                  ToolTipService.ToolTip="{x:Bind DisplayTitle}">
+                                    <TextBlock Text="{x:Bind DisplayTitle}"
+                                               FontSize="{StaticResource NvCaptionFontSize}"
+                                               TextTrimming="CharacterEllipsis" />
+                                </HyperlinkButton>
+                                <!-- Pencil icon: shown only when IsDraftLink=true -->
+                                <FontIcon Grid.Column="2"
+                                          Glyph="&#xE70F;"
+                                          FontSize="{StaticResource NvIconSizeSmall}"
+                                          Margin="4,0,0,0"
+                                          VerticalAlignment="Center"
+                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                          Visibility="{x:Bind IsDraftLink, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                <!-- Favicon (secret) / avatar (Profile row) icon. Declared last so the
+                                     existing Children[0]/[1] indices that LinkedSecretsList_ContainerContentChanging
+                                     relies on for the security-sensitive title clear-on-recycle stay unchanged. -->
+                                <Grid Grid.Column="0"
+                                      Width="16" Height="16"
+                                      Margin="0,0,6,0"
+                                      VerticalAlignment="Center">
+                                    <FontIcon FontSize="{StaticResource NvIconSizeSmall}"
+                                              Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                              Glyph="&#xE8A6;" />
+                                    <!-- Favicon (secret rows): square -->
+                                    <Image Source="{x:Bind IconSource, Mode=OneWay}"
+                                           Visibility="{x:Bind ShowSquareIcon, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                    <!-- Avatar (Profile row): round, matches ViewerWindow's link pane -->
+                                    <Ellipse Width="16" Height="16"
+                                             Visibility="{x:Bind ShowRoundIcon, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{x:Bind IconSource, Mode=OneWay}"
+                                                        Stretch="UniformToFill" />
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </Grid>
+
+            <!--  Date/time (two lines — a single horizontal line overflows the 260px pane and clips
+                 the second date): import icon &#xE898; / document icon &#xE8A5;  -->
+            <StackPanel Grid.Row="1" Margin="8,6,8,8" Spacing="2"
+                        Visibility="{x:Bind ViewModel.HasSelection, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <FontIcon Glyph="&#xE898;" FontSize="{StaticResource NvIconSizeSmall}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
+                    <TextBlock FontSize="{StaticResource NvCaptionFontSize}"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               VerticalAlignment="Center"
+                               Text="{x:Bind ViewModel.SelectedFile.CreatedAtDisplay, Mode=OneWay}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Spacing="4">
+                    <FontIcon Glyph="&#xE8A5;" FontSize="{StaticResource NvIconSizeSmall}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
+                    <TextBlock FontSize="{StaticResource NvCaptionFontSize}"
+                               Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                               VerticalAlignment="Center"
+                               Text="{x:Bind ViewModel.SelectedFile.FileModifiedAtDisplay, Mode=OneWay}" />
+                </StackPanel>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

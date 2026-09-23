@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="NaimitsuVault.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:NaimitsuVault.Localization"
+    NavigationCacheMode="Required">
+
+    <NavigationView
+        x:Name="SettingsNav"
+        IsBackButtonVisible="Collapsed"
+        IsSettingsVisible="False"
+        PaneDisplayMode="Top"
+        SelectionChanged="SettingsNav_SelectionChanged">
+        <NavigationView.MenuItems>
+            <NavigationViewItem
+                x:Name="NavItemAppCommon"
+                Content="{loc:Msg Key=AppSettings.TabTitle}"
+                IsSelected="True"
+                Tag="app">
+                <NavigationViewItem.Icon>
+                    <FontIcon Glyph="&#xE774;" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+            <NavigationViewItem x:Name="NavItemVault" Tag="vault">
+                <NavigationViewItem.Icon>
+                    <FontIcon FontSize="18" Glyph="&#xF540;" />
+                </NavigationViewItem.Icon>
+            </NavigationViewItem>
+        </NavigationView.MenuItems>
+
+        <ScrollViewer Padding="32,24,32,24">
+            <Grid x:Name="ContentHost" />
+        </ScrollViewer>
+    </NavigationView>
+</Page>

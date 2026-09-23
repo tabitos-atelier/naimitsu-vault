@@ -1,0 +1,12 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+  </Configurations>
+  <Project Path="NaimitsuVault.Tests/NaimitsuVault.Tests.csproj" Id="51a2daa7-d2d4-4a4c-9d54-5a418c5cbbb8">
+    <Platform Solution="*|x64" Project="x64" />
+    <Build Solution="Release|x64" Project="false" />
+  </Project>
+  <Project Path="NaimitsuVault/NaimitsuVault.csproj" Id="a1b2c3d4-e5f6-7890-abcd-ef1234567890">
+    <Platform Project="x64" />
+  </Project>
+</Solution>

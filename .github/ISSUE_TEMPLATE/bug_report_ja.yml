@@ -1,0 +1,65 @@
+name: "🐛 バグ報告"
+description: "再現可能な不具合やエラーを報告します（機能追加要望は受け付けていません）"
+title: "[BUG]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## ご確認ください
+        * 本リポジトリは**再現性のある不具合・バグ報告専用**です。
+        * **機能追加要望、他 OS（macOS/スマホ等）への移植要望は一切受け付けておりません。** 必要な機能がある場合は、MIT ライセンスの範囲内で自由にフォークして開発してください。
+        * 脆弱性（セキュリティホール）の報告は、Issue ではなく [Private Vulnerability Reporting](https://github.com/tabitos-atelier/naimitsu-vault/security/advisories/new) をご利用ください。
+
+  - type: input
+    id: version
+    attributes:
+      label: "アプリのバージョン"
+      placeholder: "例: v1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: "Windows のバージョン"
+      placeholder: "例: Windows 11 Pro 23H2 (x64)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: distribution
+    attributes:
+      label: "配布形態"
+      options:
+        - "インストーラー版 (Installer)"
+        - "ZIP ポータブル版 (Portable)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "不具合の内容"
+      placeholder: "発生した問題の内容を簡潔に記述してください。"
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "再現手順"
+      placeholder: |
+        1. 〇〇画面を開く
+        2. △△ボタンを押す
+        3. エラーメッセージが表示される
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "ログやスクリーンショット (任意)"
+      placeholder: "個人情報やマスターパスワードが含まれていないことを確認の上、添付してください。"
+    validations:
+      required: false

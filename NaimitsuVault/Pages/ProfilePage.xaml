@@ -1,0 +1,778 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="NaimitsuVault.Pages.ProfilePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:NaimitsuVault.Views.Controls"
+    xmlns:loc="using:NaimitsuVault.Localization"
+    AllowDrop="True"
+    DragOver="Page_DragOver"
+    Drop="Page_Drop"
+    NavigationCacheMode="Required">
+
+    <Grid HorizontalAlignment="Stretch">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <ScrollViewer
+            x:Name="MainScrollViewer"
+            Grid.Row="0"
+            Padding="100,24,100,0">
+            <StackPanel Margin="0,0,0,24" Spacing="16">
+
+                <StackPanel
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="20">
+                    <PersonPicture
+                        Width="72"
+                        Height="72"
+                        ProfilePicture="{x:Bind ViewModel.AvatarSource, Mode=OneWay}" />
+                    <StackPanel VerticalAlignment="Center" Spacing="8">
+                        <Button Click="PickAvatarButton_Click" ToolTipService.ToolTip="{loc:Msg Key=Profile.ChangeAvatar}">
+                            <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xEB9F;" />
+                        </Button>
+                        <Button
+                            Click="ClearAvatarButton_Click"
+                            Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                            IsEnabled="{x:Bind ViewModel.HasAvatar, Mode=OneWay}"
+                            ToolTipService.ToolTip="{loc:Msg Key=Common.Delete}">
+                            <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE74D;" />
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Spacing="8">
+
+                    <Grid ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="140" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Text="{loc:Msg Key=Profile.Name}" />
+                            <TextBox
+                                Grid.Column="1"
+                                Padding="10,5,40,7"
+                                GotFocus="CopyOverlayTextBox_GotFocus"
+                                LostFocus="CopyOverlayTextBox_LostFocus"
+                                PlaceholderText="{loc:Msg Key=Profile.RealName}"
+                                Text="{x:Bind ViewModel.Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Copy button (overlaid inside the text box, right edge; hidden on focus to avoid overlapping the built-in delete button)  -->
+                            <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="0,0,4,0"
+                                Padding="0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{x:Bind ViewModel.CopyFieldCommand}"
+                                CommandParameter="Name"
+                                IsEnabled="{x:Bind ViewModel.Name, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                Tag="CopyOverlay"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.CopyToClipboard}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8C8;" />
+                            </Button>
+                        </Grid>
+
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Text="{loc:Msg Key=Profile.Nickname}" />
+                            <TextBox
+                                Grid.Column="1"
+                                Padding="10,5,40,7"
+                                GotFocus="CopyOverlayTextBox_GotFocus"
+                                LostFocus="CopyOverlayTextBox_LostFocus"
+                                PlaceholderText="{loc:Msg Key=Profile.ExampleNickname}"
+                                Text="{x:Bind ViewModel.Nickname, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Copy button (overlaid inside the text box, right edge; hidden on focus to avoid overlapping the built-in delete button)  -->
+                            <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="0,0,4,0"
+                                Padding="0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{x:Bind ViewModel.CopyFieldCommand}"
+                                CommandParameter="Nickname"
+                                IsEnabled="{x:Bind ViewModel.Nickname, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                Tag="CopyOverlay"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.CopyToClipboard}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8C8;" />
+                            </Button>
+                        </Grid>
+
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Text="{loc:Msg Key=Common.Email}" />
+                            <TextBox
+                                Grid.Column="1"
+                                Padding="10,5,40,7"
+                                GotFocus="CopyOverlayTextBox_GotFocus"
+                                LostFocus="CopyOverlayTextBox_LostFocus"
+                                PlaceholderText="{loc:Msg Key=Profile.ExampleEmail}"
+                                Text="{x:Bind ViewModel.Email, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Copy button (overlaid inside the text box, right edge; hidden on focus to avoid overlapping the built-in delete button)  -->
+                            <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="0,0,4,0"
+                                Padding="0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{x:Bind ViewModel.CopyFieldCommand}"
+                                CommandParameter="Email"
+                                IsEnabled="{x:Bind ViewModel.Email, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                Tag="CopyOverlay"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.CopyToClipboard}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8C8;" />
+                            </Button>
+                        </Grid>
+
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Text="{loc:Msg Key=Profile.PostalCode}" />
+                            <TextBox
+                                Grid.Column="1"
+                                Padding="10,5,40,7"
+                                GotFocus="CopyOverlayTextBox_GotFocus"
+                                LostFocus="CopyOverlayTextBox_LostFocus"
+                                PlaceholderText="{loc:Msg Key=Profile.ExamplePostalCode}"
+                                Text="{x:Bind ViewModel.PostalCode, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Copy button (overlaid inside the text box, right edge; hidden on focus to avoid overlapping the built-in delete button)  -->
+                            <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="0,0,4,0"
+                                Padding="0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{x:Bind ViewModel.CopyFieldCommand}"
+                                CommandParameter="PostalCode"
+                                IsEnabled="{x:Bind ViewModel.PostalCode, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                Tag="CopyOverlay"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.CopyToClipboard}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8C8;" />
+                            </Button>
+                        </Grid>
+
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Text="{loc:Msg Key=Profile.AddressLine1}" />
+                            <TextBox
+                                Grid.Column="1"
+                                Padding="10,5,40,7"
+                                GotFocus="CopyOverlayTextBox_GotFocus"
+                                LostFocus="CopyOverlayTextBox_LostFocus"
+                                PlaceholderText="{loc:Msg Key=Profile.ExampleAddress1}"
+                                Text="{x:Bind ViewModel.Address1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Copy button (overlaid inside the text box, right edge; hidden on focus to avoid overlapping the built-in delete button)  -->
+                            <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="0,0,4,0"
+                                Padding="0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{x:Bind ViewModel.CopyFieldCommand}"
+                                CommandParameter="Address1"
+                                IsEnabled="{x:Bind ViewModel.Address1, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                Tag="CopyOverlay"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.CopyToClipboard}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8C8;" />
+                            </Button>
+                        </Grid>
+
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Text="{loc:Msg Key=Profile.AddressLine2}" />
+                            <TextBox
+                                Grid.Column="1"
+                                Padding="10,5,40,7"
+                                GotFocus="CopyOverlayTextBox_GotFocus"
+                                LostFocus="CopyOverlayTextBox_LostFocus"
+                                PlaceholderText="{loc:Msg Key=Profile.ExampleAddress2}"
+                                Text="{x:Bind ViewModel.Address2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Copy button (overlaid inside the text box, right edge; hidden on focus to avoid overlapping the built-in delete button)  -->
+                            <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="0,0,4,0"
+                                Padding="0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{x:Bind ViewModel.CopyFieldCommand}"
+                                CommandParameter="Address2"
+                                IsEnabled="{x:Bind ViewModel.Address2, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                Tag="CopyOverlay"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.CopyToClipboard}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8C8;" />
+                            </Button>
+                        </Grid>
+
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Text="{loc:Msg Key=Profile.MobilePhone}" />
+                            <TextBox
+                                Grid.Column="1"
+                                Padding="10,5,40,7"
+                                GotFocus="CopyOverlayTextBox_GotFocus"
+                                LostFocus="CopyOverlayTextBox_LostFocus"
+                                PlaceholderText="{loc:Msg Key=Profile.ExampleMobile}"
+                                Text="{x:Bind ViewModel.MobilePhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Copy button (overlaid inside the text box, right edge; hidden on focus to avoid overlapping the built-in delete button)  -->
+                            <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="0,0,4,0"
+                                Padding="0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{x:Bind ViewModel.CopyFieldCommand}"
+                                CommandParameter="MobilePhone"
+                                IsEnabled="{x:Bind ViewModel.MobilePhone, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                Tag="CopyOverlay"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.CopyToClipboard}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8C8;" />
+                            </Button>
+                        </Grid>
+
+                        <Grid ColumnSpacing="8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock
+                                Grid.Column="0"
+                                VerticalAlignment="Center"
+                                Text="{loc:Msg Key=Profile.HomePhone}" />
+                            <TextBox
+                                Grid.Column="1"
+                                Padding="10,5,40,7"
+                                GotFocus="CopyOverlayTextBox_GotFocus"
+                                LostFocus="CopyOverlayTextBox_LostFocus"
+                                PlaceholderText="{loc:Msg Key=Profile.ExampleHomePhone}"
+                                Text="{x:Bind ViewModel.HomePhone, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Copy button (overlaid inside the text box, right edge; hidden on focus to avoid overlapping the built-in delete button)  -->
+                            <Button
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="0,0,4,0"
+                                Padding="0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{x:Bind ViewModel.CopyFieldCommand}"
+                                CommandParameter="HomePhone"
+                                IsEnabled="{x:Bind ViewModel.HomePhone, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                Tag="CopyOverlay"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.CopyToClipboard}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8C8;" />
+                            </Button>
+                        </Grid>
+
+                        <!--
+                            Identity items 1-3 (defaults: National ID / Driver's License / Passport Number).
+                            Freely relabeled per vault, since which of these a given vault needs to track
+                            (and under what name) varies by person and by personal-vs-work vault.
+                            Label column uses the same tap-to-edit pattern as SecretsPage's LabelUserId/etc.
+                            (see the "⛔ Do not restyle the label column" note there) plus an expiry alert icon.
+                        -->
+                        <Grid ColumnSpacing="8">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="32" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="32" />
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Row="0" Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <!--  Margin (not Grid.ColumnSpacing) provides the icon-to-label gap, since ColumnSpacing
+                                      would reserve it unconditionally even while the icon is Collapsed (no active alert),
+                                      pushing the label out of alignment with the plain fields above it.  -->
+                                <FontIcon
+                                    Grid.Column="0"
+                                    Margin="0,0,4,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="{StaticResource NvIconSizeDefault}"
+                                    Foreground="{x:Bind GetAlertForeground(ViewModel.HasId1Alert, ViewModel.IsId1Expired), Mode=OneWay}"
+                                    Glyph="&#xEC92;"
+                                    Visibility="{x:Bind AlertVisibility(ViewModel.HasId1Alert), Mode=OneWay}" />
+                                <!--  Fixed-width label cell (fills the rest of Col.0) instead of auto-sizing to the label text, so the click/hover target stays consistent regardless of label length - matches SecretsPage's LabelUserId column  -->
+                                <Grid
+                                    Grid.Column="1"
+                                    IsHitTestVisible="{x:Bind ViewModel.IdentityItem1, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                    Opacity="{x:Bind ViewModel.IdentityItem1, Mode=OneWay, Converter={StaticResource EmptyToDisabledOpacityConverter}}"
+                                    PointerEntered="LabelGrid_PointerEntered"
+                                    PointerExited="LabelGrid_PointerExited">
+                                    <Border
+                                        Background="Transparent"
+                                        CornerRadius="4"
+                                        IsHitTestVisible="False" />
+                                    <TextBlock
+                                        Padding="4,4,4,4"
+                                        VerticalAlignment="Center"
+                                        Foreground="{x:Bind GetAlertForeground(ViewModel.HasId1Alert, ViewModel.IsId1Expired), Mode=OneWay}"
+                                        MaxLines="1"
+                                        Tapped="LabelDisplay_Tapped"
+                                        Text="{x:Bind ViewModel.LabelIdentityItem1, Mode=OneWay}"
+                                        TextTrimming="CharacterEllipsis"
+                                        ToolTipService.ToolTip="{x:Bind ViewModel.LabelIdentityItem1, Mode=OneWay}" />
+                                    <TextBox
+                                        MinHeight="0"
+                                        Padding="4,8,4,4"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        LostFocus="LabelEditor_LostFocus"
+                                        Tag="{loc:Msg Key=Profile.IdentityItem1}"
+                                        Text="{x:Bind ViewModel.LabelIdentityItem1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="Collapsed" />
+                                </Grid>
+                            </Grid>
+                            <TextBox
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Padding="10,5,40,7"
+                                GotFocus="CopyOverlayTextBox_GotFocus"
+                                LostFocus="CopyOverlayTextBox_LostFocus"
+                                PlaceholderText="{loc:Msg Key=Profile.ExampleIdentityItem1}"
+                                Text="{x:Bind ViewModel.IdentityItem1, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Copy button (overlaid inside the text box, right edge; hidden on focus to avoid overlapping the built-in delete button)  -->
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="0,0,4,0"
+                                Padding="0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{x:Bind ViewModel.CopyFieldCommand}"
+                                CommandParameter="IdentityItem1"
+                                IsEnabled="{x:Bind ViewModel.IdentityItem1, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                Tag="CopyOverlay"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.CopyToClipboard}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8C8;" />
+                            </Button>
+                            <!--  Enlarge-preview toggle (same position/size as SecretsPage's UserId enlarge toggle)  -->
+                            <ToggleButton
+                                x:Name="Id1EnlargeToggle"
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Width="32"
+                                Height="32"
+                                Padding="0"
+                                VerticalAlignment="Center"
+                                Click="Id1EnlargeToggle_Click"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.EnlargeDisplay}">
+                                <FontIcon
+                                    FontSize="{StaticResource NvIconSizeDefault}"
+                                    Glyph="{x:Bind Id1EnlargeToggle.IsChecked, Mode=OneWay, Converter={StaticResource BoolToZoomGlyphConverter}}" />
+                            </ToggleButton>
+                            <CalendarDatePicker
+                                x:Name="Id1ExpiryPicker"
+                                Grid.Row="0"
+                                Grid.Column="3"
+                                HorizontalAlignment="Stretch"
+                                Date="{x:Bind ViewModel.Id1Expiry, Mode=TwoWay}"
+                                DateChanged="IdExpiryPicker_DateChanged"
+                                IsEnabled="{x:Bind ViewModel.IsId1ExpiryEnabled, Mode=OneWay}"
+                                PlaceholderText="{loc:Msg Key=Common.SelectDate}"
+                                ToolTipService.ToolTip="{x:Bind ViewModel.Id1ExpiryTooltip}" />
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="4"
+                                Width="32"
+                                Height="32"
+                                Padding="0"
+                                VerticalAlignment="Center"
+                                Command="{x:Bind ViewModel.ClearId1ExpiryCommand}"
+                                IsEnabled="{x:Bind ViewModel.HasId1Expiry, Mode=OneWay}"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.ClearExpiry}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE75C;" />
+                            </Button>
+                            <!--  Row=1: Large preview (spans Col.1-4)  -->
+                            <controls:UserIdLargePreviewControl
+                                x:Name="Id1LargePreview"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="4" />
+                        </Grid>
+
+                        <Grid ColumnSpacing="8">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="32" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="32" />
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Row="0" Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <!--  Margin (not Grid.ColumnSpacing) provides the icon-to-label gap, since ColumnSpacing
+                                      would reserve it unconditionally even while the icon is Collapsed (no active alert),
+                                      pushing the label out of alignment with the plain fields above it.  -->
+                                <FontIcon
+                                    Grid.Column="0"
+                                    Margin="0,0,4,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="{StaticResource NvIconSizeDefault}"
+                                    Foreground="{x:Bind GetAlertForeground(ViewModel.HasId2Alert, ViewModel.IsId2Expired), Mode=OneWay}"
+                                    Glyph="&#xEC92;"
+                                    Visibility="{x:Bind AlertVisibility(ViewModel.HasId2Alert), Mode=OneWay}" />
+                                <Grid
+                                    Grid.Column="1"
+                                    IsHitTestVisible="{x:Bind ViewModel.IdentityItem2, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                    Opacity="{x:Bind ViewModel.IdentityItem2, Mode=OneWay, Converter={StaticResource EmptyToDisabledOpacityConverter}}"
+                                    PointerEntered="LabelGrid_PointerEntered"
+                                    PointerExited="LabelGrid_PointerExited">
+                                    <Border
+                                        Background="Transparent"
+                                        CornerRadius="4"
+                                        IsHitTestVisible="False" />
+                                    <TextBlock
+                                        Padding="4,4,4,4"
+                                        VerticalAlignment="Center"
+                                        Foreground="{x:Bind GetAlertForeground(ViewModel.HasId2Alert, ViewModel.IsId2Expired), Mode=OneWay}"
+                                        MaxLines="1"
+                                        Tapped="LabelDisplay_Tapped"
+                                        Text="{x:Bind ViewModel.LabelIdentityItem2, Mode=OneWay}"
+                                        TextTrimming="CharacterEllipsis"
+                                        ToolTipService.ToolTip="{x:Bind ViewModel.LabelIdentityItem2, Mode=OneWay}" />
+                                    <TextBox
+                                        MinHeight="0"
+                                        Padding="4,8,4,4"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        LostFocus="LabelEditor_LostFocus"
+                                        Tag="{loc:Msg Key=Profile.IdentityItem2}"
+                                        Text="{x:Bind ViewModel.LabelIdentityItem2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="Collapsed" />
+                                </Grid>
+                            </Grid>
+                            <TextBox
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Padding="10,5,40,7"
+                                GotFocus="CopyOverlayTextBox_GotFocus"
+                                LostFocus="CopyOverlayTextBox_LostFocus"
+                                PlaceholderText="{loc:Msg Key=Profile.ExampleIdentityItem2}"
+                                Text="{x:Bind ViewModel.IdentityItem2, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Copy button (overlaid inside the text box, right edge; hidden on focus to avoid overlapping the built-in delete button)  -->
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="0,0,4,0"
+                                Padding="0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{x:Bind ViewModel.CopyFieldCommand}"
+                                CommandParameter="IdentityItem2"
+                                IsEnabled="{x:Bind ViewModel.IdentityItem2, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                Tag="CopyOverlay"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.CopyToClipboard}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8C8;" />
+                            </Button>
+                            <!--  Enlarge-preview toggle (same position/size as SecretsPage's UserId enlarge toggle)  -->
+                            <ToggleButton
+                                x:Name="Id2EnlargeToggle"
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Width="32"
+                                Height="32"
+                                Padding="0"
+                                VerticalAlignment="Center"
+                                Click="Id2EnlargeToggle_Click"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.EnlargeDisplay}">
+                                <FontIcon
+                                    FontSize="{StaticResource NvIconSizeDefault}"
+                                    Glyph="{x:Bind Id2EnlargeToggle.IsChecked, Mode=OneWay, Converter={StaticResource BoolToZoomGlyphConverter}}" />
+                            </ToggleButton>
+                            <CalendarDatePicker
+                                x:Name="Id2ExpiryPicker"
+                                Grid.Row="0"
+                                Grid.Column="3"
+                                HorizontalAlignment="Stretch"
+                                Date="{x:Bind ViewModel.Id2Expiry, Mode=TwoWay}"
+                                DateChanged="IdExpiryPicker_DateChanged"
+                                IsEnabled="{x:Bind ViewModel.IsId2ExpiryEnabled, Mode=OneWay}"
+                                PlaceholderText="{loc:Msg Key=Common.SelectDate}"
+                                ToolTipService.ToolTip="{x:Bind ViewModel.Id2ExpiryTooltip}" />
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="4"
+                                Width="32"
+                                Height="32"
+                                Padding="0"
+                                VerticalAlignment="Center"
+                                Command="{x:Bind ViewModel.ClearId2ExpiryCommand}"
+                                IsEnabled="{x:Bind ViewModel.HasId2Expiry, Mode=OneWay}"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.ClearExpiry}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE75C;" />
+                            </Button>
+                            <!--  Row=1: Large preview (spans Col.1-4)  -->
+                            <controls:UserIdLargePreviewControl
+                                x:Name="Id2LargePreview"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="4" />
+                        </Grid>
+
+                        <Grid ColumnSpacing="8">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="140" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="32" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="32" />
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Row="0" Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <!--  Margin (not Grid.ColumnSpacing) provides the icon-to-label gap, since ColumnSpacing
+                                      would reserve it unconditionally even while the icon is Collapsed (no active alert),
+                                      pushing the label out of alignment with the plain fields above it.  -->
+                                <FontIcon
+                                    Grid.Column="0"
+                                    Margin="0,0,4,0"
+                                    VerticalAlignment="Center"
+                                    FontSize="{StaticResource NvIconSizeDefault}"
+                                    Foreground="{x:Bind GetAlertForeground(ViewModel.HasId3Alert, ViewModel.IsId3Expired), Mode=OneWay}"
+                                    Glyph="&#xEC92;"
+                                    Visibility="{x:Bind AlertVisibility(ViewModel.HasId3Alert), Mode=OneWay}" />
+                                <Grid
+                                    Grid.Column="1"
+                                    IsHitTestVisible="{x:Bind ViewModel.IdentityItem3, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                    Opacity="{x:Bind ViewModel.IdentityItem3, Mode=OneWay, Converter={StaticResource EmptyToDisabledOpacityConverter}}"
+                                    PointerEntered="LabelGrid_PointerEntered"
+                                    PointerExited="LabelGrid_PointerExited">
+                                    <Border
+                                        Background="Transparent"
+                                        CornerRadius="4"
+                                        IsHitTestVisible="False" />
+                                    <TextBlock
+                                        Padding="4,4,4,4"
+                                        VerticalAlignment="Center"
+                                        Foreground="{x:Bind GetAlertForeground(ViewModel.HasId3Alert, ViewModel.IsId3Expired), Mode=OneWay}"
+                                        MaxLines="1"
+                                        Tapped="LabelDisplay_Tapped"
+                                        Text="{x:Bind ViewModel.LabelIdentityItem3, Mode=OneWay}"
+                                        TextTrimming="CharacterEllipsis"
+                                        ToolTipService.ToolTip="{x:Bind ViewModel.LabelIdentityItem3, Mode=OneWay}" />
+                                    <TextBox
+                                        MinHeight="0"
+                                        Padding="4,8,4,4"
+                                        Background="Transparent"
+                                        BorderThickness="0"
+                                        LostFocus="LabelEditor_LostFocus"
+                                        Tag="{loc:Msg Key=Profile.IdentityItem3}"
+                                        Text="{x:Bind ViewModel.LabelIdentityItem3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                                        Visibility="Collapsed" />
+                                </Grid>
+                            </Grid>
+                            <TextBox
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Padding="10,5,40,7"
+                                GotFocus="CopyOverlayTextBox_GotFocus"
+                                LostFocus="CopyOverlayTextBox_LostFocus"
+                                PlaceholderText="{loc:Msg Key=Profile.ExampleIdentityItem3}"
+                                Text="{x:Bind ViewModel.IdentityItem3, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                            <!--  Copy button (overlaid inside the text box, right edge; hidden on focus to avoid overlapping the built-in delete button)  -->
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Width="28"
+                                Height="28"
+                                Margin="0,0,4,0"
+                                Padding="0"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center"
+                                Background="Transparent"
+                                BorderThickness="0"
+                                Command="{x:Bind ViewModel.CopyFieldCommand}"
+                                CommandParameter="IdentityItem3"
+                                IsEnabled="{x:Bind ViewModel.IdentityItem3, Mode=OneWay, Converter={StaticResource NotNullOrEmptyToBoolConverter}}"
+                                Tag="CopyOverlay"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.CopyToClipboard}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8C8;" />
+                            </Button>
+                            <!--  Enlarge-preview toggle (same position/size as SecretsPage's UserId enlarge toggle)  -->
+                            <ToggleButton
+                                x:Name="Id3EnlargeToggle"
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Width="32"
+                                Height="32"
+                                Padding="0"
+                                VerticalAlignment="Center"
+                                Click="Id3EnlargeToggle_Click"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.EnlargeDisplay}">
+                                <FontIcon
+                                    FontSize="{StaticResource NvIconSizeDefault}"
+                                    Glyph="{x:Bind Id3EnlargeToggle.IsChecked, Mode=OneWay, Converter={StaticResource BoolToZoomGlyphConverter}}" />
+                            </ToggleButton>
+                            <CalendarDatePicker
+                                x:Name="Id3ExpiryPicker"
+                                Grid.Row="0"
+                                Grid.Column="3"
+                                HorizontalAlignment="Stretch"
+                                Date="{x:Bind ViewModel.Id3Expiry, Mode=TwoWay}"
+                                DateChanged="IdExpiryPicker_DateChanged"
+                                IsEnabled="{x:Bind ViewModel.IsId3ExpiryEnabled, Mode=OneWay}"
+                                PlaceholderText="{loc:Msg Key=Common.SelectDate}"
+                                ToolTipService.ToolTip="{x:Bind ViewModel.Id3ExpiryTooltip}" />
+                            <Button
+                                Grid.Row="0"
+                                Grid.Column="4"
+                                Width="32"
+                                Height="32"
+                                Padding="0"
+                                VerticalAlignment="Center"
+                                Command="{x:Bind ViewModel.ClearId3ExpiryCommand}"
+                                IsEnabled="{x:Bind ViewModel.HasId3Expiry, Mode=OneWay}"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.ClearExpiry}">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE75C;" />
+                            </Button>
+                            <!--  Row=1: Large preview (spans Col.1-4)  -->
+                            <controls:UserIdLargePreviewControl
+                                x:Name="Id3LargePreview"
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Grid.ColumnSpan="4" />
+                        </Grid>
+
+                    </StackPanel>
+
+                <controls:RecordExtrasControl
+                    x:Name="RecordExtras"
+                    AddCustomFieldCommand="{x:Bind ViewModel.AddCustomFieldCommand}"
+                    AttachedFiles="{x:Bind ViewModel.ProfileFiles, Mode=OneWay}"
+                    CopyCustomFieldCommand="{x:Bind ViewModel.CopyCustomFieldCommand}"
+                    CreatedAtText="{x:Bind ViewModel.CreatedAtText, Mode=OneWay}"
+                    CustomFields="{x:Bind ViewModel.CustomFields, Mode=OneWay}"
+                    FilesMaxHeight="280"
+                    Notes="{x:Bind ViewModel.Notes, Mode=TwoWay}"
+                    OpenCustomFieldUrlCommand="{x:Bind ViewModel.OpenCustomFieldUrlCommand}"
+                    RemoveCustomFieldCommand="{x:Bind ViewModel.RemoveCustomFieldCommand}"
+                    RemoveFileCommand="{x:Bind ViewModel.RemoveFileCommand}"
+                    UpdatedAtText="{x:Bind ViewModel.UpdatedAtText, Mode=OneWay}" />
+
+            </StackPanel>
+        </ScrollViewer>
+
+        <StackPanel
+            Grid.Row="1"
+            Padding="100,12"
+            Orientation="Horizontal"
+            Spacing="8">
+            <!--  Compare button: shown only when HasDraft=true  -->
+            <Button
+                x:Name="CompareButton"
+                Click="CompareButton_Click"
+                ToolTipService.ToolTip="{loc:Msg Key=Profile.CompareDraft}"
+                Visibility="{x:Bind ViewModel.HasDraft, Mode=OneWay, Converter={StaticResource BoolToVisibilityConverter}}">
+                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE70F;" />
+            </Button>
+            <!--  Commit save button (always shown, blue)  -->
+            <Button
+                AutomationProperties.Name="{loc:Msg Key=Common.Save}"
+                Command="{x:Bind ViewModel.SaveCommand}"
+                Style="{StaticResource AccentButtonStyle}"
+                ToolTipService.ToolTip="{loc:Msg Key=Common.Save}">
+                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE74E;" />
+            </Button>
+        </StackPanel>
+
+    </Grid>
+</Page>

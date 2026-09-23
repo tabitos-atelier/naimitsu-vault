@@ -1,0 +1,150 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <Version>1.0.0</Version>
+    <Authors>Tabito's Works</Authors>
+    <Company>Tabito's Works</Company>
+    <Copyright>Copyright (c) 2026 Tabito's Works</Copyright>
+  </PropertyGroup>
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net10.0-windows10.0.26100.0</TargetFramework>
+    <TargetPlatformMinVersion>10.0.17763.0</TargetPlatformMinVersion>
+    <RootNamespace>NaimitsuVault</RootNamespace>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <Platforms>x64</Platforms>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
+    <!-- Debug builds are not self-contained so the test project can reference this via ProjectReference -->
+    <SelfContained Condition="'$(Configuration)' != 'Debug'">true</SelfContained>
+    <WindowsPackageType>None</WindowsPackageType>
+    <!-- Required when SelfContained=true; also passed through to the test ProjectReference -->
+    <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
+    <UseWinUI>true</UseWinUI>
+    <WinUISDKReferences>false</WinUISDKReferences>
+    <EnableMsixTooling>false</EnableMsixTooling>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <ApplicationIcon>Assets\NaimitsuVault.ico</ApplicationIcon>
+    <!-- CS0612/CS0618: WindowEx.SystemBackdrop/Icon [Obsolete] leak into XamlTypeInfo.g.cs; not used in handwritten code -->
+    <NoWarn>$(NoWarn);CS0612;CS0618</NoWarn>
+  </PropertyGroup>
+
+  <!-- Disable the XAML-generated Main; the entry point is defined in our own Program.cs -->
+  <PropertyGroup>
+    <DefineConstants>$(DefineConstants);DISABLE_XAML_GENERATED_MAIN</DefineConstants>
+  </PropertyGroup>
+
+  <!-- Publish settings (effective only during dotnet publish, not dotnet build) -->
+  <PropertyGroup>
+    <PublishReadyToRun Condition="'$(Configuration)' == 'Debug'">False</PublishReadyToRun>
+    <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
+    <!--
+      PublishTrimmed is permanently disabled.
+      EF Core uses Activator.CreateInstance() inside CurrentValueComparerFactory.Create() to build
+      value comparers at model-validation time. The trimmer removes these constructors (e.g.
+      EntryCurrentValueComparer<int>) because the call site is opaque to static analysis, causing
+      MissingMethodException on first DbContext use. Microsoft explicitly does not support full
+      trimming for EF Core. Enabling trimming would require compiled EF Core models
+      (dotnet ef dbcontext optimize) plus ongoing regeneration on every schema change.
+    -->
+    <PublishTrimmed>False</PublishTrimmed>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Runtime assets: copied to build output -->
+    <Content Include="Assets\NaimitsuVault.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Assets\NaimitsuVault.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Manifest Include="$(ApplicationManifest)" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.2" />
+    <PackageReference Include="Konscious.Security.Cryptography.Argon2" Version="1.3.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="10.0.12" />
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="3.0.5" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.12" />
+    <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2705" />
+    <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.5.1" />
+    <PackageReference Include="NLog" Version="6.2.1" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="6.2.1" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="10.0.12" />
+    <PackageReference Include="WinUIEx" Version="2.9.3" />
+    <PackageReference Include="zxcvbn-core" Version="7.0.92" />
+    <PackageReference Include="ZXing.Net" Version="0.16.11" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Localization\Resources\locale-*.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="nlog.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>NaimitsuVault.Tests</_Parameter1>
+    </AssemblyAttribute>
+  </ItemGroup>
+
+  <!--
+    WinUI 3 unpackaged self-contained publish workaround.
+    dotnet publish omits two categories of files from the publish output:
+      1. XBF files (compiled XAML binaries): Application.LoadComponent("ms-appx:///...") throws
+         XamlParseException when the XBF is missing.
+      2. The app-specific PRI file (NaimitsuVault.pri): without it, MRT Core cannot initialize its
+         resource resolution base at startup, causing {ThemeResource} lookups such as
+         TextFillColorTertiaryBrush (loaded via XamlControlsResources) to fail.
+  -->
+  <Target Name="IncludeXbfFilesInPublish" BeforeTargets="ComputeFilesToPublish">
+    <ItemGroup>
+      <!--
+        App.xbf must be excluded. The WinUI 3 runtime processes App.xaml internally;
+        placing App.xbf as an external file conflicts with Windows App SDK initialization
+        and causes a pre-log startup crash.
+      -->
+      <_XbfToPublish Include="$(OutDir)**\*.xbf" Exclude="$(OutDir)App.xbf" />
+      <ResolvedFileToPublish Include="@(_XbfToPublish)">
+        <RelativePath>%(RecursiveDir)%(Filename)%(Extension)</RelativePath>
+      </ResolvedFileToPublish>
+
+      <!-- Include the app-specific PRI file so MRT Core can resolve theme and XAML resources. -->
+      <_PriToPublish Include="$(OutDir)$(AssemblyName).pri" Condition="Exists('$(OutDir)$(AssemblyName).pri')" />
+      <ResolvedFileToPublish Include="@(_PriToPublish)">
+        <RelativePath>%(Filename)%(Extension)</RelativePath>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+  <!--
+    License notices in the publish output.
+    The MIT License requires the copyright and permission notice to accompany copies of the software, and the
+    self-contained publish bundles third-party binaries (EF Core, SQLitePCLRaw, NLog, ZXing.Net, ...) that carry
+    their own notices. Adding the files to ResolvedFileToPublish (same mechanism as IncludeXbfFilesInPublish
+    above) puts them in the publish folder for every publish, so the installer and the portable ZIP built from
+    that folder both contain them. A missing file fails the publish instead of shipping without notices.
+    The files live in the repository root, one level above this project.
+  -->
+  <Target Name="IncludeLicenseFilesInPublish" BeforeTargets="ComputeFilesToPublish">
+    <ItemGroup>
+      <_LicenseToPublish Include="$(MSBuildProjectDirectory)\..\LICENSE" />
+      <_LicenseToPublish Include="$(MSBuildProjectDirectory)\..\THIRD-PARTY-NOTICES.md" />
+      <_LicenseToPublish Include="$(MSBuildProjectDirectory)\..\THIRD-PARTY-NOTICES-ja.md" />
+      <ResolvedFileToPublish Include="@(_LicenseToPublish)">
+        <RelativePath>%(Filename)%(Extension)</RelativePath>
+      </ResolvedFileToPublish>
+    </ItemGroup>
+  </Target>
+
+</Project>

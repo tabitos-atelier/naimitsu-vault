@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentDialog
+    x:Class="NaimitsuVault.Views.DirectInjectionDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:NaimitsuVault.Localization">
+
+    <StackPanel x:Name="RootPanel" Spacing="12">
+
+        <Border
+            Padding="12,10"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+            BorderThickness="1"
+            CornerRadius="4">
+            <StackPanel Spacing="6">
+                <TextBlock
+                    FontSize="{StaticResource NvCaptionFontSize}"
+                    Text="{loc:Msg Key=DirectInjection.Step1FocusTarget}"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    FontSize="{StaticResource NvCaptionFontSize}"
+                    Text="{loc:Msg Key=DirectInjection.Step2InjectUsername}"
+                    TextWrapping="Wrap" />
+                <TextBlock
+                    FontSize="{StaticResource NvCaptionFontSize}"
+                    Text="{loc:Msg Key=DirectInjection.Step3InjectPassword}"
+                    TextWrapping="Wrap" />
+            </StackPanel>
+        </Border>
+
+        <Button
+            x:Name="InjectUsernameButton"
+            HorizontalAlignment="Stretch"
+            Click="InjectUsernameButton_Click">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8F0;" />
+                <TextBlock Text="{loc:Msg Key=DirectInjection.InjectUsername}" />
+            </StackPanel>
+        </Button>
+
+        <Button
+            x:Name="InjectPasswordButton"
+            HorizontalAlignment="Stretch"
+            Click="InjectPasswordButton_Click">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8F0;" />
+                <TextBlock Text="{loc:Msg Key=DirectInjection.InjectPassword}" />
+            </StackPanel>
+        </Button>
+
+        <TextBlock
+            x:Name="StatusTextBlock"
+            FontSize="{StaticResource NvCaptionFontSize}"
+            TextWrapping="Wrap" />
+
+        <Button
+            x:Name="OkButton"
+            HorizontalAlignment="Stretch"
+            Click="OkButton_Click"
+            Style="{StaticResource AccentButtonStyle}">
+            <TextBlock Text="{loc:Msg Key=Common.Ok}" />
+        </Button>
+
+    </StackPanel>
+
+</ContentDialog>

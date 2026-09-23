@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: "🔒 Report a Vulnerability"
+    url: "https://github.com/tabitos-atelier/naimitsu-vault/security/advisories/new"
+    about: "Do not report security vulnerabilities as a public Issue. See SECURITY.md for the private reporting process."
+  - name: "📜 Author's Profile — Tabito's Voyage"
+    url: "https://tabitos-voyage.com/about"
+    about: "About the author and the story behind this project."
+  - name: "⬇️ Releases"
+    url: "https://github.com/tabitos-atelier/naimitsu-vault/releases"
+    about: "Download the latest Installer / ZIP (portable) build."

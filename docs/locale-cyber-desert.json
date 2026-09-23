@@ -1,0 +1,645 @@
+{
+  "locale": "en",
+  "displayName": "Cyber Desert",
+  "localeVersion": 1,
+  "messages": {
+    "Common": {
+      "#01-01: Common Actions": {
+        "Ok": "Acknowledged",
+        "Cancel": "Discard",
+        "Verify": "Attune Identity",
+        "AuthWithWindowsHello": "Dispel with Crest of Soul",
+        "AuthWithWindowsHelloPrompt": "Unseals the barrier protecting your scrolls.",
+        "WarningAutoLockNotice": "Upon completion, the oasis shall seal automatically.",
+        "Close": "Close",
+        "Save": "Engrave into Memory",
+        "Discard": "Return to Sand",
+        "Restart": "Reawaken Soul",
+        "Add": "Weave",
+        "Delete": "Oblivion",
+        "Import": "Import into Treasury",
+        "Export": "Export from Treasury",
+        "IdentityVerification": "Proof of Soul",
+        "Backup": "Memory Trace",
+        "Unlock": "Break Seal"
+      },
+      "#01-02: Status Display": {
+        "On": "On",
+        "Off": "Off",
+        "All": "All",
+        "Current": "Present",
+        "Warning": "Omen of Sandstorm",
+        "Error": "Logic Corruption",
+        "Expired": "Magic Expired",
+        "Loading": "Reciting Incantation...",
+        "PleaseWait": "Await shifting sands...",
+        "SafeWritingLock": "Inscribing the scroll safely. The oasis will seal automatically to maintain the barrier.",
+        "MemoryClearedLock": "Thoughts in memory cleared and sealed to ward off thieves."
+      },
+      "#01-03: Password Strength": {
+        "StrengthVeryWeak": "Fragile Sand Wall",
+        "StrengthWeak": "Cracked Stone Wall",
+        "StrengthFair": "Sturdy Sandstone Wall",
+        "StrengthStrong": "Steel Bulwark",
+        "StrengthVeryStrong": "Impregnable Citadel Wall"
+      },
+      "#01-04: Input Field Names": {
+        "Title": "Title",
+        "Username": "Nomad's Name",
+        "Password": "Secret Incantation",
+        "Email": "Messenger Dove Address",
+        "Website": "Oasis Coordinates",
+        "TotpSecret": "Dual Barrier",
+        "Notes": "Journey Notes",
+        "ExpiresAt": "Lifetime of Magic"
+      },
+      "#01-05: Additional Field Forms": {
+        "CustomField": "Unknown Offering",
+        "NewText": "New Inscription",
+        "NewPassword": "New Incantation",
+        "NewWebsite": "New Coordinates",
+        "NewDate": "New Epoch"
+      },
+      "#01-06: Input Guidance and Search": {
+        "EnterText": "Inscribe text",
+        "EnterPassword": "Recite incantation",
+        "EnterWebsite": "Note coordinates",
+        "SelectDate": "Mark epoch",
+        "FreeInput": "Free inscription permitted",
+        "EnterMasterPassword": "Recite the Great Binding Spell",
+        "PasswordLengthHint": "8+ runes required",
+        "SearchSecret": "Searching scrolls...",
+        "DropZonePrompt": "Drag and drop exhibits here to add",
+        "DropTooltip": "Up to {0} exhibits per drop / {1}MB max per exhibit"
+      },
+      "#01-07: Extra Actions and Tooltips": {
+        "AddTextField": "Add Inscription Field",
+        "AddPasswordField": "Add Incantation Field",
+        "AddWebsiteField": "Add Coordinates Field",
+        "AddDateField": "Add Epoch Field",
+        "ClearExpiry": "Remove Magic Expiry",
+        "ExpiryAlarmNotice": "Winds of the desert will whisper {0} days before magic expires.",
+        "OpenInBrowser": "Peer into Crystal Orb",
+        "DeleteConfirm": "Confirm Oblivion",
+        "AttachedFiles": "Attached Exhibits",
+        "AttachedFileQuarantined": "A curse was sensed (possible tampering or damage). This exhibit's likeness cannot be shown.",
+        "CommonOperations": "Universal Rituals",
+        "DropToAttach": "Drop here to attach exhibit",
+        "DropZone": "Drop memory trace (.nkdb) here",
+        "FileFilter": "{0} Format (*.{1})",
+        "AllFiles": "All Exhibits",
+        "FileTypeCertKey": "Passes / Keys",
+        "FileTypeXmlJson": "Ancient Blueprints",
+        "FileTypeImage": "Illusions"
+      },
+      "#01-08: File Links": {
+        "NoLinks": "Unbound to any scrolls",
+        "SelectToView": "Select an exhibit to view bound fates",
+        "AddLink": "Bind fate",
+        "RemoveLink": "Sever fate",
+        "ToggleFilter": "Toggle view of bound fates"
+      },
+      "#01-09: Completion and Success Notices": {
+        "SuccessSaveComplete": "Engraved",
+        "SuccessExportedToPath": "Exported to \"{0}\".",
+        "ImportSuccess": "Imported into treasury successfully",
+        "QrReadSuccess": "Deciphered the ancient emblem.",
+        "InfoDeleteComplete": "Returned to oblivion",
+        "InfoUnifiedDbAutoRecovered": "The Well of Wisdom was automatically restored by magic. Some recent memories may be lost.",
+        "InfoVaultDbAutoRecovered": "Treasury {0} was automatically restored. Recent edits may be lost.",
+        "InfoOversizeFilesSkipped": "{0} exhibit(s) were too heavy (limit {1}MB) and sank into the sand.",
+        "InfoFilesQuarantined": "A curse was sensed on {0} exhibit(s) (possible tampering or damage). They have been withheld from the Museum.",
+        "InfoFilesAddFailed": "{0} exhibit(s) resisted sealing and were left behind.",
+        "InfoFilesLoadFailed": "{0} exhibit(s) failed to surface."
+      },
+      "#01-10: Expiry Alerts": {
+        "ExpiresInDays": "Magic expires in {0} day(s)"
+      },
+      "#01-11: Input Errors": {
+        "GeneralError": "A sandstorm has arisen",
+        "ErrorAuthFailed": "Dispel Failed",
+        "ErrorHelloAuthFailed": "Crest of Soul rejected you",
+        "ErrorHelloProfileMismatch": "This Crest of Soul cannot bind to this vessel, in this land",
+        "ErrorIncorrectPassword": "Incantation mismatched. Check the Great Binding Spell used for this memory trace.",
+        "ErrorPasswordMismatch": "Echoes of incantation do not match.",
+        "ErrorPasswordTooShort": "Incantation too brief. Weave at least 8 runes.",
+        "ErrorPinMismatch": "Secret cipher mismatch.",
+        "WarningInvalidBase32Secret": "Barrier core is malformed. Inscribe at least 8 runes using letters A-Z and digits 2-7."
+      },
+      "#01-12: System Errors": {
+        "WarningUnifiedDbIntegrityIssue": "Structural corruption detected in the Well of Wisdom",
+        "WarningVersionMismatch": "Mismatch in World Logic",
+        "ErrorBrowserOpenFailed": "Could not peer into Crystal Orb: {0}",
+        "ErrorCaptureFailed": "Failed to capture illusion.",
+        "ErrorDecryptionFailed": "Failed to break seal on encrypted exhibit.",
+        "ErrorFileDataNotFound": "The exhibit's substance was not found in the physical realm.",
+        "ErrorPartialLoadTitle": "Some scrolls could not be retrieved",
+        "ErrorPartialLoadText": "{0} of {1} scroll(s) failed to appear in the lineage - they have eroded beyond recovery.",
+        "ErrorLockBlockedRunningTask": "Cannot seal treasury while a ritual is in progress.",
+        "ErrorWriteAccessDenied": "Permission denied in that land. Choose another domain.",
+        "ErrorInvalidEncoding": "The lettering is not valid UTF-8. When inscribing with an editor, choose \"UTF-8\"."
+      },
+      "#01-13: Common Shortcuts and Misc": {
+        "BrowseFolder": "Search for the Memory Trace domain",
+        "ClearFolder": "Clear the Memory Trace domain",
+        "CopyToClipboard": "Copy fragment to memory buffer",
+        "DeleteField": "Destroy this field",
+        "FocusSearchBar": "Follow scent of ink",
+        "KeyboardShortcuts": "Incantation Shortcuts",
+        "PurgePermanently": "Reduce to Void",
+        "ToggleLeftPane": "Toggle left field of view",
+        "ToggleRightPane": "Toggle right field of view",
+        "ToggleMask": "Toggle Veil of Illusion",
+        "ToggleVisibility": "Reveal / Conceal",
+        "EnlargeDisplay": "Greater Manifestation",
+        "UndoDelete": "Resist Oblivion",
+        "ToggleDeletedFilter": "Toggle view of abyss",
+        "ToggleDraftFilter": "Toggle view of unfinished scrolls",
+        "ToggleExpirationFilter": "Toggle view of magic expiry",
+        "ToggleFavoriteFilter": "Toggle view of favored items",
+        "ToggleFavoriteItem": "Mark / unmark favored"
+      }
+    },
+    "Unlock": {
+      "#02: Unlock": {
+        "SetupStart": "Prepare Gear and Set Forth",
+        "WindowsHello": "Dispel with Crest of Soul",
+        "Main": "Break Seal",
+        "SelectVault": "Select Treasury to open",
+        "ConfirmPassword": "Great Binding Spell (Confirm)",
+        "PasswordForgetWarning": "If you forget this spell, the treasury shall remain sealed forever.",
+        "ErrorUnifiedDbCorrupted": "Corruption in the Well of Wisdom detected. Use the tool icon below to begin purification.",
+        "ErrorVaultDbCorrupted": "Treasury {0} is cursed. No shadow copy was found to save it. Use the tool icon below to begin purification.",
+        "WarningDbRecreatedBackup": "The Well of Wisdom was dry; a new spring was formed.\nOriginal spring preserved as memory trace:\n{0}"
+      },
+      "#02-01: Unlock (Windows Hello unavailable dialog)": {
+        "Dialog": {
+          "HelloProfileMismatchTitle": "Severing the Crest of Soul (All Treasuries)",
+          "HelloProfileMismatchBody": "This Crest of Soul was bound to another vessel and cannot be channeled in this land.\nSever this resonance for all treasuries?\n\nPlease break the seal with the Great Binding Spell.\n(Note: You can re-bind the Crest of Soul in Laws of the World after entering.)",
+          "HelloProfileMismatchDisableButton": "Sever All"
+        }
+      }
+    },
+    "Shell": {
+      "#03: Main Menu": {
+        "Navi": {
+          "Secrets": "Scrolls",
+          "TimeMachine": "Corridor of Time",
+          "Gallery": "Museum",
+          "Profile": "Nomad's Profile",
+          "AuditLog": "Footprints of Exploration",
+          "Settings": "Laws of the World",
+          "About": "About this Oasis"
+        },
+        "LockNow": "Seal Immediately",
+        "SelectPagePrompt": "Choose a path from the left signpost",
+        "ExpiryAlertBadge": "Some scrolls have lost or are losing their magic",
+        "TrayExit": "Depart the Oasis"
+      }
+    },
+    "Secrets": {
+      "#04: Secrets": {
+        "Add": "Inscribe Scroll",
+        "GeneratePassword": "Forge Incantation",
+        "SymbolSet": "Rune Ornamentation",
+        "Dialog": {
+          "CopyCommitted": "Copy engraved value",
+          "ReviewDraft": "Review or discard unfinished scroll",
+          "DisableTotpConfirm": "Dispelling the Dual Barrier will erase the sealed passphrase. Dispel it?",
+          "DisableTotpButton": "Dispel"
+        },
+        "CategorySelection": "Shelf of Knowledge",
+        "SearchPlaceholder": "Search scrolls by title, ID, coordinates, dove address...",
+        "SelectOrCreatePrompt": "Select a scroll from the lineage on the left, or inscribe a new one",
+        "UntitledSecret": "Nameless Scroll",
+        "WarningTitleRequired": "Epithet is a required offering.",
+        "ExampleEmail": "e.g. tabito@example.com",
+        "ExampleTitle": "e.g. Mana Exchange",
+        "ExampleUrl": "e.g. https://oasis.example.com",
+        "ExampleUsername": "e.g. tabito_nomad",
+        "NoExpiry": "Eternal Magic",
+        "CopyTotpCodeTooltip": "Copy Passphrase",
+        "DisableTotpTooltip": "Dispel the Dual Barrier",
+        "GoToTimeMachineTooltip": "Peer into past of this scroll",
+        "HasDraftBadgeTooltip": "Unfinished scroll exists",
+        "ToggleTotpTooltip": "Construct / Dispel Dual Barrier"
+      }
+    },
+    "Totp": {
+      "#05: Two-Factor Authentication": {
+        "ScreenCapture": "Capture Illusion",
+        "BackupCodeOptional": "Egress Spell (optional)",
+        "CaptureGuideText": "Click button, then drag to enclose the ancient emblem. Press Esc to cancel.",
+        "DirectInputOption": "Or enter the core of the barrier directly",
+        "DiscardButton": "Discard",
+        "DropBackupCodeInstructions": "Drop copies of the egress spell here",
+        "ReadQrOption": "Decipher the Ancient Emblem",
+        "SecretKeyBase32": "Barrier Core",
+        "TimeDriftCodes": "T-{2}s: {0}   T+{2}s: {1}",
+        "TimeSyncNotice": "If passphrases are rejected, adjust the magic box's clock",
+        "WarningQrRecognitionFailed": "Ancient emblem unrecognized. Expand selection area or enter manually.",
+        "ExampleSecret": "JBSWY3DPEHPK3PXP"
+      }
+    },
+    "DirectInjection": {
+      "#06: Direct Injection": {
+        "InjectPassword": "Recite Incantation",
+        "InjectUsername": "Recite Nomad's Name",
+        "Title": "Auto-Recitation Magic",
+        "Step1FocusTarget": "1. Focus consciousness into target soul's name field",
+        "Step2InjectUsername": "2. Click \"Recite Nomad's Name\" for auto-recitation (no memory fragment used)",
+        "Step3InjectPassword": "3. Move to incantation field and click \"Recite Incantation\"",
+        "ErrorHwndMismatchInterrupted": "Safe stop — another window intervened; process aborted to prevent magic backlash",
+        "ErrorTargetWindowNotFound": "Target window lost — reawaken the soul and try again",
+        "ErrorSendInputWin32Failed": "Auto-recitation circuits silent. Check if target soul is active. (Code: {0})",
+        "InfoMonitoringForeground": "Recitation standing by — watching the foremost window",
+        "SuccessPasswordInjected": "Incantation recited successfully",
+        "SuccessUsernameInjected": "Nomad's Name recited successfully"
+      }
+    },
+    "TimeMachine": {
+      "#07: Time Machine": {
+        "Dialog": {
+          "GenerationSwap": "Swap Eras",
+          "BeforeSwap": "Before Swap",
+          "AfterSwap": "After Swap",
+          "DeletedItemNotice": "This scroll rests in the abyss. It will return to the void on {0}. Use \"Resist Oblivion\" to reawaken.",
+          "PurgeConfirmText": "Reduce \"{0}\" to Void.\nThis erases all history inscribed in the Corridor of Time and cannot be undone.\n\nAre you certain?"
+        },
+        "SearchPlaceholder": "Search scrolls by title or update epoch...",
+        "SelectSecretPrompt": "Select a scroll from the lineage on the left to view its history",
+        "GoToSecretsPageTooltip": "Return to current era for this scroll",
+        "UndoToGen1Tooltip": "Revert 1 era back",
+        "UndoToGen2Tooltip": "Revert 2 eras back",
+        "SuccessRestoreComplete": "Timeline Restored",
+        "SuccessItemRestored": "Reawakened \"{0}\".",
+        "DraftBlocksRestoreNotice": "Cannot alter timeline while an unfinished scroll exists"
+      }
+    },
+    "Gallery": {
+      "#08: Gallery": {
+        "Dialog": {
+          "SoftDeleteConfirmText": "Cast this exhibit into the abyss. It can be pulled back for 30 days, but its bonds with scrolls and the profile will be severed.",
+          "PurgeFileConfirmText": "Return this exhibit to the void. This ritual cannot be undone."
+        },
+        "DeletedFilterLabel": "Forgotten",
+        "DeletedItemPurgeNotice": "Will return to the void from the abyss on {0}",
+        "SearchPlaceholder": "Search exhibits by name or epoch...",
+        "FilterImages": "Illusions {0}",
+        "FilterPdf": "Ancient Tomes {0}",
+        "FilterCerts": "Passes & Keys {0}",
+        "FilterJsonXml": "Ancient Blueprints {0}",
+        "FilterConfigs": "Magical Laws {0}",
+        "FilterMarkdown": "Manuscripts {0}",
+        "FilterLicense": "Stone Tablets {0}",
+        "FilterArchive": "Compressed Chests {0}",
+        "FilterSql": "Well Spells {0}",
+        "InfoAlreadyRegistered": "All selected exhibits are already enshrined. (Skipped: {0})",
+        "InfoUnsupportedSkipped": "{0} exhibit(s) skipped — unknown structure.",
+        "InfoAutoUndeletedDuplicate": "Found a matching exhibit in the abyss and pulled it back",
+        "SuccessImportedCount": "Enshrined {0} exhibit(s) into the Museum. (Duplicates skipped: {1})",
+        "SuccessFileUndeleted": "Exhibit pulled back from the abyss",
+        "WarningCertExpiredCount": "{0} pass(es) lost magic",
+        "WarningCertExpiringSoonCount": "{0} pass(es) losing magic within {1} day(s)",
+        "WarningCertMixedExpiryAlert": "{0} pass(es) lost magic, {1} losing magic within {2} day(s)"
+      }
+    },
+    "Viewer": {
+      "#09: File Viewer": {
+        "Main": "Identification Eye",
+        "CertSectionHeader": "Pass Engravings",
+        "CertIssuer": "Granting Authority",
+        "CertSubject": "Entitled Subject",
+        "CertKeyUsage": "Key Role",
+        "CertThumbprint": "Soul Thumbprint (SHA1)",
+        "CertValidFrom": "Awakening of Magic",
+        "CertValidTo": "Expiry of Magic",
+        "JsonSectionHeader": "Blueprint Truth",
+        "OauthType": "Attribute",
+        "OauthProjectId": "Project Identifier",
+        "OauthClientId": "Client Identifier",
+        "OauthClientEmail": "Client Messenger Dove",
+        "TextSectionHeader": "Inscription Decipherment",
+        "ArchiveSectionHeader": "Caravan Cargo Manifest",
+        "ArchiveEntryCount": "{0} pieces of cargo",
+        "ArchiveEntryCountTruncated": "Showing {0} of {1} pieces of cargo (too many to unload them all)",
+        "ArchiveEmpty": "An empty satchel. No cargo is loaded.",
+        "PreviewUnsupported": "Preview repelled by this exhibit. Export it from the treasury to examine directly.",
+        "PreviewFailed": "Preview failed. Exhibit holds too much magic. Export to examine.",
+        "PreviewQuarantined": "A curse was sensed (possible tampering or damage); this exhibit cannot be scried. If you don't recognize it, consider casting it out.",
+        "ErrorCertExpired": "Magic expired {0} days ago",
+        "WarningCertExpiringSoon": "Magic expires in {0} days"
+      }
+    },
+    "Profile": {
+      "#10: Profile": {
+        "Avatar": "Illusion",
+        "ChangeAvatar": "Change Illusion",
+        "CompareDraft": "Compare with Unfinished Scroll",
+        "Dialog": {
+          "AvatarCrop": "Adjust Illusion Focus",
+          "ZoomIn": "Step Closer",
+          "ZoomOut": "Step Back"
+        },
+          "Name": "True Name",
+          "Nickname": "Desert Moniker",
+          "HomePhone": "Oasis Speaking Tube",
+          "MobilePhone": "Mobile Comm Beacon",
+          "PostalCode": "Oasis Azimuth",
+          "AddressLine1": "Oasis Sector / District",
+          "AddressLine2": "Obelisk / Haven Suite",
+          "IdentityItem1": "Imperial Identifier",
+          "IdentityItem2": "Sandship Pilot License",
+          "IdentityItem3": "Border Transit Passport",
+          "RealName": "True Name",
+          "ExampleNickname": "e.g., Tabito the Traveler",
+          "ExampleEmail": "e.g., tabito@tabitos-works.com",
+          "ExampleHomePhone": "e.g., +CYB-01-7788-0001",
+          "ExampleMobile": "e.g., +CYB-090-8899-7701",
+          "ExamplePostalCode": "e.g., AZ-77001",
+          "ExampleAddress1": "e.g., Digital Desert Oasis, Sector 1",
+          "ExampleAddress2": "e.g., Cyberian Obelisk Tower, Suite 777",
+          "ExampleIdentityItem1": "e.g., CYBERIA-ID-77001",
+          "ExampleIdentityItem2": "e.g., TV123456789",
+          "ExampleIdentityItem3": "e.g., TP123456789"
+      }
+    },
+    "Categories": {
+      "#11: Category presets (freely addable/editable by the user; shown in ascending code order)": {
+        "01": "Communion Spells",
+        "10": "Magical Circuits",
+        "20": "Stone Tablets",
+        "30": "Expedition Ledger",
+        "40": "Training Tome",
+        "50": "Treasures & Mana",
+        "60": "Nomad Proofs",
+        "70": "Ancient Covenants",
+        "80": "Caravan Tokens",
+        "90": "Sealed Volumes",
+        "99": "Unbound Scrolls",
+        "Uncategorized": "Uncategorized Sand Mound"
+      }
+    },
+    "Dashboard": {
+      "#12: Dashboard": {
+        "Main": "Compass",
+        "Overview": "Oasis Overview",
+        "SecretCount": "Scrolls",
+        "FileCount": "Exhibits",
+        "VaultCount": "Treasuries",
+        "DbFileSize": "Weight of Treasury",
+        "SecurityScan": "Barrier Rift Scan",
+        "RunScan": "Begin Scan Ritual",
+        "NotScannedYet": "Ritual Pending",
+        "WeakPasswords": "Fragile Incantations",
+        "ReusedPasswords": "Duplicate Incantations",
+        "NoIssuesFound": "No barrier rifts detected"
+      }
+    },
+    "AuditLog": {
+      "#13-01: List and Filters": {
+        "Code": "Rune Identifier",
+        "Severity": "Trace Weight",
+        "SeverityNormal": "Tranquil",
+        "SeverityNotice": "Heed",
+        "SeverityImportant": "Grand Ritual",
+        "FilterCategoryAuth": "Dispel / Seal",
+        "FilterCategoryWrite": "Inscription",
+        "FilterCategoryRead": "Divination",
+        "FilterCategoryConfig": "Laws",
+        "FilterCategoryPrivilege": "High Magic",
+        "FilterCategoryPurge": "Oblivion",
+        "FilterCategorySystem": "World Logic",
+        "NoMatchingActivityPlaceholder": "No matching footprints in the sand",
+        "SearchPlaceholder": "Search footprints or rune identifiers..."
+      },
+      "#13-02: Event Summary Templates": {
+        "AddFileLink": "Bound exhibit \"{0}\"",
+        "AuthenticationFailed": "Dispel failed",
+        "AuthenticationSuccess": "Dispel succeeded",
+        "AutoPurgeExpiredFile": "Weathered away {0} expired exhibit(s) by magic expiry",
+        "AutoPurgeExpiredSecret": "Weathered away by magic expiry",
+        "ChangeAutoBackupConfig": "Rewrote laws of automatic memory trace",
+        "ChangeAutoLockConfig": "Rewrote laws of automatic sealing",
+        "ChangeCaptureProtectionConfig": "Altered illusion protection barrier",
+        "ChangeFaviconFetchConfig": "Rewrote emblem auto-collection laws",
+        "ChangeMasterPassword": "Reforged Great Binding Spell",
+        "ChangeWindowsHelloConfig": "Rewrote Crest of Soul laws",
+        "DeleteTimeMachineSlot": "Returned past memory to sand",
+        "DeletedItemPlaceholder": "(lost to oblivion)",
+        "ExecuteAutoBackup": "A memory trace formed on its own",
+        "ExecuteEmergencyAccessRecovery": "Breached treasury via emergency beacon",
+        "ExecuteLogRotation": "Swept away old footprints in the wind",
+        "ExecuteManualBackup": "Created manual memory trace",
+        "ExecuteManualRestore": "Overwrote world from past memories",
+        "ExecuteSilentSelfHealing": "Automatic magical restoration executed",
+        "SelfHealNoOpDraft": "Discarded {0} unfinished scroll(s) identical to the record",
+        "SelfHealUnifiedDb": "The Well of Wisdom was auto-restored from its shadow copy",
+        "SelfHealVaultDb": "Treasury {0} was auto-restored from its shadow copy",
+        "RepairFileContentType": "Corrected the curse-mark on exhibit \"{0}\" automatically ({1} → {2})",
+        "CsvFormulaGuardApplied": "Sealed a curse-spell hidden in the record carrying \"{0}\" out of the treasury",
+        "ExportFileFromGallery": "Exported exhibit \"{0}\" from treasury",
+        "ExportItemFailed": "Failed to export \"{0}\" from the treasury",
+        "ExportPlainText": "Unsealed and exported, defenseless ({0} items)",
+        "GenerateEmergencyCode": "Assembled emergency beacon kit",
+        "ImportItemFailed": "Caravan cargo #{0} could not be deciphered ({1} format)",
+        "ImportPlainText": "Imported defenseless records into treasury ({0} items)",
+        "LocaleImportFailed": "Failed to import the outlander's scripture",
+        "LocaleImportKeyMissing": "Word-spirit \"{0}\" was not found - patched with the default incantation",
+        "LocaleImportPlaceholderBroken": "Word-spirit \"{0}\" was missing its carved rune - turned away, the original incantation kept",
+        "LocaleImportSucceeded": "Imported the outlander's scripture \"{0}\" ({1} word-spirits patched with the default incantation)",
+        "LocaleImportValueTooLong": "Word-spirit \"{0}\" was too long - turned away, the original incantation kept",
+        "MoveFileToTrash": "Cast exhibit \"{0}\" into the abyss",
+        "MoveSecretToTrash": "Cast \"{0}\" into abyss",
+        "NoActivityPlaceholder": "No footprints in sand",
+        "ProfileFieldCopiedToClipboard": "Traced \"{0}\" from Nomad's Profile",
+        "PurgeFilePermanently": "Reduced exhibit \"{0}\" to void",
+        "PurgeSecretPermanently": "Reduced {0} to void",
+        "ReadProfile": "Divined Nomad's Profile",
+        "ReadSecret": "Divined {0}",
+        "ReadSecretAttachment": "Divined an exhibit attached to {0}",
+        "ReadSecretHistory": "Divined history of {0}",
+        "RecentActivityHeader": "Recent Footprints in the Sand",
+        "RestoreTimeMachineGeneration": "Anchored past memory into present",
+        "RevokeEmergencyCode": "Deactivated emergency beacon",
+        "RotateTimeMachineGeneration": "Turned Wheel of Time",
+        "SaveProfile": "Inscribed Nomad's Profile",
+        "SaveSecret": "Engraved scroll \"{0}\" into memory",
+        "SecretAutoTypeExecuted": "Recited \"{0}\" of {1} through the veil into an outlander's window",
+        "SecretFieldCopiedToClipboard": "Traced \"{0}\" of {1}",
+        "SixMonthsHistoryNotice": "Footprints from past 6 months recorded",
+        "TimeMachineValueCopiedToClipboard": "Traced \"{0}\" ({1}) from {2}'s Corridor of Time",
+        "UndoDeleteFile": "Pulled exhibit \"{0}\" back from the abyss",
+        "UndoDeleteSecret": "Pulled {0} back from abyss",
+        "VaultCreated": "Raised a new treasury"
+      }
+    },
+    "AppSettings": {
+      "#14-01: Page-level": {
+        "TabTitle": "Oasis Laws"
+      },
+      "#14-02: Theme": {
+        "ThemeMode": "Sky Tone",
+        "ThemeLight": "High Noon Desert",
+        "ThemeDark": "Starry Night Desert",
+        "ThemeSystem": "Obey World Logic"
+      },
+      "#14-03: Font": {
+        "FontFamily": "Inscription Font",
+        "FontFamilyDesc": "Changes font of inscribed runes. Text size depends on Magic Box settings.",
+        "FontFamilySystemDefault": "World Standard"
+      },
+      "#14-04: Security": {
+        "ScreenCaptureProtection": "Illusion Protection Barrier",
+        "CaptureProtectionAffinity": "Repels illusion-capture and recording spells from external scrying tools.",
+        "HideOnMinimize": "Conceal presence when meditating",
+        "MinimizeBehavior": "When meditating, vanish from the surface realm and slumber in the abyss. Click its sigil to reawaken."
+      },
+      "#14-06: Language": {
+        "Language": "Tongue of Communion",
+        "LangCustom": "Custom Realm Tongue",
+        "JsonFilterName": "Tongue Scripture (*.json)",
+        "CustomLangInstructions": "Export language scripture, rewrite it, and import to overwrite world logic.",
+        "ExportCustomLanguage": "Export Tongue Scripture",
+        "ImportCustomLanguage": "Import Tongue Scripture",
+        "RestartRequiredHint": "Takes effect after reawakening soul.",
+        "Dialog": {
+          "RestartRequiredAlert": "Language changes settle after reawakening the oasis.",
+          "ImportLanguageSuccess": "Tongue Scripture imported successfully",
+          "ImportPatchedCountReport": "{0} missing runes patched and imported. Takes effect after reawakening.",
+          "VersionMismatchPatchNotice": "Scripture logic version differs ({0}). Missing runes patched automatically."
+        }
+      },
+      "#14-07: Network": {
+        "Network": "Desert Wind",
+        "AutoFaviconFetch": "Auto-collect oasis emblems",
+        "FaviconPrivacyWarning": "Sends domain names on desert winds, which may reveal which oases you visit."
+      }
+    },
+    "VaultSettings": {
+      "#14-04: Security": {
+        "SecurityGroup": "Laws of Barrier",
+        "AutoLockTimeout": "Auto-seal when idle",
+        "MinutesCountFormat": "{0} hourglasses (min)",
+        "AddNewVault": "Construct New Treasury",
+        "AuthRequiredToCreate": "Recite current Great Binding Spell to construct a treasury",
+        "VaultManagement": "Treasury Management"
+      },
+      "#14-05: Backup": {
+        "BackupRestoreSection": "Memory Trace",
+        "RestoreRequiresMasterPasswordNotice": "Reviving memory on another magic box requires the Great Binding Spell (the Crest of Soul resonates only within this box).",
+        "BackupDatabaseAction": "Entrusts encrypted Well of Wisdom to a chosen land.",
+        "AutoBackupOnExit": "Auto-trace memory on departure",
+        "AutoBackupInstructions": "Automatically leaves a memory trace in designated land upon departing oasis.",
+        "BackupTargetFolder": "Domain for Memory Trace",
+        "SuccessBackupSavedToPath": "Memory trace entrusted to {0}.",
+        "WarningAutoBackupContext": "Auto-Trace Ritual",
+        "WarningLastExitBackupFailedAlert": "Auto-trace failed on last departure. Check designated land in Laws.",
+        "WarningNoFolderAutoBackupDisabled": "Auto-trace deactivated because no domain was set.",
+        "WarningBackupBlockedReadOnlyAlert": "Memory trace is forbidden while unsealed via the emergency beacon.",
+        "Dialog": {
+          "ClearBackupPathConfirmText": "Clear designated memory domain setting?\nAre you sure?"
+        }
+      },
+      "#15-01: Page-level": {
+        "TabTitleFormat": "Treasury {0} Laws"
+      },
+      "#15-02: Security (Windows Hello)": {
+        "WindowsHelloUnlock": "Crest of Soul Seal Break (Valid on this magic box only)",
+        "BiometricEnrollment": "Unseals treasury using life proof or secret cipher."
+      },
+      "#15-03: Security (Change Master Password)": {
+        "CurrentMasterPassword": "Current Great Binding Spell",
+        "NewMasterPassword": "New Great Binding Spell",
+        "ConfirmMasterPassword": "Confirm New Great Binding Spell",
+        "Dialog": {
+          "ChangeMasterPassword": "Reforge Great Binding Spell",
+          "ForceResetViaHelloInstructions": "Force-reforges the Great Binding Spell using Crest of Soul if forgotten.",
+          "HelloForceReset": "Force-reforge with Crest of Soul",
+          "ForceResetViaHelloPrompt": "Verifies authority to forge a new Great Binding Spell.",
+          "CannotReuseCurrentMasterPassword": "New Great Binding Spell must differ from the current Great Binding Spell.",
+          "MasterPasswordChangedSuccessfully": "Great Binding Spell reforged successfully.",
+          "PasswordResetViaHelloSuccessfully": "Spell reset via Crest of Soul succeeded.",
+          "EmergencyCodeRemainsValid": "Emergency beacon code remains active."
+        }
+      },
+      "#15-04: Security (Emergency Access Code)": {
+        "Dialog": {
+          "EmergencyAccessSetup": "Emergency Beacon",
+          "EmergencyAccessConcept": "Keep the ancient emblem physically protected and hidden away alongside its cipher, so that in times of dire need the treasury can be unsealed for scrying only.",
+          "EmergencyCodeStatusIssued": "Deployed",
+          "FourDigitsPin": "4-digit cipher",
+          "ConfirmPin": "Confirm Cipher",
+          "EncryptQrWithPin": "Encrypts emblem with 4-digit cipher and saves as illusion (PNG).",
+          "GenerateOrReissueCode": "Assemble / Reassemble",
+          "RevokeEmergencyCode": "Extinguishes emergency beacon. Deleted emblem can no longer unseal treasury.",
+          "DeleteEmergencyCodeConfirmText": "Current emblem becomes mere drawing after deletion.\nAre you sure?",
+          "ReissueEmergencyCodeConfirm": "Confirm Reassembling Emergency Beacon",
+          "ReissueEmergencyCodeConfirmText": "Reassembling invalidates current emblem.\n(Note: If you cancel saving new emblem, current remains active.)\nAre you sure?",
+          "QrCodeSavedToPath": "Saved to {0}. Keep it in a secure sanctuary.",
+          "OldQrRevokedNotice": "Old emblem can no longer unseal treasury."
+        }
+      },
+      "#15-05: Data Migration": {
+        "DataMigrationGroup": "Migration of Memories",
+        "PlainTextExportAction": "Exports all scrolls as unsealed, defenseless records (CSV/JSON).",
+        "PlainTextImportAction": "Imports scrolls from external records (CSV/JSON). Duplicates suffixed with \"(Import into Treasury)\".",
+        "IncludeTotpInExport": "Include Dual Barrier cores in export",
+        "ExportTotpRiskWarning": "Includes Dual Barrier cores in export. Mind the ruinous risk of leakage to thieves.",
+        "Dialog": {
+          "ExportPlaintextWarning": "Defenseless Export Warning",
+          "PlaintextExportDangerAlert": "All scrolls will be released as unshielded records (CSV/JSON).",
+          "ExportPartialSuccessTitle": "Some scrolls fell from the rite",
+          "ExportPartialSuccessText": "{0} of {1} scrolls could not break their wards and fell from the rite. The rest were exported safely beyond the treasury.",
+          "ImportPlaintextConfirm": "Defenseless Import Confirmation",
+          "PlaintextImportConfirmText": "Import scrolls from unsealed records (CSV/JSON)."
+        },
+        "SuccessImportedCountReport": "Imported {0} scroll(s) into the treasury.",
+        "SuccessImportDetailsReport": " (Renamed for duplicates: {0}, Moved to uncategorized: {1})",
+        "SuccessImportFailedCountReport": " ({0} cargo item(s) could not be deciphered - see the trail of footprints for details)",
+        "ErrorImportExceptionReport": "Import failed: {0}"
+      },
+      "#15-06: Common (Confirmation Dialogs)": {
+        "Dialog": {
+          "AuthRequiredToProceed": "Recite Great Binding Spell to prove your soul."
+        }
+      }
+    },
+    "Restore": {
+      "#16: Restore (Rev.22 removed selective restore; only full overwrite restore remains)": {
+        "Dialog": {
+          "StartRestore": "Time Restoration Ritual",
+          "UnifiedDbIntegrityIssueAlert": "Distortion detected in the Well of Wisdom. Export immediately and secure a memory trace.",
+          "VaultDbIntegrityIssueAlert": "Distortion detected in the Treasury. Export immediately and secure a memory trace."
+        },
+        "SelectBackupFile": "Select Past Memory",
+        "MainPage": "World Restoration",
+        "Description": "Restores the entire world from a past memory. The present will be replaced with the world as it was when that memory was inscribed.",
+        "ExecuteButton": "Execute Time Restoration",
+        "AuthDialogTitle": "Attunement of the Past Memory",
+        "AuthDialogMessage": "Recite the Great Binding Spell inscribed upon any one treasury when this memory was created.",
+        "AuthPasswordPlaceholder": "Binding Spell",
+        "AuthButton": "Attune",
+        "OverwriteWarningTitle": "Overwrite the world with this memory?",
+        "OverwriteWarningMessage": "All treasuries of the present world will be overwritten and replaced with the past memory (inscribed {0}).\n\nFor safety, the present world's shape is automatically recorded to a sanctuary of retreat.\n\nThe soul resonance will be severed. Open with the Great Binding Spell after the time restoration, then rebind it.",
+        "OverwriteConfirmButton": "Overwrite and Restore Time",
+        "NoFilesFoundAlert": "No fragments of memory were found to reawaken. Examine the contents of the past memory.",
+        "ErrorInvalidBackupFileAborted": "Past memory \"{0}\" is tainted, its shape lost. The time restoration ritual was aborted. The present world remains untouched.",
+        "ErrorActiveDbSelected": "Currently active Well of Wisdom cannot be chosen as a memory to revive."
+      }
+    },
+    "Emergency": {
+      "#17: Emergency Access": {
+        "WindowTitle": "Emergency Beacon",
+        "DropQrZone": "Drop ancient emblem (PNG) here",
+        "SelectQrFile": "Select ancient emblem (PNG)",
+        "Pin": "4-Digit Cipher for the Beacon",
+        "ErrorQrOrPinInvalid": "Invalid emblem or incorrect cipher.",
+        "ErrorQrReadFailed": "Could not decipher emblem. Select valid PNG file.",
+        "ErrorMultipleFilesDropped": "Drop only one illusion (PNG).",
+        "ErrorNoVaultMatchingQr": "No treasury bound to this emblem found in this land.",
+        "ReadOnlyModeNote": "Unseals the treasury for scrying only, using the emblem and cipher."
+      }
+    }
+  }
+}

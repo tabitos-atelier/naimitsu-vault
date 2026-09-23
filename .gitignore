@@ -1,0 +1,237 @@
+# User-specific files
+*.rsuser
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+*.userprefs
+mono_crash.*
+
+# Build results
+[Dd]ebug/
+[Dd]ebugPublic/
+[Rr]elease/
+[Rr]eleases/
+x64/
+x86/
+[Ww][Ii][Nn]32/
+[Aa][Rr][Mm]/
+[Aa][Rr][Mm]64/
+bld/
+[Bb]in/
+[Oo]bj/
+[Oo]ut/
+[Ll]og/
+[Ll]ogs/
+
+# Visual Studio
+.vs/
+.vscode/
+Generated\ Files/
+
+# Build artifacts and logs
+*.log
+*.binlog
+project.lock.json
+project.fragment.lock.json
+artifacts/
+FodyWeavers.xsd
+
+# MSTest and test results
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+*.VisualState.xml
+TestResult.xml
+nunit-*.xml
+coverage*.json
+coverage*.xml
+coverage*.info
+*.coverage
+*.coveragexml
+
+# Code analysis
+StyleCopReport.xml
+
+# Compiler outputs
+*.ilk
+*.meta
+*.obj
+*.iobj
+*.pch
+*.pdb
+*.ipdb
+*.pgc
+*.pgd
+*.rsp
+*.sbr
+*.tlb
+*.tli
+*.tlh
+*.tmp
+*.tmp_proj
+*_wpftmp.csproj
+*.vspscc
+*.vssscc
+*.scc
+.builds
+*.pidb
+*.svclog
+
+# Visual C++
+ipch/
+*.aps
+*.ncb
+*.opendb
+*.opensdf
+*.sdf
+*.cachefile
+*.VC.db
+*.VC.VC.opendb
+
+# Visual Studio profiler
+*.psess
+*.vsp
+*.vspx
+*.sap
+*.e2e
+
+# ReSharper
+_ReSharper*/
+*.[Rr]e[Ss]harper
+*.DotSettings.user
+
+# TeamCity
+_TeamCity*
+
+# Code coverage tools
+*.dotCover
+.axoCover/*
+!.axoCover/settings.json
+_NCrunch_*
+.*crunch*.local.xml
+nCrunchTemp_*
+
+# NuGet
+*.nupkg
+*.snupkg
+**/[Pp]ackages/*
+!**/[Pp]ackages/build/
+*.nuget.props
+*.nuget.targets
+
+# Windows Store
+AppPackages/
+BundleArtifacts/
+Package.StoreAssociation.xml
+_pkginfo.txt
+*.appx
+*.appxbundle
+*.appxupload
+
+# SQL Server
+*.mdf
+*.ldf
+*.ndf
+
+# RIA/Silverlight
+Generated_Code/
+**/*.HTMLClient/GeneratedArtifacts
+**/*.DesktopClient/GeneratedArtifacts
+**/*.DesktopClient/ModelManifest.xml
+**/*.Server/GeneratedArtifacts
+**/*.Server/ModelManifest.xml
+_Pvt_Extensions
+ScaffoldingReadMe.txt
+
+# Other artifacts
+ClientBin/
+DocProject/
+_UpgradeReport_Files/
+Backup*/
+UpgradeLog*.XML
+UpgradeLog*.htm
+ServiceFabricBackup/
+*.rptproj.bak
+*.rdl.data
+*.bim.layout
+*.bim_*.settings
+*.rptproj.rsuser
+*- [Bb]ackup.rdl
+*- [Bb]ackup ([0-9]).rdl
+*- [Bb]ackup ([0-9][0-9]).rdl
+
+# Misc tools
+BenchmarkDotNet.Artifacts/
+*.plg
+*.opt
+*.vbw
+publish/
+*.PublishSettings
+*.pubxml
+# FolderProfile is a local folder publish (no remote endpoint or credentials) that defines the publish output
+# folder consumed by Setup/NaimitsuVault.iss, so it is tracked.
+!NaimitsuVault/Properties/PublishProfiles/FolderProfile.pubxml
+*.publishproj
+PublishScripts/
+csx/
+ecf/
+rcf/
+*.jmconfig
+*.btp.cs
+*.btm.cs
+*.odx.cs
+*.xsd.cs
+*.GhostDoc.xml
+OpenCover/
+ASALocalRun/
+.mfractor/
+.localhistory/
+healthchecksdb
+MigrationBackup/
+.ionide/
+
+# Node.js
+node_modules/
+.ntvs_analysis.dat
+__pycache__/
+*.pyc
+.sass-cache/
+
+# Database and temp files
+*.dbmdl
+*.dbproj.schemaview
+*.jfm
+*.pfx
+*~
+/
+_Chutzpah*
+*.[Cc]ache
+!?*.[Cc]ache/
+*.tmp_proj
+
+# Editor
+*.swp
+*.swo
+*.tss
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
+
+# Development tools
+.claude/
+CLAUDE.md
+.gemini/
+GEMINI.md
+.obsidian/
+.env
+.env.*
+
+# Inno Setup compiled output
+Setup/Output/

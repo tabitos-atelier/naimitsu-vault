@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--
+    SnippingWindow: captures a QR code via a full-screen still image plus a rectangular selection.
+    Invoked from TotpSetupDialog. After the selection completes, it closes the window via CloseWithResult(cropRect).
+-->
+<winuiex:WindowEx
+    x:Class="NaimitsuVault.Views.SnippingWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:NaimitsuVault.Localization"
+    xmlns:winuiex="using:WinUIEx"
+    Title="">
+
+    <Canvas
+        x:Name="RootCanvas"
+        Background="Black"
+        PointerPressed="Canvas_PointerPressed"
+        PointerMoved="Canvas_PointerMoved"
+        PointerReleased="Canvas_PointerReleased">
+
+        <Image
+            x:Name="ScreenImage"
+            Canvas.Left="0"
+            Canvas.Top="0"
+            Stretch="Fill" />
+
+        <Rectangle
+            x:Name="SelectionRect"
+            IsHitTestVisible="False"
+            Stroke="#00AAFF"
+            StrokeThickness="2"
+            Fill="#330088FF"
+            Visibility="Collapsed" />
+
+        <Border
+            x:Name="HintBorder"
+            Canvas.Left="0"
+            Canvas.Top="0"
+            Background="#CC000000"
+            CornerRadius="4"
+            Padding="12,6">
+            <TextBlock
+                x:Name="HintText"
+                Foreground="White"
+                FontSize="{StaticResource NvBodyFontSize}"
+                Text="{loc:Msg Key=Totp.CaptureGuideText}" />
+        </Border>
+
+    </Canvas>
+</winuiex:WindowEx>

@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<winuiex:WindowEx
+    x:Class="NaimitsuVault.Views.ShellWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:NaimitsuVault.Localization"
+    xmlns:winuiex="using:WinUIEx"
+    Title="{loc:Msg Key=System.Product.Name}">
+
+    <Grid x:Name="RootGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TitleBar
+            x:Name="AppTitleBar"
+            Title="{loc:Msg Key=System.Product.Name}"
+            Grid.Row="0"
+            Height="48"
+            IsBackButtonVisible="False"
+            IsPaneToggleButtonVisible="True"
+            PaneToggleRequested="TitleBar_PaneToggleRequested">
+            <TitleBar.IconSource>
+                <ImageIconSource ImageSource="ms-appx:///Assets/NaimitsuVault.png" />
+            </TitleBar.IconSource>
+            <TitleBar.RightHeader>
+                <StackPanel
+                    Margin="0,0,6,0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="2">
+                    <FontIcon
+                        x:Name="TitleBarTitleWarningIcon"
+                        FontSize="{StaticResource NvIconSizeLarge}"
+                        Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                        Glyph="&#xE783;"
+                        ToolTipService.ToolTip="{loc:Msg Key=Common.WarningUnifiedDbIntegrityIssue}"
+                        Visibility="Collapsed" />
+                    <TextBlock
+                        x:Name="TitleBarWarningCountBadge"
+                        Margin="2,0,6,0"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        FontWeight="SemiBold"
+                        Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                        Visibility="Collapsed" />
+                    <FontIcon
+                        x:Name="ExpiryWarningIcon"
+                        FontSize="{StaticResource NvIconSizeLarge}"
+                        Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                        Glyph="&#xEC92;"
+                        Visibility="Collapsed"
+                        ToolTipService.ToolTip="{loc:Msg Key=Shell.ExpiryAlertBadge}" />
+                    <TextBlock
+                        x:Name="ExpiryCountText"
+                        Margin="2,0,6,0"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        FontWeight="SemiBold"
+                        Visibility="Collapsed" />
+                    <PersonPicture
+                        x:Name="TitleBarAvatarPicture"
+                        Width="32"
+                        Height="32"
+                        VerticalAlignment="Center"
+                        Visibility="Collapsed" />
+                    <StackPanel
+                        x:Name="TitleVaultPanel"
+                        Margin="2,0,6,0"
+                        Orientation="Horizontal"
+                        Spacing="2"
+                        VerticalAlignment="Center"
+                        Visibility="Collapsed">
+                        <FontIcon
+                            FontSize="{StaticResource NvIconSizeLarge}"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Glyph="&#xF540;" />
+                        <TextBlock
+                            x:Name="TitleVaultText"
+                            Margin="2,0,0,0"
+                            FontSize="{StaticResource NvCaptionFontSize}"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            VerticalAlignment="Center" />
+                    </StackPanel>
+                    <TextBlock
+                        x:Name="TitleCountText"
+                        Margin="8,0,8,0"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    <Button
+                        x:Name="ShortcutsButton"
+                        Width="40"
+                        Height="40"
+                        Padding="0"
+                        AutomationProperties.Name="{loc:Msg Key=Common.KeyboardShortcuts}"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Click="ShortcutsButton_Click"
+                        ToolTipService.ToolTip="{loc:Msg Key=Common.KeyboardShortcuts}">
+                        <Button.Resources>
+                            <ResourceDictionary>
+                                <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#FF0078D4" />
+                                <ResourceDictionary.ThemeDictionaries>
+                                    <!-- The default ButtonBackgroundPointerOver (light) is a translucent white base,
+                                         so on this Background="Transparent" button it blends into the Mica.
+                                         Use a faint black tone close to a normal button's hover feel, just to keep it visible. -->
+                                    <ResourceDictionary x:Key="Light">
+                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#1F000000" />
+                                    </ResourceDictionary>
+                                </ResourceDictionary.ThemeDictionaries>
+                            </ResourceDictionary>
+                        </Button.Resources>
+                        <FontIcon FontSize="{StaticResource NvIconSizeLarge}" Glyph="&#xE92E;" />
+                    </Button>
+                    <Button
+                        x:Name="AboutButton"
+                        Width="40"
+                        Height="40"
+                        Padding="0"
+                        AutomationProperties.Name="{loc:Msg Key=Shell.Navi.About}"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Click="AboutButton_Click"
+                        ToolTipService.ToolTip="{loc:Msg Key=Shell.Navi.About}">
+                        <Button.Resources>
+                            <ResourceDictionary>
+                                <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#FF0078D4" />
+                                <ResourceDictionary.ThemeDictionaries>
+                                    <!-- The default ButtonBackgroundPointerOver (light) is a translucent white base,
+                                         so on this Background="Transparent" button it blends into the Mica.
+                                         Use a faint black tone close to a normal button's hover feel, just to keep it visible. -->
+                                    <ResourceDictionary x:Key="Light">
+                                        <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#1F000000" />
+                                    </ResourceDictionary>
+                                </ResourceDictionary.ThemeDictionaries>
+                            </ResourceDictionary>
+                        </Button.Resources>
+                        <FontIcon FontSize="{StaticResource NvIconSizeLarge}" Glyph="&#xE946;" />
+                    </Button>
+                    <Button
+                        x:Name="LockButton"
+                        Width="40"
+                        Height="40"
+                        Padding="0"
+                        AutomationProperties.Name="{loc:Msg Key=Shell.LockNow}"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Click="LockButton_Click"
+                        ToolTipService.ToolTip="{loc:Msg Key=Shell.LockNow}">
+                        <Button.Resources>
+                            <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#29E81123" />
+                        </Button.Resources>
+                        <FontIcon
+                            x:Name="LockButtonIcon"
+                            FontSize="{StaticResource NvIconSizeLarge}"
+                            Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                            Glyph="&#xE72E;" />
+                    </Button>
+                </StackPanel>
+            </TitleBar.RightHeader>
+        </TitleBar>
+
+        <NavigationView
+            x:Name="NavView"
+            Grid.Row="1"
+            Background="Transparent"
+            IsBackButtonVisible="Collapsed"
+            IsPaneToggleButtonVisible="False"
+            IsSettingsVisible="False"
+            ItemInvoked="NavView_ItemInvoked"
+            KeyDown="NavView_KeyDown"
+            OpenPaneLength="240"
+            PaneDisplayMode="Left">
+
+            <NavigationView.PaneCustomContent>
+                <Grid Height="64">
+                    <!--  When pane is expanded: avatar + display name  -->
+                    <Grid
+                        x:Name="NavPaneExpandedHeader"
+                        Padding="12,12,12,4"
+                        VerticalAlignment="Center">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <PersonPicture
+                            x:Name="NavAvatarPicture"
+                            Width="40"
+                            Height="40"
+                            VerticalAlignment="Center" />
+                        <TextBlock
+                            x:Name="NavDisplayNameText"
+                            Grid.Column="1"
+                            Margin="12,0,0,0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource BodyStrongTextBlockStyle}"
+                            TextTrimming="CharacterEllipsis" />
+                    </Grid>
+                    <!--  When pane is collapsed: avatar only (centered via Width=CompactPaneLength)  -->
+                    <Border
+                        x:Name="NavPaneCollapsedHeader"
+                        Width="48"
+                        HorizontalAlignment="Left"
+                        Visibility="Collapsed">
+                        <PersonPicture
+                            x:Name="NavAvatarPictureSmall"
+                            Width="32"
+                            Height="32"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center" />
+                    </Border>
+                </Grid>
+            </NavigationView.PaneCustomContent>
+
+            <NavigationView.MenuItems>
+                <NavigationViewItem Content="{loc:Msg Key=Dashboard.Main}" Tag="dashboard">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontSize="{StaticResource NvIconSizeLarge}" Glyph="&#xF246;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="{loc:Msg Key=Shell.Navi.Secrets}" Tag="secrets">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontSize="{StaticResource NvIconSizeLarge}" Glyph="&#xEA18;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="NavItemTimeMachine" Content="{loc:Msg Key=Shell.Navi.TimeMachine}" Tag="timemachine">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontSize="{StaticResource NvIconSizeLarge}" Glyph="&#xE81C;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem Content="{loc:Msg Key=Shell.Navi.Gallery}" Tag="gallery">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontSize="{StaticResource NvIconSizeLarge}" Glyph="&#xE8B9;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.MenuItems>
+
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem Content="{loc:Msg Key=Shell.Navi.Profile}" Tag="profile">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontSize="{StaticResource NvIconSizeLarge}" Glyph="&#xE77B;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="NavItemAuditLog" Content="{loc:Msg Key=Shell.Navi.AuditLog}" Tag="auditlog">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontSize="{StaticResource NvIconSizeLarge}" Glyph="&#xE9F9;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+                <NavigationViewItem x:Name="NavItemSettings" Content="{loc:Msg Key=Shell.Navi.Settings}" Tag="settings">
+                    <NavigationViewItem.Icon>
+                        <FontIcon FontSize="{StaticResource NvIconSizeLarge}" Glyph="&#xE713;" />
+                    </NavigationViewItem.Icon>
+                </NavigationViewItem>
+            </NavigationView.FooterMenuItems>
+
+            <Grid Background="Transparent">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <InfoBar
+                    x:Name="NotificationBar"
+                    Grid.Row="0"
+                    IsClosable="True"
+                    IsOpen="False" />
+                <!--  Placeholder shown when no page is selected  -->
+                <Grid x:Name="NavEmptyHint" Grid.Row="1">
+                    <Image
+                        Width="260"
+                        Height="260"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Opacity="0.2"
+                        Source="ms-appx:///Assets/NaimitsuVault.png"
+                        Stretch="Uniform" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{loc:Msg Key=Shell.SelectPagePrompt}"
+                        TextAlignment="Center"
+                        TextWrapping="Wrap" />
+                </Grid>
+                <Frame x:Name="NavFrame" Grid.Row="1" />
+            </Grid>
+        </NavigationView>
+    </Grid>
+</winuiex:WindowEx>

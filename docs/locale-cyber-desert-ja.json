@@ -1,0 +1,645 @@
+{
+  "locale": "ja",
+  "displayName": "電脳砂漠",
+  "localeVersion": 1,
+  "messages": {
+    "Common": {
+      "#01-01: 共通操作": {
+        "Ok": "承知",
+        "Cancel": "破棄",
+        "Verify": "真贋判定",
+        "AuthWithWindowsHello": "魂の共鳴で解呪",
+        "AuthWithWindowsHelloPrompt": "羊皮紙を護る結界を解除する。",
+        "WarningAutoLockNotice": "儀式完了後、オアシスは自動的に封印される。",
+        "Close": "閉じる",
+        "Save": "記憶に刻む",
+        "Discard": "砂に還す",
+        "Restart": "魂の再起動",
+        "Add": "紡ぐ",
+        "Delete": "忘却",
+        "Import": "宝物庫への搬入",
+        "Export": "宝物庫からの搬出",
+        "IdentityVerification": "魂の証明",
+        "Backup": "記憶の写し",
+        "Unlock": "封印解除"
+      },
+      "#01-02: 状態表示": {
+        "On": "オン",
+        "Off": "オフ",
+        "All": "すべて",
+        "Current": "現在",
+        "Warning": "砂嵐の予兆",
+        "Error": "理の崩壊",
+        "Expired": "魔力切れ",
+        "Loading": "詠唱中...",
+        "PleaseWait": "砂が落ちるまで待たれよ。",
+        "SafeWritingLock": "羊皮紙を安全に記録している。完了後は結界維持のため自動的に封印される。",
+        "MemoryClearedLock": "盗賊から護るため、思考の残滓を消去し結界を張った。"
+      },
+      "#01-03: パスワード強度": {
+        "StrengthVeryWeak": "脆き砂壁",
+        "StrengthWeak": "ひび割れた石壁",
+        "StrengthFair": "堅牢な砂岩壁",
+        "StrengthStrong": "鋼の防壁",
+        "StrengthVeryStrong": "難攻不落の城壁"
+      },
+      "#01-04: 入力フィールド名": {
+        "Title": "称号",
+        "Username": "旅人の名",
+        "Password": "秘密の呪文",
+        "Email": "伝書鳩の宛先",
+        "Website": "オアシスの座標",
+        "TotpSecret": "二重の結界",
+        "Notes": "旅のメモ",
+        "ExpiresAt": "魔力の寿命"
+      },
+      "#01-05: 追加フォーム": {
+        "CustomField": "未知の供物",
+        "NewText": "新たな碑文",
+        "NewPassword": "新たな呪文",
+        "NewWebsite": "新たな座標",
+        "NewDate": "新たな刻"
+      },
+      "#01-06: 入力案内・検索": {
+        "EnterText": "碑文を刻む",
+        "EnterPassword": "呪文を詠唱する",
+        "EnterWebsite": "座標を記す",
+        "SelectDate": "刻を定める",
+        "FreeInput": "自由な記述が許されている",
+        "EnterMasterPassword": "大いなる封印の呪文を唱えよ",
+        "PasswordLengthHint": "8つのルーン以上で紡ぐこと",
+        "SearchSecret": "羊皮紙を探す...",
+        "DropZonePrompt": "ここに収蔵品を投げ入れて追加",
+        "DropTooltip": "一度に収蔵できる品は{0}件まで／1つ最大{1}MB"
+      },
+      "#01-07: 追加操作・ツールチップ": {
+        "AddTextField": "碑文の枠を設ける",
+        "AddPasswordField": "呪文の枠を設ける",
+        "AddWebsiteField": "座標の枠を設ける",
+        "AddDateField": "刻の枠を設ける",
+        "ClearExpiry": "魔力の寿命を取り払う",
+        "ExpiryAlarmNotice": "{0} 日前に砂漠の風が警告を届ける。",
+        "OpenInBrowser": "水晶玉（ブラウザ）で覗く",
+        "DeleteConfirm": "忘却の確認",
+        "AttachedFiles": "添えられた収蔵品",
+        "AttachedFileQuarantined": "呪いの気配（改ざんまたは損傷の疑い）を感知した。この収蔵品の姿は映せぬ。",
+        "CommonOperations": "共通の儀式",
+        "DropToAttach": "ここに投げ入れて添える",
+        "DropZone": "記憶の写し（.nkdb）をここに投げ入れる",
+        "FileFilter": "{0} 形式 (*.{1})",
+        "AllFiles": "すべての収蔵品",
+        "FileTypeCertKey": "通行証 / 鍵",
+        "FileTypeXmlJson": "古代の設計図",
+        "FileTypeImage": "幻影"
+      },
+      "#01-08: ファイルリンク": {
+        "NoLinks": "どの羊皮紙とも縁が結ばれていない",
+        "SelectToView": "収蔵品を手に取ると縁が視える",
+        "AddLink": "縁を結ぶ",
+        "RemoveLink": "縁を断つ",
+        "ToggleFilter": "結ばれた縁の透視を切り替える"
+      },
+      "#01-09: 完了・成功通知": {
+        "SuccessSaveComplete": "記憶への刻印完了",
+        "SuccessExportedToPath": "「{0}」へ搬出した。",
+        "ImportSuccess": "宝物庫への搬入に成功",
+        "QrReadSuccess": "古代の紋章を解読した。",
+        "InfoDeleteComplete": "忘却完了",
+        "InfoUnifiedDbAutoRecovered": "知恵の泉を魔力で自動修復した。直前の記憶が失われているやもしれぬ。",
+        "InfoVaultDbAutoRecovered": "宝物庫 {0} を自動修復した。直前の記憶が失われているやもしれぬ。",
+        "InfoOversizeFilesSkipped": "{0} つの収蔵品は重すぎる（上限 {1}MB）ため、砂に沈んだ。",
+        "InfoFilesQuarantined": "{0} つの収蔵品に呪いの気配（改ざんまたは損傷の疑い）を感知した。博物館の陳列からは除外した。",
+        "InfoFilesAddFailed": "{0} つの収蔵品は封印できず、深追いを諦めた。",
+        "InfoFilesLoadFailed": "{0} つの収蔵品は姿を現さなかった。"
+      },
+      "#01-10: 有効期限アラート": {
+        "ExpiresInDays": "あと {0} 日で魔力が尽きる"
+      },
+      "#01-11: 入力エラー": {
+        "GeneralError": "砂嵐が発生した",
+        "ErrorAuthFailed": "解呪失敗",
+        "ErrorHelloAuthFailed": "魂の共鳴が汝を拒絶した",
+        "ErrorHelloProfileMismatch": "この魂の共鳴は、今の器・今の地では結べない",
+        "ErrorIncorrectPassword": "呪文が違う。記憶の写しの、大いなる封印の呪文を確認せよ。",
+        "ErrorPasswordMismatch": "呪文の反響が一致しない。",
+        "ErrorPasswordTooShort": "呪文が短すぎる。8つのルーン以上で紡げ。",
+        "ErrorPinMismatch": "秘密の暗号が一致しない。",
+        "WarningInvalidBase32Secret": "結界の核の形が正しくない。英字（A〜Z）と数字（2〜7）で、8つのルーン以上刻め。"
+      },
+      "#01-12: システムエラー": {
+        "WarningUnifiedDbIntegrityIssue": "知恵の泉の構造に歪みを検知した",
+        "WarningVersionMismatch": "理の不一致",
+        "ErrorBrowserOpenFailed": "水晶玉（ブラウザ）を起動できなかった: {0}",
+        "ErrorCaptureFailed": "幻影の写し取りに失敗した。",
+        "ErrorDecryptionFailed": "暗号化された収蔵品の封印を破れなかった。",
+        "ErrorFileDataNotFound": "収蔵品の実体が存在しない。",
+        "ErrorPartialLoadTitle": "一部の羊皮紙を取り出せなかった",
+        "ErrorPartialLoadText": "全{1}件中{0}件の羊皮紙が風化していたため、系譜に姿を現さなかった。",
+        "ErrorLockBlockedRunningTask": "儀式が終わるまで宝物庫は封印できない。",
+        "ErrorWriteAccessDenied": "その地には書き込みの権限がない。別の地を選べ。",
+        "ErrorInvalidEncoding": "文字の刻印が UTF-8 として正しくない。エディタで書き記す際は UTF-8 を選べ。"
+      },
+      "#01-13: 共通ショートカット・その他": {
+        "BrowseFolder": "記憶を託す地を探す",
+        "ClearFolder": "記憶を託す地を白紙に戻す",
+        "CopyToClipboard": "記憶の断片に写し取る",
+        "DeleteField": "この枠を破壊する",
+        "FocusSearchBar": "インクの匂いを追う",
+        "KeyboardShortcuts": "詠唱の短縮",
+        "PurgePermanently": "虚無への還元",
+        "ToggleLeftPane": "左の視界を開閉する",
+        "ToggleRightPane": "右の視界を開閉する",
+        "ToggleMask": "幻惑のヴェールの着脱",
+        "ToggleVisibility": "顕現 / 隠蔽",
+        "EnlargeDisplay": "拡大顕現",
+        "UndoDelete": "忘却への抵抗",
+        "ToggleDeletedFilter": "忘却の淵の透視を切り替える",
+        "ToggleDraftFilter": "書きかけの羊皮紙の透視を切り替える",
+        "ToggleExpirationFilter": "魔力の寿命の透視を切り替える",
+        "ToggleFavoriteFilter": "お気に入りの透視を切り替える",
+        "ToggleFavoriteItem": "お気に入りの印を刻む/消す"
+      }
+    },
+    "Unlock": {
+      "#02: ロック解除": {
+        "SetupStart": "旅の仕度をして出発",
+        "WindowsHello": "魂の共鳴で解呪",
+        "Main": "封印解除",
+        "SelectVault": "開く宝物庫を選べ",
+        "ConfirmPassword": "大いなる封印の呪文（確認）",
+        "PasswordForgetWarning": "この呪文を忘れると、二度と宝物庫は開かない。",
+        "ErrorUnifiedDbCorrupted": "知恵の泉が呪いを受けている。下の工具の印から浄化を執行せよ。",
+        "ErrorVaultDbCorrupted": "宝物庫 {0} が呪いを受けている。救済する影の写しが見当たらぬ。下の工具の印から浄化を執行せよ。",
+        "WarningDbRecreatedBackup": "知恵の泉が枯渇していたため、新たに湧き出させた。\n古き泉は記憶の写しとして保存されている:\n{0}"
+      },
+      "#02-01: ロック解除（Windows Hello 使用不可ダイアログ）": {
+        "Dialog": {
+          "HelloProfileMismatchTitle": "魂の共鳴の切断（全宝物庫）",
+          "HelloProfileMismatchBody": "この魂の共鳴は別の器で結ばれたため、現在の地では力を発揮できぬ。\nすべての宝物庫の共鳴の掟を無効化するか？\n\n大いなる封印の呪文で宝物庫を開けよ。\n（※開錠後、世界の理にて再び共鳴を結び直すことができる。）",
+          "HelloProfileMismatchDisableButton": "すべて無効化"
+        }
+      }
+    },
+    "Shell": {
+      "#03: メインメニュー": {
+        "Navi": {
+          "Secrets": "羊皮紙",
+          "TimeMachine": "時の回廊",
+          "Gallery": "博物館",
+          "Profile": "旅人の横顔",
+          "AuditLog": "探求の足跡",
+          "Settings": "世界の理",
+          "About": "このオアシスについて"
+        },
+        "LockNow": "直ちに封印",
+        "SelectPagePrompt": "左の道標から進む道を選べ",
+        "ExpiryAlertBadge": "魔力が尽きた、あるいは尽きかけている羊皮紙がある",
+        "TrayExit": "オアシスを去る"
+      }
+    },
+    "Secrets": {
+      "#04: 機密情報": {
+        "Add": "羊皮紙を記す",
+        "GeneratePassword": "呪文を錬成する",
+        "SymbolSet": "ルーンの装飾",
+        "Dialog": {
+          "CopyCommitted": "記憶に刻んだ値を複製",
+          "ReviewDraft": "書きかけの羊皮紙を検分・破棄",
+          "DisableTotpConfirm": "二重の結界を解除すると、封じた合言葉は消え去る。解除するか？",
+          "DisableTotpButton": "解除"
+        },
+        "CategorySelection": "書庫の棚",
+        "SearchPlaceholder": "称号・ID・座標・伝書鳩の宛先から羊皮紙を探す",
+        "SelectOrCreatePrompt": "左の系譜から羊皮紙を選ぶか、新たな羊皮紙を記せ",
+        "UntitledSecret": "名もなき羊皮紙",
+        "WarningTitleRequired": "称号は必須の供物だ。",
+        "ExampleEmail": "例: tabito@example.com",
+        "ExampleTitle": "例: 魔石の取引所",
+        "ExampleUrl": "例: https://oasis.example.com",
+        "ExampleUsername": "例: tabito_nomad",
+        "NoExpiry": "永遠の魔力",
+        "CopyTotpCodeTooltip": "結界の合言葉を写す",
+        "DisableTotpTooltip": "二重の結界の解除",
+        "GoToTimeMachineTooltip": "この羊皮紙の過去を覗く",
+        "HasDraftBadgeTooltip": "書きかけの羊皮紙あり",
+        "ToggleTotpTooltip": "二重の結界の構築/破壊"
+      }
+    },
+    "Totp": {
+      "#05: 2段階認証": {
+        "ScreenCapture": "幻影の写し取り",
+        "BackupCodeOptional": "退避の呪文 (任意)",
+        "CaptureGuideText": "詠唱後、古代の紋章を枠で囲い込め。Esc で詠唱を破棄できる。",
+        "DirectInputOption": "あるいは結界の核を直接刻む",
+        "DiscardButton": "破棄",
+        "DropBackupCodeInstructions": "退避の呪文の写しをここに投げ入れろ",
+        "ReadQrOption": "古代の紋章を読み解く",
+        "SecretKeyBase32": "結界の核",
+        "TimeDriftCodes": "{2}秒前: {0}  {2}秒後: {1}",
+        "TimeSyncNotice": "合言葉が弾かれるなら、魔法の箱の刻の刻みを修正せよ。",
+        "WarningQrRecognitionFailed": "紋章を解読できなかった。視野を広げるか、手で刻み込め。",
+        "ExampleSecret": "JBSWY3DPEHPK3PXP"
+      }
+    },
+    "DirectInjection": {
+      "#06: 自動入力": {
+        "InjectPassword": "呪文を自動詠唱",
+        "InjectUsername": "旅人の名を自動詠唱",
+        "Title": "魔導の自動詠唱",
+        "Step1FocusTarget": "1. 魂の入力陣に意識を集中させよ",
+        "Step2InjectUsername": "2. 「旅人の名を自動詠唱」を放つ（記憶の断片は不使用）",
+        "Step3InjectPassword": "3. 呪文の入力陣へ移り、「呪文を自動詠唱」を放つ",
+        "ErrorHwndMismatchInterrupted": "詠唱中断 — 別の窓が割り込んだため、暴発を防ぐべく儀式を止めた",
+        "ErrorTargetWindowNotFound": "対象の窓が見当たらない — 魂を呼び覚ましてから再試行せよ",
+        "ErrorSendInputWin32Failed": "自動詠唱の回路が沈黙している。対象の魂が目覚めているか確認せよ。(禍根: {0})",
+        "InfoMonitoringForeground": "詠唱待機中 — 最前面の窓を監視している",
+        "SuccessPasswordInjected": "呪文の詠唱が完了した",
+        "SuccessUsernameInjected": "旅人の名の詠唱が完了した"
+      }
+    },
+    "TimeMachine": {
+      "#07: タイムマシン": {
+        "Dialog": {
+          "GenerationSwap": "歴史のすり替え",
+          "BeforeSwap": "すり替え前",
+          "AfterSwap": "すり替え後",
+          "DeletedItemNotice": "この羊皮紙は忘却の淵にある。{0} に虚無へ還る。「忘却への抵抗」で呼び戻すことが可能だ。",
+          "PurgeConfirmText": "「{0}」を虚無へ還す。\nこの儀式は時の回廊に刻まれた歴史ごと消滅させ、二度と蘇ることはない。\n\n真に実行するのか？"
+        },
+        "SearchPlaceholder": "称号・更新の刻から羊皮紙を探す",
+        "SelectSecretPrompt": "左の系譜から過去を視たい羊皮紙を選べ",
+        "GoToSecretsPageTooltip": "この羊皮紙の現在へ戻る",
+        "UndoToGen1Tooltip": "ひとつ前の時代へ巻き戻す",
+        "UndoToGen2Tooltip": "ふたつ前の時代へ巻き戻す",
+        "SuccessRestoreComplete": "時の修復完了",
+        "SuccessItemRestored": "「{0}」を現代に蘇らせた。",
+        "DraftBlocksRestoreNotice": "書きかけの羊皮紙があるうちは歴史に干渉できない"
+      }
+    },
+    "Gallery": {
+      "#08: ギャラリー": {
+        "Dialog": {
+          "SoftDeleteConfirmText": "この収蔵品を忘却の淵へ投げ込む。30日の間は引き上げられるが、羊皮紙や旅人の横顔との縁は断ち切られる。",
+          "PurgeFileConfirmText": "この収蔵品を虚無へ還す。この儀式は取り消せない。"
+        },
+        "DeletedFilterLabel": "忘却済み",
+        "DeletedItemPurgeNotice": "{0} に忘却の淵から虚無へ還る",
+        "SearchPlaceholder": "収蔵品の名・刻から探す",
+        "FilterImages": "幻影 {0}",
+        "FilterPdf": "古の書物 {0}",
+        "FilterCerts": "通行証・鍵 {0}",
+        "FilterJsonXml": "古代の設計図 {0}",
+        "FilterConfigs": "魔導の設定 {0}",
+        "FilterMarkdown": "手記 {0}",
+        "FilterLicense": "契約の石版 {0}",
+        "FilterArchive": "圧縮された箱 {0}",
+        "FilterSql": "知恵の泉の呪文 {0}",
+        "InfoAlreadyRegistered": "選ばれた品はすでに収蔵済みだ。(見送り: {0} 件)",
+        "InfoUnsupportedSkipped": "{0} 件は未知の構造ゆえに見送った。",
+        "InfoAutoUndeletedDuplicate": "忘却の淵に同じ収蔵品を見つけ、引き上げた",
+        "SuccessImportedCount": "{0} 件を博物館へ収蔵した。(既知の見送り: {1} 件)",
+        "SuccessFileUndeleted": "収蔵品を忘却の淵から引き上げた",
+        "WarningCertExpiredCount": "通行証 {0} 件の魔力が尽きている",
+        "WarningCertExpiringSoonCount": "通行証 {0} 件が {1} 日以内に魔力を失う",
+        "WarningCertMixedExpiryAlert": "通行証 {0} 件の魔力が尽き、{1} 件が {2} 日以内に魔力を失う"
+      }
+    },
+    "Viewer": {
+      "#09: ファイルビューワ": {
+        "Main": "鑑定眼",
+        "CertSectionHeader": "通行証の刻印",
+        "CertIssuer": "発行を許しき者",
+        "CertSubject": "名を冠する者",
+        "CertKeyUsage": "鍵の役割",
+        "CertThumbprint": "魂の拇印 (SHA1)",
+        "CertValidFrom": "魔力の芽吹き",
+        "CertValidTo": "魔力の寿命",
+        "JsonSectionHeader": "設計図の真理",
+        "OauthType": "属性",
+        "OauthProjectId": "計画の識別符",
+        "OauthClientId": "依頼者の識別符",
+        "OauthClientEmail": "依頼者の伝書鳩",
+        "TextSectionHeader": "碑文の解読",
+        "ArchiveSectionHeader": "隊商の荷物目録",
+        "ArchiveEntryCount": "{0} 個の荷物",
+        "ArchiveEntryCountTruncated": "{0} 個を披露中（隊商の荷は全 {1} 個。数が多すぎて残りは行李の奥だ）",
+        "ArchiveEmpty": "空の行李だ。荷は積まれていない。",
+        "PreviewUnsupported": "この収蔵品は透視の魔法を弾く。宝物庫から搬出して直接確かめよ。",
+        "PreviewFailed": "透視に失敗した。収蔵品に込められた魔力が大きすぎるやもしれぬ。搬出して確かめよ。",
+        "PreviewQuarantined": "呪いの気配（改ざんまたは損傷の疑い）を感知したため、透視できぬ。心当たりがなければ、廃棄を検討せよ。",
+        "ErrorCertExpired": "{0} 日前に魔力が尽きている",
+        "WarningCertExpiringSoon": "あと {0} 日で魔力が尽きる"
+      }
+    },
+    "Profile": {
+      "#10: プロフィール": {
+        "Avatar": "幻影",
+        "ChangeAvatar": "幻影の変更",
+        "CompareDraft": "書きかけの羊皮紙と比較",
+        "Dialog": {
+          "AvatarCrop": "幻影の焦点調整",
+          "ZoomIn": "近づく",
+          "ZoomOut": "遠ざかる"
+        },
+          "Name": "真名",
+          "Nickname": "砂漠での通り名",
+          "HomePhone": "拠点の伝声管",
+          "MobilePhone": "携帯伝声管",
+          "PostalCode": "拠点の方位角",
+          "AddressLine1": "オアシスの区画・街区",
+          "AddressLine2": "方尖塔・階室",
+          "IdentityItem1": "帝国の認識符",
+          "IdentityItem2": "砂上船の操舵証",
+          "IdentityItem3": "国境越えの通行証",
+          "RealName": "真名（本名）",
+          "ExampleNickname": "例: たびと (Tabito)",
+          "ExampleEmail": "例: tabito@tabitos-works.com",
+          "ExampleHomePhone": "例: +CYB-01-7788-0001",
+          "ExampleMobile": "例: +CYB-090-8899-7701",
+          "ExamplePostalCode": "例: AZ-77001",
+          "ExampleAddress1": "例: 電脳砂漠第1オアシス特別区",
+          "ExampleAddress2": "例: サイベリア方尖塔 777号室",
+          "ExampleIdentityItem1": "例: CYBERIA-ID-77001 (12桁認識符)",
+          "ExampleIdentityItem2": "例: TV123456789",
+          "ExampleIdentityItem3": "例: TP123456789"
+      }
+    },
+    "Categories": {
+      "#11: カテゴリプリセット（ユーザーが自由に追加・変更可能。番号は昇順で表示される）": {
+        "01": "交信の呪文",
+        "10": "魔導の回路",
+        "20": "契約の石版",
+        "30": "遠征の書",
+        "40": "修行の書",
+        "50": "財宝・魔石",
+        "60": "旅人の証",
+        "70": "古代の盟約",
+        "80": "商隊の証",
+        "90": "封印の書",
+        "99": "雑多なる羊皮紙",
+        "Uncategorized": "未分類の砂山"
+      }
+    },
+    "Dashboard": {
+      "#12: ダッシュボード": {
+        "Main": "羅針盤",
+        "Overview": "オアシスの現況",
+        "SecretCount": "羊皮紙の数",
+        "FileCount": "収蔵品の数",
+        "VaultCount": "宝物庫の数",
+        "DbFileSize": "宝物庫の重さ",
+        "SecurityScan": "結界の綻び検知",
+        "RunScan": "検知の儀式を始める",
+        "NotScannedYet": "儀式未了",
+        "WeakPasswords": "脆い呪文",
+        "ReusedPasswords": "使い回された呪文",
+        "NoIssuesFound": "結界に綻びは視当たらない"
+      }
+    },
+    "AuditLog": {
+      "#13-01: 一覧・フィルター": {
+        "Code": "識別のルーン",
+        "Severity": "足跡の重み",
+        "SeverityNormal": "平穏",
+        "SeverityNotice": "留意",
+        "SeverityImportant": "重儀",
+        "FilterCategoryAuth": "解呪・封印",
+        "FilterCategoryWrite": "記録の儀",
+        "FilterCategoryRead": "透視の儀",
+        "FilterCategoryConfig": "掟の改変",
+        "FilterCategoryPrivilege": "大魔導",
+        "FilterCategoryPurge": "忘却・虚無",
+        "FilterCategorySystem": "世界の理",
+        "NoMatchingActivityPlaceholder": "砂の上に、条件に合う足跡は見つからない",
+        "SearchPlaceholder": "足跡の記述・識別のルーンから探す"
+      },
+      "#13-02: イベント概要テンプレート": {
+        "AddFileLink": "収蔵品「{0}」と縁を結んだ",
+        "AuthenticationFailed": "解呪に失敗した",
+        "AuthenticationSuccess": "解呪に成功した",
+        "AutoPurgeExpiredFile": "魔力切れにより収蔵品を自動風化させた（{0}件）",
+        "AutoPurgeExpiredSecret": "魔力切れによる自動風化",
+        "ChangeAutoBackupConfig": "記憶の自動写しの掟を書き換えた",
+        "ChangeAutoLockConfig": "自動封印の掟を書き換えた",
+        "ChangeCaptureProtectionConfig": "幻影保護の結界を操作した",
+        "ChangeFaviconFetchConfig": "紋章の自動収集の掟を書き換えた",
+        "ChangeMasterPassword": "大いなる封印の呪文を錬成し直した",
+        "ChangeWindowsHelloConfig": "魂の共鳴の掟を書き換えた",
+        "DeleteTimeMachineSlot": "過去の記憶をひとつ砂に還した",
+        "DeletedItemPlaceholder": "（忘却の彼方）",
+        "ExecuteAutoBackup": "記憶の写しが自ずと生まれた",
+        "ExecuteEmergencyAccessRecovery": "最後の狼煙で宝物庫をこじ開けた",
+        "ExecuteLogRotation": "古き足跡を風に流した",
+        "ExecuteManualBackup": "記憶の写しを手動で創り出した",
+        "ExecuteManualRestore": "過去の記憶から世界を上書きした",
+        "ExecuteSilentSelfHealing": "魔力による自動修復が走った",
+        "SelfHealNoOpDraft": "記録と瓜二つの書きかけの羊皮紙を自動で処分した（{0} 件）",
+        "SelfHealUnifiedDb": "知恵の泉を影の写しから自動修復した",
+        "SelfHealVaultDb": "宝物庫 {0} を影の写しから自動修復した",
+        "RepairFileContentType": "収蔵品「{0}」の印の乱れを自動で正した（{1} → {2}）",
+        "CsvFormulaGuardApplied": "「{0}」を搬出する記録に忍んだ呪いの数式を封じた",
+        "ExportFileFromGallery": "収蔵品「{0}」を搬出した",
+        "ExportItemFailed": "「{0}」を搬出できなかった",
+        "ExportPlainText": "結界を解き、無防備な姿で搬出した（{0} 件）",
+        "GenerateEmergencyCode": "最後の狼煙を組み上げた",
+        "ImportItemFailed": "隊商{0}番目の荷を読み解けなかった（{1}形式）",
+        "ImportPlainText": "無防備な記録を宝物庫へ搬入した（{0} 件）",
+        "LocaleImportFailed": "外界の古文書を搬入できなかった",
+        "LocaleImportKeyMissing": "言霊「{0}」が見当たらず、既定の呪文で埋めた",
+        "LocaleImportPlaceholderBroken": "言霊「{0}」に刻まれた印が欠けていたため退け、元の呪文を保った",
+        "LocaleImportSucceeded": "外界の古文書「{0}」を搬入した（{1} 個の言霊を既定の呪文で補った）",
+        "LocaleImportValueTooLong": "言霊「{0}」が長すぎたため退け、元の呪文を保った",
+        "MoveFileToTrash": "収蔵品「{0}」を忘却の淵へ投げ捨てた",
+        "MoveSecretToTrash": "{0} を忘却の淵へ投げ捨てた",
+        "NoActivityPlaceholder": "砂漠に足跡はない",
+        "ProfileFieldCopiedToClipboard": "旅人の横顔から「{0}」を写し取った",
+        "PurgeFilePermanently": "収蔵品「{0}」を虚無へ還した",
+        "PurgeSecretPermanently": "{0} を虚無へ還した",
+        "ReadProfile": "旅人の横顔を透視した",
+        "ReadSecret": "{0} を透視した",
+        "ReadSecretAttachment": "{0} の収蔵品を透視した",
+        "ReadSecretHistory": "{0} の過去を垣間見た",
+        "RecentActivityHeader": "砂漠に刻まれた最近の足跡",
+        "RestoreTimeMachineGeneration": "過去の記憶を現代に定着させた",
+        "RevokeEmergencyCode": "最後の狼煙を無効化した",
+        "RotateTimeMachineGeneration": "時の輪を回した",
+        "SaveProfile": "旅人の横顔を刻み込んだ",
+        "SaveSecret": "羊皮紙「{0}」を記憶に留めた",
+        "SecretAutoTypeExecuted": "{1} の「{0}」を異界の窓へ直に詠唱した",
+        "SecretFieldCopiedToClipboard": "{1} の「{0}」を写し取った",
+        "SixMonthsHistoryNotice": "過去半年分の足跡が残っている",
+        "TimeMachineValueCopiedToClipboard": "{2} の時の回廊から「{0}」（{1}）を写し取った",
+        "UndoDeleteFile": "収蔵品「{0}」を忘却の淵から引き上げた",
+        "UndoDeleteSecret": "{0} を忘却の淵から引き上げた",
+        "VaultCreated": "新たな宝物庫を築いた"
+      }
+    },
+    "AppSettings": {
+      "#14-01: ページ全般": {
+        "TabTitle": "オアシス共通の掟"
+      },
+      "#14-02: テーマ": {
+        "ThemeMode": "空の色",
+        "ThemeLight": "白日の砂漠",
+        "ThemeDark": "星月夜の砂漠",
+        "ThemeSystem": "世界の理に従う"
+      },
+      "#14-03: フォント": {
+        "FontFamily": "碑文の書体",
+        "FontFamilyDesc": "刻まれる文字の形を変える。文字の大きさは魔法の箱の設定に依存する。",
+        "FontFamilySystemDefault": "理の標準"
+      },
+      "#14-04: セキュリティ": {
+        "ScreenCaptureProtection": "幻影保護の結界",
+        "CaptureProtectionAffinity": "幻影の写し取りや共有の魔術を弾く結界を張る。",
+        "HideOnMinimize": "瞑想時に気配を絶つ",
+        "MinimizeBehavior": "瞑想に入った際、世界の表層から姿を消し、深淵へ潜る。"
+      },
+      "#14-06: 言語": {
+        "Language": "交信の言語",
+        "LangCustom": "異郷の言葉",
+        "JsonFilterName": "言語の古文書 (*.json)",
+        "CustomLangInstructions": "古文書を搬出して書き換え、再び搬入することで理が上書きされる。",
+        "ExportCustomLanguage": "言語の古文書を搬出",
+        "ImportCustomLanguage": "言語の古文書を搬入",
+        "RestartRequiredHint": "魂の再起動後に効力を発揮する。",
+        "Dialog": {
+          "RestartRequiredAlert": "オアシスを再起動した後に、新たな言葉が定着する。",
+          "ImportLanguageSuccess": "言語の古文書の搬入に成功した",
+          "ImportPatchedCountReport": "{0} 個の欠落したルーンを補って搬入した。再起動後に定着する。",
+          "VersionMismatchPatchNotice": "古文書の理が古き時代のものだ（{0}）。欠落を補って使用する。"
+        }
+      },
+      "#14-07: ネットワーク": {
+        "Network": "砂漠の風",
+        "AutoFaviconFetch": "オアシスの紋章の自動収集",
+        "FaviconPrivacyWarning": "風に乗せてオアシスの名を外部へ飛ばすため、旅の目的地が知られるリスクが伴う。"
+      }
+    },
+    "VaultSettings": {
+      "#14-04: セキュリティ": {
+        "SecurityGroup": "結界の掟",
+        "AutoLockTimeout": "無の時間が続いた際の自動封印",
+        "MinutesCountFormat": "{0} 砂時計（分）",
+        "AddNewVault": "新たな宝物庫の建造",
+        "AuthRequiredToCreate": "宝物庫を造るには、現在の大いなる封印の呪文を唱えよ",
+        "VaultManagement": "宝物庫の管理"
+      },
+      "#14-05: バックアップ": {
+        "BackupRestoreSection": "記憶の写し",
+        "RestoreRequiresMasterPasswordNotice": "他の魔法の箱で記憶を蘇らせるには、大いなる封印の呪文が要る（魂の共鳴は他の箱では響かない）。",
+        "BackupDatabaseAction": "封印された知恵の泉を、世界の任意の場所へ退避させる。",
+        "AutoBackupOnExit": "旅の終わりの自動退避",
+        "AutoBackupInstructions": "オアシスを去る時、指定した地へ自動的に記憶を写す。",
+        "BackupTargetFolder": "記憶を託す地",
+        "SuccessBackupSavedToPath": "{0} へ記憶を託した。",
+        "WarningAutoBackupContext": "自動退避の儀",
+        "WarningLastExitBackupFailedAlert": "前回オアシスを去る際、記憶の退避に失敗している。世界の理で託す地を確認せよ。",
+        "WarningNoFolderAutoBackupDisabled": "記憶を託す地が定められていないため、自動退避の掟を破棄した。",
+        "WarningBackupBlockedReadOnlyAlert": "最後の狼煙で覗く間は、記憶の退避は許されぬ。",
+        "Dialog": {
+          "ClearBackupPathConfirmText": "記憶を託す地の指定を白紙に戻す。\n後悔はないか？"
+        }
+      },
+      "#15-01: ページ全般": {
+        "TabTitleFormat": "宝物庫 {0} の掟"
+      },
+      "#15-02: セキュリティ（Windows Hello）": {
+        "WindowsHelloUnlock": "魂の共鳴による封印解除（この魔法の箱でのみ有効）",
+        "BiometricEnrollment": "生命の証や秘密の暗号で宝物庫の封印を解く。"
+      },
+      "#15-03: セキュリティ（マスターパスワードの変更）": {
+        "CurrentMasterPassword": "現在の大いなる封印の呪文",
+        "NewMasterPassword": "新たなる封印の呪文",
+        "ConfirmMasterPassword": "新たなる封印の呪文（確認）",
+        "Dialog": {
+          "ChangeMasterPassword": "封印の呪文の錬成し直し",
+          "ForceResetViaHelloInstructions": "古き呪文を忘却した場合、魂の共鳴の力で新たな呪文を強制錬成する。",
+          "HelloForceReset": "魂の共鳴で強制錬成",
+          "ForceResetViaHelloPrompt": "新たな呪文を刻むための資格を真贋判定する。",
+          "CannotReuseCurrentMasterPassword": "現在と同じ呪文は刻めない。新たな言葉を紡げ。",
+          "MasterPasswordChangedSuccessfully": "封印の呪文の錬成し直しに成功した。",
+          "PasswordResetViaHelloSuccessfully": "魂の共鳴による呪文の強制錬成に成功した。",
+          "EmergencyCodeRemainsValid": "最後の狼煙は依然として効力を保っている。"
+        }
+      },
+      "#15-04: セキュリティ（緊急アクセスコード）": {
+        "Dialog": {
+          "EmergencyAccessSetup": "最後の狼煙",
+          "EmergencyAccessConcept": "古代の紋章を物理的に保護し、秘密の暗号と共に隠しておくことで、万が一の際に透視のみ可能な状態で宝物庫をこじ開けられる。",
+          "EmergencyCodeStatusIssued": "配備済み",
+          "FourDigitsPin": "4つの数字の暗号",
+          "ConfirmPin": "暗号（確認用）",
+          "EncryptQrWithPin": "4つの暗号で紋章を封印し、幻影（PNG）として残す。",
+          "GenerateOrReissueCode": "組み上げ / 組み直し",
+          "RevokeEmergencyCode": "最後の狼煙を消し去る。消し去られた紋章では二度と封印を解けない。",
+          "DeleteEmergencyCodeConfirmText": "消し去れば現在の紋章はただの絵と化す。\n真に消し去るのか？",
+          "ReissueEmergencyCodeConfirm": "狼煙の組み直しの確認",
+          "ReissueEmergencyCodeConfirmText": "組み直せば現在の紋章は力を失う。\n（※新たな紋章の生成を途中で破棄した場合は、現在のものが保たれる）\n真に組み直すのか？",
+          "QrCodeSavedToPath": "{0} に幻影を残した。金庫などの堅牢なる地へ秘匿せよ。",
+          "OldQrRevokedNotice": "この紋章はもはや力を失っている。"
+        }
+      },
+      "#15-05: データ移行": {
+        "DataMigrationGroup": "記憶の移し替え",
+        "PlainTextExportAction": "すべての羊皮紙を、結界を解いた無防備な記録（CSV/JSON）として搬出する。",
+        "PlainTextImportAction": "異郷の記録（CSV/JSON）から羊皮紙を搬入する。称号が衝突した際は「(宝物庫への搬入)」と刻まれる。",
+        "IncludeTotpInExport": "搬出する記録に二重の結界の核も含める",
+        "ExportTotpRiskWarning": "二重の結界の核も同時に白日の下に晒す。盗賊に奪われた際の破滅的リスクを心に刻め。",
+        "Dialog": {
+          "ExportPlaintextWarning": "無防備な搬出の警告",
+          "PlaintextExportDangerAlert": "すべての羊皮紙を結界なき無防備な記録（CSV/JSON）として放つ。",
+          "ExportPartialSuccessTitle": "一部の羊皮紙が儀式から零れ落ちました",
+          "ExportPartialSuccessText": "全{1}件の羊皮紙のうち{0}件は結界を解けず、儀式から零れ落ちた。残りの羊皮紙は無事に宝物庫の外へ搬出されている。",
+          "ImportPlaintextConfirm": "無防備な搬入の確認",
+          "PlaintextImportConfirmText": "結界なき記録（CSV/JSON）から羊皮紙を宝物庫へ搬入する。"
+        },
+        "SuccessImportedCountReport": "{0} 件の羊皮紙を宝物庫へ搬入した。",
+        "SuccessImportDetailsReport": "（称号の衝突による改名: {0} 件、棚が見当たらず未分類: {1} 件）",
+        "SuccessImportFailedCountReport": "（{0} 件の荷は読み解けなかった。詳細は探求の足跡を見よ）",
+        "ErrorImportExceptionReport": "搬入に失敗した: {0}"
+      },
+      "#15-06: 共通（確認ダイアログ）": {
+        "Dialog": {
+          "AuthRequiredToProceed": "魂の証明のため、大いなる封印の呪文を唱えよ。"
+        }
+      }
+    },
+    "Restore": {
+      "#16: 復元（Rev.22で個別復元を廃止し一括完全復元のみに一本化）": {
+        "Dialog": {
+          "StartRestore": "時戻しの儀式",
+          "UnifiedDbIntegrityIssueAlert": "知恵の泉に歪みが視える。直ちに搬出し、記憶の写しを取れ。",
+          "VaultDbIntegrityIssueAlert": "宝物庫の構造に歪みが視える。直ちに搬出し、記憶の写しを取れ。"
+        },
+        "SelectBackupFile": "過去の記憶を選べ",
+        "MainPage": "世界の修復",
+        "Description": "過去の記憶から、この世界の全てを修復する。現世は過去の記憶が刻まれた時点の姿へと置き換わる。",
+        "ExecuteButton": "時戻しを実行",
+        "AuthDialogTitle": "過去の記憶の真贋判定",
+        "AuthDialogMessage": "その記憶を創りし時、いずれかの宝物庫に刻んだ大いなる封印の呪文を唱えよ。",
+        "AuthPasswordPlaceholder": "封印の呪文",
+        "AuthButton": "真贋判定",
+        "OverwriteWarningTitle": "本当に世界を上書きするか？",
+        "OverwriteWarningMessage": "現世の宝物庫はすべて上書きされ、過去の記憶（{0} に刻まれたもの）の姿へと置き換わる。\n\n※安全のため、現世の姿は退避の間へ自動的に記録される。\n\n※魂の共鳴は解かれるため、時戻しの後は大いなる封印の呪文で開封し、共鳴を結び直すこと。",
+        "OverwriteConfirmButton": "上書きして時を戻す",
+        "NoFilesFoundAlert": "呼び覚ますべき記憶の欠片が見当たらない。過去の記憶の中身を確かめよ。",
+        "ErrorInvalidBackupFileAborted": "過去の記憶「{0}」は穢れ、あるいは形を失っている。時戻しの儀式は中止された。現世は何一つ触れられていない。",
+        "ErrorActiveDbSelected": "現在息づいている知恵の泉は選べない。過去の記憶を選べ。"
+      }
+    },
+    "Emergency": {
+      "#17: 緊急アクセス": {
+        "WindowTitle": "最後の狼煙",
+        "DropQrZone": "古代の紋章（PNG）をここに投げ入れろ",
+        "SelectQrFile": "古代の紋章（PNG）を選べ",
+        "Pin": "狼煙を上げるための4桁の暗号",
+        "ErrorQrOrPinInvalid": "紋章か暗号が間違っている。",
+        "ErrorQrReadFailed": "紋章を解読できなかった。正しき幻影（PNG）を選べ。",
+        "ErrorMultipleFilesDropped": "幻影はひとつだけ投げ入れろ。",
+        "ErrorNoVaultMatchingQr": "この紋章と結びつく宝物庫がこの地には無い。",
+        "ReadOnlyModeNote": "紋章と暗号により、宝物庫を「透視」でこじ開ける。"
+      }
+    }
+  }
+}

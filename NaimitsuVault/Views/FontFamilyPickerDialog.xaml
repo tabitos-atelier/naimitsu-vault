@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--  Copyright (c) 2026 Tabito's Works. Licensed under the MIT License.  -->
+<ContentDialog
+    x:Class="NaimitsuVault.Views.FontFamilyPickerDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:NaimitsuVault.Localization">
+
+    <ContentDialog.Title>
+        <StackPanel Orientation="Horizontal" Spacing="8">
+            <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8D2;" />
+            <TextBlock VerticalAlignment="Center" Text="{loc:Msg Key=AppSettings.FontFamily}" />
+        </StackPanel>
+    </ContentDialog.Title>
+
+    <!--  Custom footer (Cancel left, OK right) instead of PrimaryButtonText/CloseButtonText, so the
+         confirm action is consistently on the right like the app's other non-destructive dialogs.  -->
+    <StackPanel Spacing="12">
+        <TextBlock
+            FontSize="{StaticResource NvCaptionFontSize}"
+            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+            Text="{loc:Msg Key=AppSettings.FontFamilyDesc}"
+            TextWrapping="Wrap" />
+        <ListView
+            x:Name="FontListView"
+            Height="440"
+            MinWidth="320"
+            HorizontalAlignment="Stretch"
+            KeyDown="FontListView_KeyDown"
+            SelectionMode="Single" />
+
+        <StackPanel
+            HorizontalAlignment="Right"
+            Orientation="Horizontal"
+            Spacing="8">
+            <Button Click="CancelButton_Click" Content="{loc:Msg Key=Common.Cancel}" />
+            <Button
+                Click="OkButton_Click"
+                Content="{loc:Msg Key=Common.Ok}"
+                Style="{StaticResource AccentButtonStyle}" />
+        </StackPanel>
+    </StackPanel>
+</ContentDialog>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<winuiex:WindowEx
+    x:Class="NaimitsuVault.Views.UnlockWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:NaimitsuVault.Localization"
+    xmlns:winuiex="using:WinUIEx"
+    Title="{loc:Msg Key=System.Product.Name}">
+
+    <Grid>
+        <!--  Custom title bar (hides the OS caption buttons and places our own min/close)  -->
+        <Grid
+            x:Name="AppTitleBar"
+            Height="32"
+            VerticalAlignment="Top">
+            <!--  46px right margin to sit just left of the OS close button (46px)  -->
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Margin="0,0,46,0">
+                <Button
+                    x:Name="TitleMinButton"
+                    Width="46"
+                    Height="32"
+                    Background="Transparent"
+                    BorderThickness="0"
+                    CornerRadius="0"
+                    Padding="0"
+                    Click="TitleMinButton_Click">
+                    <Button.Resources>
+                        <ResourceDictionary>
+                            <ResourceDictionary.ThemeDictionaries>
+                                <ResourceDictionary x:Key="Light">
+                                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#FFD2D2D2"/>
+                                    <SolidColorBrush x:Key="ButtonForegroundPointerOver" Color="#FF000000"/>
+                                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#FFB4B4B4"/>
+                                    <SolidColorBrush x:Key="ButtonForegroundPressed" Color="#FF000000"/>
+                                </ResourceDictionary>
+                            </ResourceDictionary.ThemeDictionaries>
+                        </ResourceDictionary>
+                    </Button.Resources>
+                    <FontIcon
+                        FontSize="{StaticResource NvIconSizeSmall}"
+                        FontFamily="Segoe MDL2 Assets"
+                        Glyph="&#xE921;" />
+                </Button>
+            </StackPanel>
+        </Grid>
+
+        <StackPanel
+            Margin="4,0,0,4"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Bottom"
+            Orientation="Horizontal"
+            Spacing="0">
+            <Button
+                x:Name="RestoreGateButton"
+                Click="RestoreGateButton_Click"
+                Style="{StaticResource SubtleButtonStyle}"
+                ToolTipService.ToolTip="{loc:Msg Key=Restore.Dialog.StartRestore}">
+                <FontIcon
+                    FontSize="{StaticResource NvIconSizeDefault}"
+                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                    Glyph="&#xE90F;" />
+            </Button>
+            <Button
+                x:Name="EmergencyQrButton"
+                Click="EmergencyQrButton_Click"
+                Style="{StaticResource SubtleButtonStyle}"
+                ToolTipService.ToolTip="{loc:Msg Key=Emergency.WindowTitle}">
+                <FontIcon
+                    FontSize="{StaticResource NvIconSizeDefault}"
+                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                    Glyph="&#xED14;" />
+            </Button>
+        </StackPanel>
+        <StackPanel
+            MaxWidth="360"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Spacing="0">
+
+            <StackPanel Margin="0,0,0,28" HorizontalAlignment="Center">
+                <Image
+                    Width="256"
+                    Height="256"
+                    HorizontalAlignment="Center"
+                    Source="ms-appx:///Assets/NaimitsuVault.png" />
+                <TextBlock
+                    Margin="0,10,0,0"
+                    HorizontalAlignment="Center"
+                    FontSize="{StaticResource NvTitleFontSize}"
+                    FontWeight="SemiBold"
+                    Text="{loc:Msg Key=System.Product.Name}" />
+            </StackPanel>
+
+            <!--  Error message (visibility toggled from code-behind)  -->
+            <Border
+                x:Name="ErrorBorder"
+                Margin="0,0,0,16"
+                Padding="12,8"
+                Background="{ThemeResource SystemFillColorCriticalBackgroundBrush}"
+                CornerRadius="{ThemeResource ControlCornerRadius}"
+                Visibility="Collapsed">
+                <TextBlock
+                    x:Name="ErrorText"
+                    Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                    TextWrapping="Wrap" />
+            </Border>
+
+            <!--  Password entry form (controls disabled individually via SetRestoreMode during recovery)  -->
+            <StackPanel Spacing="0">
+
+                <StackPanel>
+                    <PasswordBox
+                        x:Name="MainPasswordBox"
+                        Padding="10,8"
+                        FontSize="{StaticResource NvBodyFontSize}"
+                        IsEnabled="{x:Bind ViewModel.IsNotBusy, Mode=OneWay}"
+                        KeyDown="UnlockInput_KeyDown"
+                        PasswordChanged="PasswordBox_PasswordChanged" />
+
+                    <StackPanel
+                        x:Name="SetupPanel"
+                        Margin="0,16,0,0"
+                        Visibility="Collapsed">
+                        <PasswordBox
+                            x:Name="ConfirmBox"
+                            Padding="10,8"
+                            PlaceholderText="{loc:Msg Key=Unlock.ConfirmPassword}"
+                            AutomationProperties.Name="{loc:Msg Key=Unlock.ConfirmPassword}"
+                            FontSize="{StaticResource NvBodyFontSize}"
+                            KeyDown="UnlockInput_KeyDown"
+                            PasswordChanged="ConfirmBox_PasswordChanged" />
+                        <TextBlock
+                            Margin="0,8,0,0"
+                            FontSize="{StaticResource NvCaptionFontSize}"
+                            Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                            Text="{loc:Msg Key=Unlock.PasswordForgetWarning}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Margin="0,24,0,0" Spacing="10">
+                    <Button
+                        x:Name="UnlockButton"
+                        Height="40"
+                        HorizontalAlignment="Stretch"
+                        Command="{x:Bind ViewModel.ExecuteCommand}"
+                        FontSize="{StaticResource NvBodyFontSize}"
+                        Style="{StaticResource AccentButtonStyle}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <ProgressRing
+                                x:Name="BusyRing"
+                                Width="16"
+                                Height="16"
+                                IsActive="False"
+                                Visibility="Collapsed" />
+                            <FontIcon FontSize="{StaticResource NvIconSizeLarge}" Glyph="&#xE785;" />
+                            <TextBlock x:Name="ButtonText" Text="{loc:Msg Key=Unlock.Main}" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button
+                        x:Name="WindowsHelloButton"
+                        Height="40"
+                        HorizontalAlignment="Stretch"
+                        Command="{x:Bind ViewModel.UnlockWithWindowsHelloCommand}"
+                        FontSize="{StaticResource NvBodyFontSize}"
+                        Style="{StaticResource SubtleButtonStyle}"
+                        Visibility="Collapsed">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon FontSize="{StaticResource NvIconSizeLarge}" Glyph="&#xE928;" />
+                            <TextBlock Text="{loc:Msg Key=Unlock.WindowsHello}" />
+                        </StackPanel>
+                    </Button>
+
+                </StackPanel>
+            </StackPanel>
+
+        </StackPanel>
+    </Grid>
+</winuiex:WindowEx>

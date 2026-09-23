@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--  Copyright (c) 2026 Tabito's Works. Licensed under the MIT License.  -->
+<UserControl
+    x:Class="NaimitsuVault.Views.Controls.AvatarCropControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:NaimitsuVault.Views.Controls"
+    xmlns:loc="using:NaimitsuVault.Localization">
+
+    <StackPanel Spacing="12">
+
+        <controls:CursorGrid
+            x:Name="Viewport"
+            Width="320"
+            Height="320"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            PointerCaptureLost="Viewport_PointerCaptureLost"
+            PointerMoved="Viewport_PointerMoved"
+            PointerPressed="Viewport_PointerPressed"
+            PointerReleased="Viewport_PointerReleased"
+            PointerWheelChanged="Viewport_PointerWheelChanged">
+
+            <!--  Image layer (clipped via Canvas)  -->
+            <Canvas Width="320" Height="320">
+                <Canvas.Clip>
+                    <RectangleGeometry Rect="0,0,320,320" />
+                </Canvas.Clip>
+                <Image
+                    x:Name="CropImage"
+                    Stretch="None">
+                    <Image.RenderTransform>
+                        <TransformGroup>
+                            <ScaleTransform x:Name="ImgScale" />
+                            <TranslateTransform x:Name="ImgTranslate" />
+                        </TransformGroup>
+                    </Image.RenderTransform>
+                </Image>
+            </Canvas>
+
+            <!--
+                Dim overlay: "cuts out" the circle from the rectangle using EvenOdd fill.
+                The semi-transparent black works as a "darken outside the circle" effect in both light and dark themes.
+            -->
+            <Path IsHitTestVisible="False" Fill="#8C000000">
+                <Path.Data>
+                    <GeometryGroup FillRule="EvenOdd">
+                        <RectangleGeometry Rect="0,0,320,320" />
+                        <EllipseGeometry Center="160,160" RadiusX="120" RadiusY="120" />
+                    </GeometryGroup>
+                </Path.Data>
+            </Path>
+
+            <!--
+                Crop circle guide (double line):
+                Outer: semi-transparent black shadow -> keeps the inner line visible even over bright images
+                Inner: TextFillColorPrimaryBrush -> black in light mode, white in dark mode
+            -->
+            <Ellipse
+                Width="244"
+                Height="244"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                IsHitTestVisible="False"
+                Stroke="#80000000"
+                StrokeDashArray="4 2"
+                StrokeThickness="2.5" />
+            <Ellipse
+                Width="240"
+                Height="240"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                IsHitTestVisible="False"
+                Stroke="{ThemeResource TextFillColorPrimaryBrush}"
+                StrokeDashArray="4 2"
+                StrokeThickness="1.5" />
+
+        </controls:CursorGrid>
+
+        <Grid ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="0"
+                Width="28"
+                Height="28"
+                Padding="0"
+                AutomationProperties.Name="{loc:Msg Key=Profile.Dialog.ZoomOut}"
+                Click="ZoomOut_Click"
+                ToolTipService.ToolTip="{loc:Msg Key=Profile.Dialog.ZoomOut}">
+                <FontIcon FontSize="{StaticResource NvIconSizeSmall}" Glyph="&#xE738;" />
+            </Button>
+            <Slider
+                x:Name="ZoomSlider"
+                Grid.Column="1"
+                Maximum="100"
+                Minimum="0"
+                Value="0"
+                ValueChanged="ZoomSlider_ValueChanged" />
+            <Button
+                Grid.Column="2"
+                Width="28"
+                Height="28"
+                Padding="0"
+                AutomationProperties.Name="{loc:Msg Key=Profile.Dialog.ZoomIn}"
+                Click="ZoomIn_Click"
+                ToolTipService.ToolTip="{loc:Msg Key=Profile.Dialog.ZoomIn}">
+                <FontIcon FontSize="{StaticResource NvIconSizeSmall}" Glyph="&#xE710;" />
+            </Button>
+        </Grid>
+
+    </StackPanel>
+</UserControl>

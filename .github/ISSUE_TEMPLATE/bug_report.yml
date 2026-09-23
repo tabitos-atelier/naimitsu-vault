@@ -1,0 +1,65 @@
+name: "🐛 Bug Report"
+description: "Report a reproducible bug or error (feature requests are not accepted here)."
+title: "[BUG]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        ## Notice
+        * This tracker is for **reproducible bugs only**.
+        * **Feature requests and requests for other-OS support (macOS, mobile, etc.) are not accepted.** This project is MIT licensed — feel free to fork it and build what you need.
+        * Found a security vulnerability? Do **not** open an Issue. Use [Private Vulnerability Reporting](https://github.com/tabitos-atelier/naimitsu-vault/security/advisories/new) instead.
+
+  - type: input
+    id: version
+    attributes:
+      label: "App version"
+      placeholder: "e.g. v1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: "Windows version"
+      placeholder: "e.g. Windows 11 Pro 23H2 (x64)"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: distribution
+    attributes:
+      label: "Distribution form"
+      options:
+        - "Installer"
+        - "ZIP (portable)"
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      placeholder: "A clear and concise description of the bug."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Steps to reproduce"
+      placeholder: |
+        1. Open the '...' screen
+        2. Click '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: "Logs / Screenshots (optional)"
+      placeholder: "Before attaching anything, make sure it contains no personal data or master password."
+    validations:
+      required: false

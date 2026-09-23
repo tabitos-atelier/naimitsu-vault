@@ -1,0 +1,660 @@
+﻿{
+  "locale": "ja",
+  "displayName": "日本語",
+  "localeVersion": 1,
+  "messages": {
+    "Common": {
+      "#01-01: 共通操作": {
+        "Ok": "OK",
+        "Cancel": "キャンセル",
+        "Verify": "認証",
+        "AuthWithWindowsHello": "Windows Hello で認証",
+        "AuthWithWindowsHelloPrompt": "機密情報を保護しているロックを解除します。",
+        "WarningAutoLockNotice": "実行後、アプリは自動的にロック状態になります。",
+        "Close": "閉じる",
+        "Save": "保存",
+        "Discard": "破棄",
+        "Restart": "アプリを再起動",
+        "Add": "追加",
+        "Delete": "削除",
+        "Import": "インポート",
+        "Export": "エクスポート",
+        "IdentityVerification": "本人確認",
+        "Backup": "バックアップ",
+        "Unlock": "ロック解除"
+      },
+      "#01-02: 状態表示": {
+        "On": "オン",
+        "Off": "オフ",
+        "All": "すべて",
+        "Current": "現在",
+        "Warning": "警告",
+        "Error": "エラー",
+        "Expired": "期限切れ",
+        "Loading": "読み込み中...",
+        "PleaseWait": "しばらくお待ちください。",
+        "SafeWritingLock": "データを安全に保存しています。完了後はセキュリティ確保のため自動的に画面がロックされます。",
+        "MemoryClearedLock": "安全のため、機密データを消去して画面をロックしました。"
+      },
+      "#01-03: パスワード強度": {
+        "StrengthVeryWeak": "非常に弱い",
+        "StrengthWeak": "脆弱",
+        "StrengthFair": "普通",
+        "StrengthStrong": "強力",
+        "StrengthVeryStrong": "強固"
+      },
+      "#01-04: 入力フィールド名": {
+        "Title": "タイトル",
+        "Username": "ユーザー名",
+        "Password": "パスワード",
+        "Email": "メールアドレス",
+        "Website": "ウェブサイト",
+        "TotpSecret": "2段階認証 (2FA)",
+        "Notes": "メモ",
+        "ExpiresAt": "有効期限"
+      },
+      "#01-05: 追加フォーム": {
+        "CustomField": "追加項目",
+        "NewText": "新規テキスト",
+        "NewPassword": "新規パスワード",
+        "NewWebsite": "新規ウェブサイト",
+        "NewDate": "新規日付"
+      },
+      "#01-06: 入力案内・検索": {
+        "EnterText": "テキストを入力",
+        "EnterPassword": "パスワードを入力",
+        "EnterWebsite": "ウェブサイトを入力",
+        "SelectDate": "日付を選択",
+        "FreeInput": "自由に入力できます",
+        "EnterMasterPassword": "マスターパスワードを入力してください",
+        "PasswordLengthHint": "8文字以上を設定してください",
+        "SearchSecret": "機密情報を検索...",
+        "DropZonePrompt": "ここにファイルをドラッグ＆ドロップして追加",
+        "DropTooltip": "1回のドロップで{0}件まで／1ファイル最大{1}MB"
+      },
+      "#01-07: 追加操作・ツールチップ": {
+        "AddTextField": "テキスト項目を追加",
+        "AddPasswordField": "パスワード項目を追加",
+        "AddWebsiteField": "ウェブサイト項目を追加",
+        "AddDateField": "日付項目を追加",
+        "ClearExpiry": "有効期限をクリア",
+        "ExpiryAlarmNotice": "{0} 日前になるとアラームが表示されます。",
+        "OpenInBrowser": "ブラウザで開く",
+        "DeleteConfirm": "削除の確認",
+        "AttachedFiles": "添付ファイル",
+        "AttachedFileQuarantined": "ファイルが破損しているか、改変された可能性があります。安全のためプレビューは表示しません。",
+        "CommonOperations": "共通操作",
+        "DropToAttach": "ここにドロップして添付",
+        "DropZone": "バックアップファイル（.nkdb）をここにドロップ",
+        "FileFilter": "{0} ファイル (*.{1})",
+        "AllFiles": "すべてのファイル",
+        "FileTypeCertKey": "証明書 / 鍵ファイル",
+        "FileTypeXmlJson": "XML / JSON ファイル",
+        "FileTypeImage": "画像ファイル"
+      },
+      "#01-08: ファイルリンク": {
+        "NoLinks": "どの機密情報にもリンクされていません",
+        "SelectToView": "ファイルを選択するとリンク情報を表示します",
+        "AddLink": "リンクを追加する",
+        "RemoveLink": "リンクを解除する",
+        "ToggleFilter": "リンク済みフィルターの切替"
+      },
+      "#01-09: 完了・成功通知": {
+        "SuccessSaveComplete": "保存完了",
+        "SuccessExportedToPath": "「{0}」に保存しました。",
+        "ImportSuccess": "インポート成功",
+        "QrReadSuccess": "QRコードを読み取りました。",
+        "InfoDeleteComplete": "削除完了",
+        "InfoUnifiedDbAutoRecovered": "アプリの基本データを自動修復しました。前回の設定が保存されていない可能性があります。",
+        "InfoVaultDbAutoRecovered": "保管庫 {0} を自動修復しました。前回の編集が保存されていない可能性があります。",
+        "InfoOversizeFilesSkipped": "{0} 件のファイルが上限（{1}MB）を超えるため除外されました。",
+        "InfoFilesQuarantined": "{0} 件のファイルに改ざんまたは破損の疑いがあるため、ギャラリー表示から除外されています。",
+        "InfoFilesAddFailed": "{0} 件のファイルの追加に失敗しました。",
+        "InfoFilesLoadFailed": "{0} 件のファイルを表示できませんでした。"
+      },
+      "#01-10: 有効期限アラート": {
+        "ExpiresInDays": "後{0} 日で期限切れ"
+      },
+      "#01-11: 入力エラー": {
+        "GeneralError": "エラーが発生しました",
+        "ErrorAuthFailed": "認証エラー",
+        "ErrorHelloAuthFailed": "Windows Hello 認証に失敗しました",
+        "ErrorHelloProfileMismatch": "この Windows Hello の設定は、現在の PC または Windows アカウントでは使用できません。",
+        "ErrorIncorrectPassword": "パスワードが一致しません。バックアップファイルのマスターパスワードを確認してください。",
+        "ErrorPasswordMismatch": "パスワードが一致しません。",
+        "ErrorPasswordTooShort": "パスワードは 8 文字以上で入力してください。",
+        "ErrorPinMismatch": "PINが一致しません。",
+        "WarningInvalidBase32Secret": "セットアップキーの形式が正しくありません。英字（A〜Z）と数字（2〜7）を8文字以上で入力してください。"
+      },
+      "#01-12: システムエラー": {
+        "WarningUnifiedDbIntegrityIssue": "アプリの基本データに問題（破損の可能性）が検出されました",
+        "WarningVersionMismatch": "バージョン不一致",
+        "ErrorBrowserOpenFailed": "ブラウザを開けませんでした: {0}",
+        "ErrorCaptureFailed": "スクリーンキャプチャに失敗しました。",
+        "ErrorDecryptionFailed": "暗号化ファイルの解除に失敗しました。",
+        "ErrorFileDataNotFound": "ファイルデータが見つかりません。",
+        "ErrorPartialLoadTitle": "一部の項目を読み込めませんでした",
+        "ErrorPartialLoadText": "全{1}件中{0}件のデータが破損しているため、一覧に表示できませんでした。",
+        "ErrorLockBlockedRunningTask": "処理が完了するまでロックできません。",
+        "ErrorWriteAccessDenied": "選択したフォルダに書き込み権限がありません。別のフォルダを選択してください。",
+        "ErrorInvalidEncoding": "ファイルの文字コードが正しくありません。メモ帳などのテキストエディタで開き、「UTF-8」を選んで保存し直してください。"
+      },
+      "#01-13: 共通ショートカット・その他": {
+        "BrowseFolder": "バックアップ先フォルダを参照",
+        "ClearFolder": "バックアップ先フォルダをクリア",
+        "CopyToClipboard": "クリップボードにコピー",
+        "DeleteField": "この項目を削除",
+        "FocusSearchBar": "検索バーにフォーカス",
+        "KeyboardShortcuts": "キーボードショートカット",
+        "PurgePermanently": "完全削除",
+        "ToggleLeftPane": "左パネルの表示/非表示",
+        "ToggleRightPane": "右パネルの表示/非表示",
+        "ToggleMask": "パスワードなどの表示/非表示",
+        "ToggleVisibility": "表示 / 非表示",
+        "EnlargeDisplay": "拡大表示",
+        "UndoDelete": "削除取消",
+        "ToggleDeletedFilter": "削除済みフィルターの切替",
+        "ToggleDraftFilter": "下書きフィルターの切替",
+        "ToggleExpirationFilter": "有効期限フィルターの切替",
+        "ToggleFavoriteFilter": "お気に入りフィルターの切替",
+        "ToggleFavoriteItem": "お気に入りの切替"
+      }
+    },
+    "Unlock": {
+      "#02: ロック解除": {
+        "SetupStart": "設定して開始",
+        "WindowsHello": "Windows Hello で解除",
+        "Main": "ロック解除",
+        "SelectVault": "保管庫を選択してください",
+        "ConfirmPassword": "マスターパスワード（確認）",
+        "PasswordForgetWarning": "このパスワードを忘れるとロック解除できなくなります。",
+        "ErrorUnifiedDbCorrupted": "アプリの基本データの破損を検知しました。下のスパナボタンから復元してください。",
+        "ErrorVaultDbCorrupted": "保管庫 {0} の破損を検知しました。復旧に使える予備データが見つかりません。下のスパナボタンから復元してください。",
+        "WarningDbRecreatedBackup": "データベースを読み込めなかったため、新規作成しました。\n元のデータベースはバックアップとして保存されています:\n{0}"
+      },
+      "#02-01: ロック解除（Windows Hello 使用不可ダイアログ）": {
+        "Dialog": {
+          "HelloProfileMismatchTitle": "Windows Hello の無効化（全保管庫）",
+          "HelloProfileMismatchBody": "この Windows Hello の設定は別の PC で登録されたため、現在の環境では使用できません。\nすべての保管庫の Windows Hello 設定を無効化しますか？\n\n無効化後はマスターパスワードでロック解除してください。\n（※ログイン後に設定画面から再設定できます。）",
+          "HelloProfileMismatchDisableButton": "すべて無効化"
+        }
+      }
+    },
+    "Shell": {
+      "#03: メインメニュー": {
+        "Navi": {
+          "Secrets": "機密情報",
+          "TimeMachine": "タイムマシン",
+          "Gallery": "ギャラリー",
+          "Profile": "プロフィール",
+          "AuditLog": "監査ログ",
+          "Settings": "設定",
+          "About": "このアプリについて"
+        },
+        "LockNow": "今すぐロック",
+        "SelectPagePrompt": "左のメニューからページを選択してください",
+        "ExpiryAlertBadge": "有効期限が切れた、または間もなく期限が切れる項目があります",
+        "TrayExit": "終了"
+      }
+    },
+    "Secrets": {
+      "#04: 機密情報": {
+        "Add": "機密を追加",
+        "GeneratePassword": "パスワードを生成",
+        "SymbolSet": "記号セット",
+        "Dialog": {
+          "CopyCommitted": "保存済みの値をコピー",
+          "ReviewDraft": "下書きを確認・破棄",
+          "DisableTotpConfirm": "2段階認証を無効化すると、登録されているセットアップキーが消去されます。無効化しますか？",
+          "DisableTotpButton": "無効化"
+        },
+        "CategorySelection": "カテゴリ",
+        "SearchPlaceholder": "タイトル・ID・URL・メールを検索",
+        "SelectOrCreatePrompt": "左の一覧から機密情報を選択するか、追加ボタンで新規作成してください",
+        "UntitledSecret": "タイトル未設定",
+        "WarningTitleRequired": "タイトルは必須です。",
+        "ExampleEmail": "例: info@example.com",
+        "ExampleTitle": "例: マイアカウント",
+        "ExampleUrl": "例: https://example.com",
+        "ExampleUsername": "例: username",
+        "NoExpiry": "期限なし",
+        "CopyTotpCodeTooltip": "コードをコピー",
+        "DisableTotpTooltip": "2段階認証（TOTP）の無効化",
+        "GoToTimeMachineTooltip": "この機密情報のタイムマシンへ移動",
+        "HasDraftBadgeTooltip": "下書きあり",
+        "ToggleTotpTooltip": "2段階認証を設定/解除"
+      }
+    },
+    "Totp": {
+      "#05: 2段階認証": {
+        "ScreenCapture": "画面キャプチャ",
+        "BackupCodeOptional": "バックアップコード (任意)",
+        "CaptureGuideText": "クリック後、QRコードをドラッグで囲んでください。Esc でキャンセルできます。",
+        "DirectInputOption": "またはセットアップキーを直接入力",
+        "DiscardButton": "破棄",
+        "DropBackupCodeInstructions": "バックアップコードの画像や PDF をここにドロップ（添付保存されます）",
+        "ReadQrOption": "QRコードを読み取る",
+        "SecretKeyBase32": "2段階認証のセットアップキー",
+        "TimeDriftCodes": "{2}秒前: {0}  {2}秒後: {1}",
+        "TimeSyncNotice": "コードが一致しない場合は PC の時刻設定を確認してください。",
+        "WarningQrRecognitionFailed": "QRコードを認識できませんでした。範囲を広めに選択するか、手動入力してください。",
+        "ExampleSecret": "JBSWY3DPEHPK3PXP"
+      }
+    },
+    "DirectInjection": {
+      "#06: 自動入力": {
+        "InjectPassword": "パスワードを入力",
+        "InjectUsername": "ユーザー名を入力",
+        "Title": "キーボード自動入力",
+        "Step1FocusTarget": "1. 対象アプリのユーザー名の入力欄にカーソルを合わせてください",
+        "Step2InjectUsername": "2. 「ユーザー名を入力」をクリックして自動入力（クリップボード不使用）",
+        "Step3InjectPassword": "3. パスワードの入力欄へ移動し、「パスワードを入力」をクリック",
+        "ErrorHwndMismatchInterrupted": "安全停止 — 入力中に別のウィンドウへ切り替わったため、入力を中断しました",
+        "ErrorTargetWindowNotFound": "入力先のウィンドウが見つかりません — 対象アプリを起動してから再試行してください",
+        "ErrorSendInputWin32Failed": "自動入力システムが応答しません。対象アプリが正しく起動しているか確認してください。(コード: {0})",
+        "InfoMonitoringForeground": "入力待機中 — 最前面ウィンドウを監視しています",
+        "SuccessPasswordInjected": "パスワードの入力が完了しました",
+        "SuccessUsernameInjected": "ユーザー名の入力が完了しました"
+      }
+    },
+    "TimeMachine": {
+      "#07: タイムマシン": {
+        "Dialog": {
+          "GenerationSwap": "履歴の入れ替え",
+          "BeforeSwap": "入れ替え前",
+          "AfterSwap": "入れ替え後",
+          "DeletedItemNotice": "この機密情報は削除済みです。{0} にゴミ箱から完全に削除されます。「削除取消」ボタンで元に戻せます。",
+          "PurgeConfirmText": "「{0}」を完全に削除します。\nこの操作はタイムマシンの履歴ごと削除し、元に戻すことはできません。\n\n本当に削除しますか？"
+        },
+        "SearchPlaceholder": "タイトル・更新日を検索",
+        "SelectSecretPrompt": "左のリストから機密情報を選択してください",
+        "GoToSecretsPageTooltip": "この機密情報の詳細へ移動",
+        "UndoToGen1Tooltip": "1世代前に戻す",
+        "UndoToGen2Tooltip": "2世代前に戻す",
+        "SuccessRestoreComplete": "復元完了",
+        "SuccessItemRestored": "「{0}」を復元しました。",
+        "DraftBlocksRestoreNotice": "下書き中は履歴を復元できません"
+      }
+    },
+    "Gallery": {
+      "#08: ギャラリー": {
+        "Dialog": {
+          "SoftDeleteConfirmText": "このファイルをゴミ箱へ移動します。30日間は復元できますが、機密情報・プロフィールへのリンクは解除されます。",
+          "PurgeFileConfirmText": "このファイルを完全に消去します。この操作は取り消せません。"
+        },
+        "DeletedFilterLabel": "削除済み",
+        "DeletedItemPurgeNotice": "{0} にゴミ箱から完全に削除されます",
+        "SearchPlaceholder": "ファイル名・日付を検索",
+        "FilterImages": "画像 {0}",
+        "FilterPdf": "PDF {0}",
+        "FilterCerts": "証明書・鍵 {0}",
+        "FilterJsonXml": "JSON / XML {0}",
+        "FilterConfigs": "設定ファイル {0}",
+        "FilterMarkdown": "Markdown {0}",
+        "FilterLicense": "ライセンス {0}",
+        "FilterArchive": "圧縮ファイル {0}",
+        "FilterSql": "SQL {0}",
+        "InfoAlreadyRegistered": "選択されたファイルはすべて既に登録されています。(スキップ: {0} 件)",
+        "InfoUnsupportedSkipped": "{0} 件は対応外の形式のためスキップしました。",
+        "InfoAutoUndeletedDuplicate": "ゴミ箱内に同一ファイルが見つかったため復元しました",
+        "SuccessImportedCount": "{0} 件をインポートしました。(重複スキップ: {1} 件)",
+        "SuccessFileUndeleted": "ファイルを復元しました",
+        "WarningCertExpiredCount": "証明書 {0} 件が期限切れ",
+        "WarningCertExpiringSoonCount": "証明書 {0} 件が {1} 日以内に期限切れ",
+        "WarningCertMixedExpiryAlert": "証明書 {0} 件が期限切れ、{1} 件が {2} 日以内に期限切れ"
+      }
+    },
+    "Viewer": {
+      "#09: ファイルビューワ": {
+        "Main": "ビューワ",
+        "CertSectionHeader": "証明書情報",
+        "CertIssuer": "発行者",
+        "CertSubject": "サブジェクト",
+        "CertKeyUsage": "鍵用途",
+        "CertThumbprint": "拇印 (SHA1)",
+        "CertValidFrom": "有効開始日",
+        "CertValidTo": "有効期限",
+        "JsonSectionHeader": "JSON メタデータ",
+        "OauthType": "タイプ",
+        "OauthProjectId": "プロジェクト ID",
+        "OauthClientId": "クライアント ID",
+        "OauthClientEmail": "クライアントメール",
+        "TextSectionHeader": "テキスト内容",
+        "ArchiveSectionHeader": "アーカイブの内容",
+        "ArchiveEntryCount": "{0} 件のファイル",
+        "ArchiveEntryCountTruncated": "{0} 件を表示中（全 {1} 件、上限のため省略）",
+        "ArchiveEmpty": "このアーカイブは空です",
+        "PreviewUnsupported": "このファイルはプレビューに対応していません。エクスポートしてご利用ください。",
+        "PreviewFailed": "プレビューの表示に失敗しました。ファイルが大きすぎる可能性があります。エクスポートしてご利用ください。",
+        "PreviewQuarantined": "改ざんまたは破損の疑いがあるため、プレビューを表示できません。心当たりがない場合は削除をご検討ください。",
+        "ErrorCertExpired": "{0} 日前に期限切れになりました",
+        "WarningCertExpiringSoon": "あと {0} 日で期限切れになります"
+      }
+    },
+    "Profile": {
+      "#10: プロフィール": {
+        "Avatar": "アバター",
+        "ChangeAvatar": "変更",
+        "CompareDraft": "下書きと比較",
+        "Dialog": {
+          "AvatarCrop": "アバターの位置調整",
+          "ZoomIn": "ズームイン",
+          "ZoomOut": "ズームアウト"
+        },
+        "Name": "名前",
+        "Nickname": "ニックネーム",
+        "HomePhone": "自宅",
+        "MobilePhone": "携帯",
+        "PostalCode": "郵便番号",
+        "AddressLine1": "住所１",
+        "AddressLine2": "住所２",
+        "IdentityItem1": "マイナンバー",
+        "IdentityItem2": "運転免許証番号",
+        "IdentityItem3": "パスポート番号",
+        "RealName": "氏名（本名）",
+        "ExampleNickname": "例: たびと（ニックネーム）",
+        "ExampleEmail": "例: tabito@example.com",
+        "ExampleHomePhone": "例: 092-xxx-xxxx",
+        "ExampleMobile": "例: 090-xxxx-xxxx",
+        "ExamplePostalCode": "例: 814-0104",
+        "ExampleAddress1": "例: 福岡県福岡市城南区別府123",
+        "ExampleAddress2": "例: 電脳砂漠マンション 777号室",
+        "ExampleIdentityItem1": "12桁の番号",
+        "ExampleIdentityItem2": "例: 123456789012",
+        "ExampleIdentityItem3": "例: TK1234567"
+      }
+    },
+    "Categories": {
+      "#11: カテゴリプリセット（ユーザーが自由に追加・変更可能。番号は昇順で表示される）": {
+        "01": "ログイン",
+        "10": "IT・インフラ",
+        "20": "ライセンス",
+        "30": "プロジェクト",
+        "40": "教育・自己研鑽",
+        "50": "金融・カード",
+        "60": "身分証",
+        "70": "契約・文書",
+        "80": "会員・生活",
+        "90": "秘密のメモ",
+        "99": "その他",
+        "Uncategorized": "未分類"
+      }
+    },
+    "Dashboard": {
+      "#12: ダッシュボード": {
+        "Main": "ダッシュボード",
+        "Overview": "アプリ概要",
+        "SecretCount": "機密情報",
+        "FileCount": "ファイル",
+        "VaultCount": "保管庫",
+        "DbFileSize": "保管庫サイズ",
+        "SecurityScan": "セキュリティ診断",
+        "RunScan": "診断を実行",
+        "NotScannedYet": "診断未実行",
+        "WeakPasswords": "脆弱なパスワード",
+        "ReusedPasswords": "重複パスワード",
+        "NoIssuesFound": "セキュリティリスクは検出されませんでした"
+      }
+    },
+    "AuditLog": {
+      "#13-01: 一覧・フィルター": {
+        "Code": "コード",
+        "Severity": "重要度",
+        "SeverityNormal": "通常",
+        "SeverityNotice": "注意",
+        "SeverityImportant": "重要",
+        "FilterCategoryAuth": "認証",
+        "FilterCategoryWrite": "保存",
+        "FilterCategoryRead": "閲覧",
+        "FilterCategoryConfig": "構成・設定変更",
+        "FilterCategoryPrivilege": "重要操作",
+        "FilterCategoryPurge": "削除",
+        "FilterCategorySystem": "システム",
+        "NoMatchingActivityPlaceholder": "条件に一致するアクティビティはありません",
+        "SearchPlaceholder": "イベント概要・コードを検索"
+      },
+      "#13-02: イベント概要テンプレート": {
+        "AddFileLink": "ファイル「{0}」を追加",
+        "AuthenticationFailed": "認証失敗",
+        "AuthenticationSuccess": "認証成功",
+        "AutoPurgeExpiredFile": "期限切れのため添付ファイルを自動削除（{0}件）",
+        "AutoPurgeExpiredSecret": "有効期限切れのため自動削除",
+        "ChangeAutoBackupConfig": "自動バックアップ設定を変更",
+        "ChangeAutoLockConfig": "自動ロック設定を変更",
+        "ChangeCaptureProtectionConfig": "画面キャプチャ保護を変更",
+        "ChangeFaviconFetchConfig": "サイトアイコン自動取得を変更",
+        "ChangeMasterPassword": "マスターパスワードを変更",
+        "ChangeWindowsHelloConfig": "Windows Hello 設定を変更",
+        "DeleteTimeMachineSlot": "タイムマシンスロットを削除",
+        "DeletedItemPlaceholder": "（削除済み）",
+        "ExecuteAutoBackup": "自動バックアップを実行",
+        "ExecuteEmergencyAccessRecovery": "緊急アクセスコードで復旧を実行",
+        "ExecuteLogRotation": "保存期間を過ぎた監査ログを削除",
+        "ExecuteManualBackup": "バックアップを実行",
+        "ExecuteManualRestore": "復元を実行",
+        "ExecuteSilentSelfHealing": "自動修復を実行",
+        "SelfHealNoOpDraft": "データと同一の下書きを自動破棄（{0} 件）",
+        "SelfHealUnifiedDb": "アプリの基本データを予備データから自動修復",
+        "SelfHealVaultDb": "保管庫 {0} を予備データから自動修復",
+        "RepairFileContentType": "ファイル「{0}」の種別情報を自動修復（{1} → {2}）",
+        "CsvFormulaGuardApplied": "「{0}」のCSVエクスポートで危険な数式文字を無害化",
+        "ExportFileFromGallery": "ファイル「{0}」をエクスポート",
+        "ExportItemFailed": "「{0}」のエクスポートに失敗",
+        "ExportPlainText": "暗号化なしでエクスポートを実行（{0} 件）",
+        "GenerateEmergencyCode": "緊急アクセスコードを生成",
+        "ImportItemFailed": "インポート{0}件目の処理に失敗（{1}形式）",
+        "ImportPlainText": "暗号化されていないファイルからインポートを実行（{0} 件）",
+        "LocaleImportFailed": "カスタムロケールのインポートに失敗",
+        "LocaleImportKeyMissing": "カスタムロケールにキー「{0}」が存在しないため既定値で補完",
+        "LocaleImportPlaceholderBroken": "カスタムロケールのキー「{0}」でプレースホルダーが欠落しているためスキップ",
+        "LocaleImportSucceeded": "カスタムロケール「{0}」をインポート（{1} 件を補完）",
+        "LocaleImportValueTooLong": "カスタムロケールのキー「{0}」の値が長すぎるためスキップ",
+        "MoveFileToTrash": "ファイル「{0}」をゴミ箱へ移動",
+        "MoveSecretToTrash": "{0} を削除（ゴミ箱へ移動）",
+        "NoActivityPlaceholder": "アクティビティはありません",
+        "ProfileFieldCopiedToClipboard": "プロフィールの「{0}」をクリップボードへコピー",
+        "PurgeFilePermanently": "ファイル「{0}」を完全削除",
+        "PurgeSecretPermanently": "{0} を完全削除",
+        "ReadProfile": "プロフィールを閲覧",
+        "ReadSecret": "{0} を閲覧",
+        "ReadSecretAttachment": "{0} を閲覧（ファイル）",
+        "ReadSecretHistory": "{0} の履歴を閲覧",
+        "RecentActivityHeader": "最近のセキュリティアクティビティ",
+        "RestoreTimeMachineGeneration": "タイムマシン復元",
+        "RevokeEmergencyCode": "緊急アクセスコードを失効",
+        "RotateTimeMachineGeneration": "タイムマシンに履歴を保存",
+        "SaveProfile": "プロフィールを保存",
+        "SaveSecret": "機密情報「{0}」を保存",
+        "SecretAutoTypeExecuted": "{1} の「{0}」を外部ウィンドウへ直接入力",
+        "SecretFieldCopiedToClipboard": "{1} の「{0}」をクリップボードへコピー",
+        "SixMonthsHistoryNotice": "過去半年分の監査ログを表示",
+        "TimeMachineValueCopiedToClipboard": "{2} のタイムマシンから「{0}」（{1}）をクリップボードへコピー",
+        "UndoDeleteFile": "ファイル「{0}」を復元",
+        "UndoDeleteSecret": "{0} の削除を取り消し（復元）",
+        "VaultCreated": "この保管庫を作成"
+      }
+    },
+    "AppSettings": {
+      "#14-01: ページ全般": {
+        "TabTitle": "アプリ共通設定"
+      },
+      "#14-02: テーマ": {
+        "ThemeMode": "テーマ",
+        "ThemeLight": "ライト",
+        "ThemeDark": "ダーク",
+        "ThemeSystem": "システムと連動"
+      },
+      "#14-03: フォント": {
+        "FontFamily": "フォント",
+        "FontFamilyDesc": "表示フォントを変更します。文字の大きさはWindowsの設定で変更できます。",
+        "FontFamilySystemDefault": "システム既定"
+      },
+      "#14-04: セキュリティ": {
+        "ScreenCaptureProtection": "画面キャプチャ保護",
+        "CaptureProtectionAffinity": "画面キャプチャや画面共有ソフトで、スクリーンショットの撮影を防止します。",
+        "HideOnMinimize": "最小化時にタスクバーから非表示にする",
+        "MinimizeBehavior": "最小化時にタスクバーから隠し、システムトレイへ格納します。トレイアイコンから復元できます。"
+      },
+      "#14-06: 言語": {
+        "Language": "言語",
+        "LangCustom": "カスタム",
+        "JsonFilterName": "言語ファイル (*.json)",
+        "CustomLangInstructions": "言語ファイルをエクスポートして編集し、インポートして適用します。",
+        "ExportCustomLanguage": "エクスポート",
+        "ImportCustomLanguage": "インポート",
+        "RestartRequiredHint": "次回起動時に反映されます。",
+        "Dialog": {
+          "RestartRequiredAlert": "アプリ再起動後に言語変更が反映されます。",
+          "ImportLanguageSuccess": "言語ファイルをインポートしました",
+          "ImportPatchedCountReport": "{0} 件の文言を補完してインポートしました。次回起動時に反映されます。",
+          "VersionMismatchPatchNotice": "言語ファイルのバージョンが異なります（{0}）。不足している文言を補完して使用します。"
+        }
+      },
+      "#14-07: ネットワーク": {
+        "Network": "ネットワーク",
+        "AutoFaviconFetch": "サイトアイコンの自動取得",
+        "FaviconPrivacyWarning": "有効にすると、アイコン取得のためドメイン名を外部送信します（利用サービスが推測されるリスクがあります）。"
+      }
+    },
+    "VaultSettings": {
+      "#14-04: セキュリティ": {
+        "SecurityGroup": "セキュリティ",
+        "AutoLockTimeout": "無操作時の自動ロック",
+        "MinutesCountFormat": "{0} 分",
+        "AddNewVault": "保管庫の新規追加",
+        "AuthRequiredToCreate": "保管庫を追加するには、現在のマスターパスワードを入力してください",
+        "VaultManagement": "保管庫"
+      },
+      "#14-05: バックアップ": {
+        "BackupRestoreSection": "バックアップ",
+        "RestoreRequiresMasterPasswordNotice": "他の端末で復元するにはマスターパスワードが必要です（Windows Hello は他の端末では無効）。",
+        "BackupDatabaseAction": "暗号化されたデータベースファイルを任意の場所に保存します。",
+        "AutoBackupOnExit": "終了時に自動バックアップ",
+        "AutoBackupInstructions": "アプリ終了時に指定フォルダへデータを自動保存します。",
+        "BackupTargetFolder": "バックアップ先フォルダ",
+        "SuccessBackupSavedToPath": "{0} に保存しました。",
+        "WarningAutoBackupContext": "自動バックアップ",
+        "WarningLastExitBackupFailedAlert": "前回の終了時に自動バックアップが失敗しました。設定画面でバックアップ先フォルダを確認してください。",
+        "WarningNoFolderAutoBackupDisabled": "バックアップ先フォルダが設定されていないため、自動バックアップをオフにしました。",
+        "WarningBackupBlockedReadOnlyAlert": "緊急アクセスコードで開いた閲覧専用モードでは、バックアップを実行できません。",
+        "Dialog": {
+          "ClearBackupPathConfirmText": "バックアップ先フォルダの設定を削除します。\nよろしいですか？"
+        }
+      },
+      "#15-01: ページ全般": {
+        "TabTitleFormat": "保管庫 {0}の設定"
+      },
+      "#15-02: セキュリティ（Windows Hello）": {
+        "WindowsHelloUnlock": "Windows Hello によるロック解除（この端末でのみ有効）",
+        "BiometricEnrollment": "生体認証や PIN でアプリのロックを解除します。"
+      },
+      "#15-03: セキュリティ（マスターパスワードの変更）": {
+        "CurrentMasterPassword": "現在のマスターパスワード",
+        "NewMasterPassword": "新規マスターパスワード",
+        "ConfirmMasterPassword": "新規マスターパスワード（確認）",
+        "Dialog": {
+          "ChangeMasterPassword": "マスターパスワードの変更",
+          "ForceResetViaHelloInstructions": "旧パスワードを忘れた場合、Windows Hello で新しいパスワードへリセットします。",
+          "HelloForceReset": "Windows Hello でリセット",
+          "ForceResetViaHelloPrompt": "新しいマスターパスワードを設定するための権限を確認します。",
+          "CannotReuseCurrentMasterPassword": "現在のマスターパスワードと同じパスワードは設定できません。",
+          "MasterPasswordChangedSuccessfully": "マスターパスワードの変更に成功しました。",
+          "PasswordResetViaHelloSuccessfully": "Windows Hello によるパスワードのリセットに成功しました。",
+          "EmergencyCodeRemainsValid": "緊急アクセスコードは引き続き有効です。"
+        }
+      },
+      "#15-04: セキュリティ（緊急アクセスコード）": {
+        "Dialog": {
+          "EmergencyAccessSetup": "緊急アクセスコード",
+          "EmergencyAccessConcept": "QRコードを印刷しPINと共に金庫等へ保管することで、緊急時や家族への引き継ぎ時に閲覧専用で開けます。",
+          "EmergencyCodeStatusIssued": "発行済み",
+          "FourDigitsPin": "4桁の数字 PIN",
+          "ConfirmPin": "PIN（確認用）",
+          "EncryptQrWithPin": "4桁のPINでQRコードを暗号化してPNGとして保存します。",
+          "GenerateOrReissueCode": "発行 / 再発行",
+          "RevokeEmergencyCode": "緊急アクセスコードを削除します。削除したQRコードではロック解除できません。",
+          "DeleteEmergencyCodeConfirmText": "削除すると現在のQRコードではロック解除できなくなります。",
+          "ReissueEmergencyCodeConfirm": "緊急アクセスコードの再発行確認",
+          "ReissueEmergencyCodeConfirmText": "再発行すると現在のQRコードは使えなくなります。\n（※新しいQRコードの保存をキャンセルした場合は、現在のものが保護されます）\n本当に再発行しますか？",
+          "QrCodeSavedToPath": "{0} に保存しました。金庫などに大切に保管してください。",
+          "OldQrRevokedNotice": "このQRコードでのロック解除はできなくなりました。"
+        }
+      },
+      "#15-05: データ移行": {
+        "DataMigrationGroup": "データ移行",
+        "PlainTextExportAction": "すべての情報を暗号化されていない通常のファイル（CSV/JSON）としてエクスポートします。",
+        "PlainTextImportAction": "外部の CSV/JSON からデータをインポートします。タイトル重複時は「(インポート)」が付与されます。",
+        "IncludeTotpInExport": "エクスポートに2段階認証（2FA）のセットアップキーを含める",
+        "ExportTotpRiskWarning": "2段階認証のセットアップキーも同時に出力します。漏洩時のリスクをご留意ください。",
+        "Dialog": {
+          "ExportPlaintextWarning": "暗号化なしエクスポートの警告",
+          "PlaintextExportDangerAlert": "すべての機密情報を、暗号化されず誰でも読める状態のファイル（CSV/JSON）としてエクスポートします。",
+          "ExportPartialSuccessTitle": "一部の項目をスキップしました",
+          "ExportPartialSuccessText": "全{1}件中{0}件は復号できず、エクスポートから除外されました。残りの項目は正常にエクスポートされています。",
+          "ImportPlaintextConfirm": "暗号化されていないファイルのインポート確認",
+          "PlaintextImportConfirmText": "暗号化されていないファイル（CSV/JSON）から機密情報をインポートします。"
+        },
+        "SuccessImportedCountReport": "{0} 件をインポートしました。",
+        "SuccessImportDetailsReport": "（タイトル重複で改名: {0} 件、カテゴリ不一致で未分類: {1} 件）",
+        "SuccessImportFailedCountReport": "（読み込みに失敗: {0} 件。詳細は監査ログを参照）",
+        "ErrorImportExceptionReport": "インポートに失敗しました: {0}"
+      },
+      "#15-06: 共通（確認ダイアログ）": {
+        "Dialog": {
+          "AuthRequiredToProceed": "本人確認のためマスターパスワードを入力してください。"
+        }
+      }
+    },
+    "Restore": {
+      "#16: 復元（Rev.22で個別復元を廃止し一括完全復元のみに一本化）": {
+        "Dialog": {
+          "StartRestore": "復元",
+          "UnifiedDbIntegrityIssueAlert": "アプリの基本データに問題が検出されました。エクスポートして早急にバックアップしてください。",
+          "VaultDbIntegrityIssueAlert": "保管庫のデータに問題が検出されました。エクスポートして早急にバックアップしてください。"
+        },
+        "SelectBackupFile": "ファイルを選択",
+        "MainPage": "復元",
+        "Description": "バックアップファイルから保管庫の全データを復元します。現在のデータはバックアップ時点の状態に置き換わります。",
+        "ExecuteButton": "復元",
+        "AuthDialogTitle": "バックアップの認証",
+        "AuthDialogMessage": "バックアップ作成時に設定していた、いずれかの保管庫のマスターパスワードを入力してください。",
+        "AuthPasswordPlaceholder": "マスターパスワード",
+        "AuthButton": "認証",
+        "OverwriteWarningTitle": "保管庫データを上書き復元しますか？",
+        "OverwriteWarningMessage": "現在の保管庫データはすべて上書きされ、バックアップファイル（{0} 作成）の状態に置き換わります。\n\n※安全のため、現在のデータは退避フォルダへ自動保存されます。\n\n※Windows Hello（生体認証/PIN）は無効化されるため、復元後にマスターパスワードでロック解除し、再設定を行ってください。",
+        "OverwriteConfirmButton": "復元して上書き",
+        "NoFilesFoundAlert": "コピーできるファイルが見つかりませんでした。バックアップフォルダの内容を確認してください。",
+        "ErrorInvalidBackupFileAborted": "バックアップファイル「{0}」が破損しているか無効な形式のため、復元を中止しました。ローカルのデータは変更されていません。",
+        "ErrorActiveDbSelected": "現在使用中のアプリの基本データは選択できません。"
+      }
+    },
+    "Emergency": {
+      "#17: 緊急アクセス": {
+        "WindowTitle": "緊急アクセス",
+        "DropQrZone": "QRコード PNG をここにドロップ",
+        "SelectQrFile": "QRコード PNG を選択",
+        "Pin": "緊急アクセスコード用 PIN（4桁）",
+        "ErrorQrOrPinInvalid": "QRコードまたは PIN が正しくありません。",
+        "ErrorQrReadFailed": "QRコードを読み取れませんでした。正しい PNG ファイルを選択してください。",
+        "ErrorMultipleFilesDropped": "PNG ファイルは1件のみドロップしてください。",
+        "ErrorNoVaultMatchingQr": "このQRコードに対応する保管庫が見つかりません。",
+        "ReadOnlyModeNote": "QRコードと PIN で保管庫を読み取り専用で開きます。"
+      }
+    },
+    "System": {
+      "#98: 組み込み言語名": {
+        "LangJa": "日本語",
+        "LangEn": "English"
+      },
+      "#99: プロダクト情報": {
+        "Product": {
+          "Name": "ないみつクン",
+          "Description": "パスワードも、身分証も、証明書も。機密のすべてを、ひとつの金庫に。",
+          "Copyright": "© 2026 Tabito's Works",
+          "License": "MIT License — 自由に使用・改変・再配布できます。",
+          "Disclaimer": "本ソフトウェアは個人開発のオープンソースであり、第三者機関による監査は受けていません。定期的なバックアップを推奨します。利用はすべて自己責任の原則（AS IS）に基づきます。"
+        }
+      }
+    }
+  }
+}

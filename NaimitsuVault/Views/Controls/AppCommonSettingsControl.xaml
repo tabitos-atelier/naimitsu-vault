@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--  Copyright (c) 2026 Tabito's Works. Licensed under the MIT License.  -->
+<UserControl
+    x:Class="NaimitsuVault.Views.Controls.AppCommonSettingsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:NaimitsuVault.Localization"
+    IsEnabled="{x:Bind BothIdle(VaultOpsVm.IsBusy, AppSettingsVm.IsBusy), Mode=OneWay}">
+
+    <!--  WinUI 3's default templates bake in extra top spacing beyond whatever external Margin/Spacing
+         is applied - ToggleSwitchPreContentMargin/PostContentMargin (10px each, even with no Header)
+         and RadioButtonsTopHeaderMargin (8px, even with Header unset). Overriding them here keeps every
+         control's gap to its label/heading consistent with the plain rows (TextBox, Button, etc.) on
+         this page instead of looking randomly wider.  -->
+    <UserControl.Resources>
+        <x:Double x:Key="ToggleSwitchPreContentMargin">2</x:Double>
+        <x:Double x:Key="ToggleSwitchPostContentMargin">0</x:Double>
+        <Thickness x:Key="RadioButtonsTopHeaderMargin">0</Thickness>
+    </UserControl.Resources>
+
+    <StackPanel Spacing="16">
+
+        <StackPanel Spacing="8">
+            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{loc:Msg Key=AppSettings.ThemeMode}" />
+            <RadioButtons Margin="28,0,0,0" SelectedIndex="{x:Bind AppSettingsVm.ThemeModeIndex, Mode=TwoWay}">
+                <RadioButton Content="{loc:Msg Key=AppSettings.ThemeSystem}" />
+                <RadioButton Content="{loc:Msg Key=AppSettings.ThemeLight}" />
+                <RadioButton Content="{loc:Msg Key=AppSettings.ThemeDark}" />
+            </RadioButtons>
+        </StackPanel>
+
+        <StackPanel Spacing="8">
+            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{loc:Msg Key=AppSettings.FontFamily}" />
+            <Button
+                Margin="28,0,0,0"
+                HorizontalAlignment="Left"
+                Click="ChangeFontFamilyButton_Click">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE8D2;" />
+                    <TextBlock VerticalAlignment="Center" Text="{x:Bind AppSettingsVm.FontFamilyDisplayName, Mode=OneWay}" />
+                </StackPanel>
+            </Button>
+        </StackPanel>
+
+        <StackPanel Spacing="8">
+            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{loc:Msg Key=VaultSettings.SecurityGroup}" />
+
+            <StackPanel Margin="28,0,0,0" Spacing="8">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <ToggleSwitch
+                        Header="{loc:Msg Key=VaultSettings.AutoLockTimeout}"
+                        IsOn="{x:Bind AppSettingsVm.AutoLockEnabled, Mode=TwoWay}"
+                        OffContent="{loc:Msg Key=Common.Off}"
+                        OnContent="{loc:Msg Key=Common.On}" />
+                    <ComboBox
+                        MinWidth="120"
+                        Header=" "
+                        IsEnabled="{x:Bind AppSettingsVm.AutoLockEnabled, Mode=OneWay}"
+                        ItemsSource="{x:Bind AppSettingsVm.AutoLockMinutesLabels}"
+                        SelectedIndex="{x:Bind AppSettingsVm.AutoLockMinutesIndex, Mode=TwoWay}" />
+                </StackPanel>
+
+                <!-- Screen capture protection (SetWindowDisplayAffinity) -->
+                <ToggleSwitch
+                    Header="{loc:Msg Key=AppSettings.ScreenCaptureProtection}"
+                    IsOn="{x:Bind AppSettingsVm.WindowCaptureProtectionEnabled, Mode=TwoWay}"
+                    MinWidth="0"
+                    OffContent="{loc:Msg Key=Common.Off}"
+                    OnContent="{loc:Msg Key=Common.On}"
+                    ToolTipService.ToolTip="{loc:Msg Key=AppSettings.CaptureProtectionAffinity}" />
+
+                <ToggleSwitch
+                    Header="{loc:Msg Key=AppSettings.HideOnMinimize}"
+                    IsOn="{x:Bind AppSettingsVm.IsHideFromTaskbarWhenMinimized, Mode=TwoWay}"
+                    MinWidth="0"
+                    OffContent="{loc:Msg Key=Common.Off}"
+                    OnContent="{loc:Msg Key=Common.On}"
+                    ToolTipService.ToolTip="{loc:Msg Key=AppSettings.MinimizeBehavior}" />
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Spacing="8">
+            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{loc:Msg Key=VaultSettings.VaultManagement}" />
+
+            <!--  Add a new vault  -->
+            <Expander
+                x:Name="AddVaultExpander"
+                Margin="28,0,0,0"
+                HorizontalAlignment="Stretch"
+                HorizontalContentAlignment="Stretch"
+                IsEnabled="{x:Bind VaultOpsVm.CanAddVault, Mode=OneWay}"
+                IsExpanded="False">
+                <Expander.Header>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon FontSize="18" Glyph="&#xF540;" />
+                        <TextBlock VerticalAlignment="Center" Text="{loc:Msg Key=VaultSettings.AddNewVault}" />
+                    </StackPanel>
+                </Expander.Header>
+                <StackPanel Spacing="8">
+                    <InfoBar
+                        IsClosable="False"
+                        IsOpen="{x:Bind VaultOpsVm.HasAddVaultError, Mode=OneWay}"
+                        Message="{x:Bind VaultOpsVm.AddVaultErrorMessage, Mode=OneWay}"
+                        Severity="Error" />
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <ComboBox
+                            Width="80"
+                            HorizontalAlignment="Stretch"
+                            ItemsSource="{x:Bind VaultOpsVm.AvailableVaultLabels, Mode=OneWay}"
+                            SelectedIndex="{x:Bind VaultOpsVm.SelectedNewVaultLabelIndex, Mode=TwoWay}" />
+                        <Button
+                            Command="{x:Bind VaultOpsVm.AddVaultCommand}"
+                            Foreground="{ThemeResource AccentButtonForeground}"
+                            IsEnabled="{x:Bind VaultOpsVm.CanAddVault, Mode=OneWay}"
+                            Style="{StaticResource AccentButtonStyle}">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE710;" />
+                                <TextBlock VerticalAlignment="Center" Text="{loc:Msg Key=Common.Add}" />
+                            </StackPanel>
+                        </Button>
+                    </StackPanel>
+                </StackPanel>
+            </Expander>
+        </StackPanel>
+
+        <StackPanel Spacing="8">
+            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{loc:Msg Key=VaultSettings.BackupRestoreSection}" />
+            <TextBlock
+                Margin="28,0,0,0"
+                FontSize="{StaticResource NvCaptionFontSize}"
+                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                Text="{loc:Msg Key=VaultSettings.RestoreRequiresMasterPasswordNotice}"
+                TextWrapping="Wrap" />
+            <StackPanel Margin="28,0,0,0" Spacing="8">
+                <Button
+                    Command="{x:Bind VaultOpsVm.BackupDatabaseCommand}"
+                    IsEnabled="{x:Bind VaultOpsVm.HasSecrets, Mode=OneWay}"
+                    ToolTipService.ToolTip="{loc:Msg Key=VaultSettings.BackupDatabaseAction}">
+                    <StackPanel Orientation="Horizontal">
+                        <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE74E;" />
+                        <TextBlock
+                            Margin="8,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="{loc:Msg Key=Common.Backup}" />
+                    </StackPanel>
+                </Button>
+                <ToggleSwitch
+                    Margin="0,8,0,0"
+                    Header="{loc:Msg Key=VaultSettings.AutoBackupOnExit}"
+                    IsOn="{x:Bind AppSettingsVm.IsAutoBackupEnabled, Mode=TwoWay}"
+                    OffContent="{loc:Msg Key=Common.Off}"
+                    OnContent="{loc:Msg Key=Common.On}"
+                    ToolTipService.ToolTip="{loc:Msg Key=VaultSettings.AutoBackupInstructions}" />
+                <Grid HorizontalAlignment="Stretch" ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBox
+                        Grid.Column="0"
+                        Header="{loc:Msg Key=VaultSettings.BackupTargetFolder}"
+                        IsEnabled="{x:Bind AppSettingsVm.IsAutoBackupEnabled, Mode=OneWay}"
+                        IsReadOnly="True"
+                        Text="{x:Bind AppSettingsVm.AutoBackupFolder, Mode=OneWay}" />
+                    <Button
+                        Grid.Column="1"
+                        VerticalAlignment="Bottom"
+                        Command="{x:Bind AppSettingsVm.BrowseBackupFolderCommand}"
+                        IsEnabled="{x:Bind AppSettingsVm.IsAutoBackupEnabled, Mode=OneWay}"
+                        ToolTipService.ToolTip="{loc:Msg Key=Common.BrowseFolder}">
+                        <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xED25;" />
+                    </Button>
+                    <Button
+                        Grid.Column="2"
+                        VerticalAlignment="Bottom"
+                        Command="{x:Bind AppSettingsVm.ClearBackupFolderCommand}"
+                        IsEnabled="{x:Bind AppSettingsVm.HasAutoBackupFolder, Mode=OneWay}"
+                        ToolTipService.ToolTip="{loc:Msg Key=Common.ClearFolder}">
+                        <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE75C;" />
+                    </Button>
+                </Grid>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel
+            x:Name="LanguageArea"
+            AllowDrop="True"
+            Background="Transparent"
+            DragOver="LanguageArea_DragOver"
+            Drop="LanguageArea_Drop"
+            Spacing="8">
+            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{loc:Msg Key=AppSettings.Language}" />
+            <StackPanel Margin="28,0,0,0" Spacing="8">
+                <RadioButtons SelectedIndex="{x:Bind AppSettingsVm.LocaleModeIndex, Mode=TwoWay}">
+                    <RadioButton Content="{loc:Msg Key=System.LangEn}" ToolTipService.ToolTip="{loc:Msg Key=AppSettings.RestartRequiredHint}" />
+                    <RadioButton Content="{loc:Msg Key=System.LangJa}" ToolTipService.ToolTip="{loc:Msg Key=AppSettings.RestartRequiredHint}" />
+                    <RadioButton
+                        Content="{x:Bind AppSettingsVm.CustomLocaleLabel, Mode=OneWay}"
+                        IsEnabled="{x:Bind AppSettingsVm.HasCustomLocale, Mode=OneWay}"
+                        ToolTipService.ToolTip="{loc:Msg Key=AppSettings.RestartRequiredHint}" />
+                </RadioButtons>
+                <StackPanel
+                    Margin="0,12,0,0"
+                    Orientation="Horizontal"
+                    Spacing="8">
+                    <!--  Restart the app (active after a language change)  -->
+                    <Button
+                        Command="{x:Bind AppSettingsVm.RestartAppCommand}"
+                        IsEnabled="{x:Bind AppSettingsVm.IsRestartRequired, Mode=OneWay}"
+                        ToolTipService.ToolTip="{loc:Msg Key=AppSettings.Dialog.RestartRequiredAlert}">
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE72C;" />
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="{loc:Msg Key=Common.Restart}" />
+                        </StackPanel>
+                    </Button>
+
+                    <Border
+                        Width="1"
+                        Margin="8,0"
+                        VerticalAlignment="Stretch"
+                        Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+                    <Button
+                        Command="{x:Bind AppSettingsVm.ExportLocaleCommand}"
+                        CommandParameter="{x:Bind AppSettingsVm.LocaleMode, Mode=OneWay}"
+                        ToolTipService.ToolTip="{loc:Msg Key=AppSettings.CustomLangInstructions}">
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE896;" />
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="{loc:Msg Key=AppSettings.ExportCustomLanguage}" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button Command="{x:Bind AppSettingsVm.ImportLocaleCommand}" ToolTipService.ToolTip="{loc:Msg Key=AppSettings.CustomLangInstructions}">
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE898;" />
+                            <TextBlock
+                                Margin="8,0,0,0"
+                                VerticalAlignment="Center"
+                                Text="{loc:Msg Key=AppSettings.ImportCustomLanguage}" />
+                        </StackPanel>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+
+        <StackPanel Spacing="8">
+            <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}" Text="{loc:Msg Key=AppSettings.Network}" />
+            <ToggleSwitch
+                Margin="28,0,0,0"
+                Header="{loc:Msg Key=AppSettings.AutoFaviconFetch}"
+                IsOn="{x:Bind AppSettingsVm.IsFaviconAutoFetchEnabled, Mode=TwoWay}"
+                OffContent="{loc:Msg Key=Common.Off}"
+                OnContent="{loc:Msg Key=Common.On}"
+                ToolTipService.ToolTip="{loc:Msg Key=AppSettings.FaviconPrivacyWarning, Warn=True}" />
+        </StackPanel>
+
+    </StackPanel>
+</UserControl>

@@ -1,0 +1,619 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<winuiex:WindowEx
+    x:Class="NaimitsuVault.Views.ViewerWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:NaimitsuVault.Views"
+    xmlns:loc="using:NaimitsuVault.Localization"
+    xmlns:helpers="using:NaimitsuVault.Helpers"
+    xmlns:vm="using:NaimitsuVault.ViewModels"
+    xmlns:winuiex="using:WinUIEx"
+    Title="{loc:Msg Key=System.Product.Name}">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TitleBar
+            x:Name="AppTitleBar"
+            Title="{x:Bind ViewModel.FileName, Mode=OneWay}"
+            Grid.Row="0"
+            Height="48"
+            x:FieldModifier="private"
+            IsBackButtonVisible="False"
+            IsPaneToggleButtonVisible="False"
+            Subtitle="{x:Bind ViewModel.FileSizeDisplay, Mode=OneWay}">
+            <TitleBar.IconSource>
+                <ImageIconSource ImageSource="ms-appx:///Assets/NaimitsuVault.png" />
+            </TitleBar.IconSource>
+            <TitleBar.RightHeader>
+                <StackPanel
+                    Margin="0,0,6,0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="2">
+                    <ComboBox
+                        x:Name="ZoomComboBox"
+                        Width="88"
+                        Height="32"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        SelectionChanged="ZoomComboBox_SelectionChanged" />
+                    <ToggleButton
+                        x:Name="PaneToggleButton"
+                        Width="32"
+                        Height="32"
+                        Margin="4,0,0,0"
+                        Padding="0"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Click="PaneToggleButton_Click"
+                        ToolTipService.ToolTip="{loc:Msg Key=Common.ToggleRightPane}">
+                        <FontIcon x:Name="PaneToggleGlyph" FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE740;" />
+                    </ToggleButton>
+                    <Button
+                        x:Name="ExportButton"
+                        Width="32"
+                        Height="32"
+                        Padding="0"
+                        AutomationProperties.Name="{loc:Msg Key=Common.Export}"
+                        Background="Transparent"
+                        BorderBrush="Transparent"
+                        Click="Export_Click"
+                        IsEnabled="{x:Bind ViewModel.CanExport}"
+                        ToolTipService.ToolTip="{loc:Msg Key=Common.Export}">
+                        <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE74E;" />
+                    </Button>
+                </StackPanel>
+            </TitleBar.RightHeader>
+        </TitleBar>
+
+        <Grid x:Name="ContentGrid" Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1" />
+                <ColumnDefinition Width="260" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="{ThemeResource LayerFillColorDefaultBrush}">
+                <Grid>
+                    <TextBlock
+                        x:Name="ImagePlaceholder"
+                        MaxWidth="440"
+                        Margin="24,0"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{loc:Msg Key=Common.Loading}"
+                        TextAlignment="Center"
+                        TextWrapping="Wrap" />
+                    <ScrollViewer
+                        x:Name="ImageScrollViewer"
+                        HorizontalScrollBarVisibility="Auto"
+                        HorizontalScrollMode="Enabled"
+                        MaxZoomFactor="8"
+                        MinZoomFactor="0.1"
+                        PointerCaptureLost="PanViewer_PointerCaptureLost"
+                        PointerEntered="PanViewer_PointerEntered"
+                        PointerExited="PanViewer_PointerExited"
+                        PointerMoved="PanViewer_PointerMoved"
+                        PointerPressed="PanViewer_PointerPressed"
+                        PointerReleased="PanViewer_PointerReleased"
+                        SizeChanged="ImageScrollViewer_SizeChanged"
+                        VerticalScrollBarVisibility="Auto"
+                        VerticalScrollMode="Enabled"
+                        ViewChanged="ImageScrollViewer_ViewChanged"
+                        Visibility="Collapsed"
+                        ZoomMode="Enabled">
+                        <Image x:Name="ViewerImage" Stretch="None" />
+                    </ScrollViewer>
+                    <!--  PDF: vertical-scroll viewer for all pages (native rendering via Windows.Data.Pdf)  -->
+                    <ScrollViewer
+                        x:Name="PdfScrollViewer"
+                        HorizontalScrollBarVisibility="Auto"
+                        HorizontalScrollMode="Enabled"
+                        MaxZoomFactor="8"
+                        MinZoomFactor="0.1"
+                        PointerCaptureLost="PanViewer_PointerCaptureLost"
+                        PointerEntered="PanViewer_PointerEntered"
+                        PointerExited="PanViewer_PointerExited"
+                        PointerMoved="PanViewer_PointerMoved"
+                        PointerPressed="PanViewer_PointerPressed"
+                        PointerReleased="PanViewer_PointerReleased"
+                        SizeChanged="PdfScrollViewer_SizeChanged"
+                        VerticalScrollBarVisibility="Auto"
+                        VerticalScrollMode="Enabled"
+                        ViewChanged="PdfScrollViewer_ViewChanged"
+                        Visibility="Collapsed"
+                        ZoomMode="Enabled">
+                        <ItemsControl x:Name="PdfItemsControl" HorizontalAlignment="Stretch">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="local:PdfPageSource">
+                                    <Border
+                                        Margin="0,0,0,8"
+                                        Background="White"
+                                        CornerRadius="2">
+                                        <Image
+                                            HorizontalAlignment="Stretch"
+                                            Source="{x:Bind Source}"
+                                            Stretch="Uniform"
+                                            UseLayoutRounding="True" />
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <!--  Certificate / text viewer  -->
+                    <ScrollViewer
+                        x:Name="SecureFileViewer"
+                        HorizontalAlignment="Stretch"
+                        VerticalScrollBarVisibility="Auto"
+                        Visibility="Collapsed">
+                        <StackPanel Padding="24,20,24,24" Spacing="16">
+
+                            <!--  Certificate metadata  -->
+                            <StackPanel
+                                x:Name="CertSection"
+                                Spacing="12"
+                                Visibility="Collapsed">
+                                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{loc:Msg Key=Viewer.CertSectionHeader}" />
+                                <InfoBar
+                                    x:Name="CertExpiryBar"
+                                    IsClosable="False"
+                                    IsOpen="False" />
+                                <Grid ColumnSpacing="12" RowSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="140" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{loc:Msg Key=Viewer.CertSubject}" />
+                                    <TextBlock
+                                        x:Name="CertSubjectText"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        IsTextSelectionEnabled="True"
+                                        TextWrapping="Wrap" />
+
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{loc:Msg Key=Viewer.CertIssuer}" />
+                                    <TextBlock
+                                        x:Name="CertIssuerText"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        IsTextSelectionEnabled="True"
+                                        TextWrapping="Wrap" />
+
+                                    <TextBlock
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{loc:Msg Key=Viewer.CertValidFrom}" />
+                                    <TextBlock
+                                        x:Name="CertNotBeforeText"
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        IsTextSelectionEnabled="True" />
+
+                                    <TextBlock
+                                        Grid.Row="3"
+                                        Grid.Column="0"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{loc:Msg Key=Viewer.CertValidTo}" />
+                                    <TextBlock
+                                        x:Name="CertNotAfterText"
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        IsTextSelectionEnabled="True" />
+
+                                    <TextBlock
+                                        Grid.Row="4"
+                                        Grid.Column="0"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{loc:Msg Key=Viewer.CertThumbprint}" />
+                                    <TextBlock
+                                        x:Name="CertThumbprintText"
+                                        Grid.Row="4"
+                                        Grid.Column="1"
+                                        FontFamily="Cascadia Code, Consolas"
+                                        FontSize="{StaticResource NvCaptionFontSize}"
+                                        IsTextSelectionEnabled="True"
+                                        TextWrapping="Wrap" />
+
+                                    <TextBlock
+                                        x:Name="CertKeyUsageLabel"
+                                        Grid.Row="5"
+                                        Grid.Column="0"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{loc:Msg Key=Viewer.CertKeyUsage}"
+                                        Visibility="Collapsed" />
+                                    <TextBlock
+                                        x:Name="CertKeyUsageText"
+                                        Grid.Row="5"
+                                        Grid.Column="1"
+                                        IsTextSelectionEnabled="True"
+                                        TextWrapping="Wrap"
+                                        Visibility="Collapsed" />
+                                </Grid>
+                            </StackPanel>
+
+                            <Border
+                                x:Name="CertTextDivider"
+                                Height="1"
+                                Background="{ThemeResource DividerStrokeColorDefaultBrush}"
+                                Visibility="Collapsed" />
+
+                            <!--  Service account JSON metadata  -->
+                            <StackPanel
+                                x:Name="JsonSection"
+                                Spacing="12"
+                                Visibility="Collapsed">
+                                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{loc:Msg Key=Viewer.JsonSectionHeader}" />
+                                <Grid ColumnSpacing="12" RowSpacing="8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="140" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                        <RowDefinition />
+                                    </Grid.RowDefinitions>
+
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{loc:Msg Key=Viewer.OauthType}" />
+                                    <TextBlock
+                                        x:Name="JsonTypeText"
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        IsTextSelectionEnabled="True" />
+
+                                    <TextBlock
+                                        x:Name="JsonProjectLabel"
+                                        Grid.Row="1"
+                                        Grid.Column="0"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{loc:Msg Key=Viewer.OauthProjectId}"
+                                        Visibility="Collapsed" />
+                                    <TextBlock
+                                        x:Name="JsonProjectText"
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        IsTextSelectionEnabled="True"
+                                        Visibility="Collapsed" />
+
+                                    <TextBlock
+                                        x:Name="JsonEmailLabel"
+                                        Grid.Row="2"
+                                        Grid.Column="0"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{loc:Msg Key=Viewer.OauthClientEmail}"
+                                        Visibility="Collapsed" />
+                                    <TextBlock
+                                        x:Name="JsonEmailText"
+                                        Grid.Row="2"
+                                        Grid.Column="1"
+                                        IsTextSelectionEnabled="True"
+                                        Visibility="Collapsed" />
+
+                                    <TextBlock
+                                        x:Name="JsonClientIdLabel"
+                                        Grid.Row="3"
+                                        Grid.Column="0"
+                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                        Text="{loc:Msg Key=Viewer.OauthClientId}"
+                                        Visibility="Collapsed" />
+                                    <TextBlock
+                                        x:Name="JsonClientIdText"
+                                        Grid.Row="3"
+                                        Grid.Column="1"
+                                        IsTextSelectionEnabled="True"
+                                        Visibility="Collapsed" />
+                                </Grid>
+                            </StackPanel>
+
+                            <Border
+                                x:Name="JsonTextDivider"
+                                Height="1"
+                                Background="{ThemeResource DividerStrokeColorDefaultBrush}"
+                                Visibility="Collapsed" />
+
+                            <!--  Text content  -->
+                            <StackPanel
+                                x:Name="TextSection"
+                                Spacing="8"
+                                Visibility="Collapsed">
+                                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{loc:Msg Key=Viewer.TextSectionHeader}" />
+                                <!--  Non-JSON text (PEM / license, etc.)  -->
+                                <TextBox
+                                    x:Name="TextViewerBox"
+                                    AcceptsReturn="True"
+                                    AutomationProperties.Name="{loc:Msg Key=Viewer.TextSectionHeader}"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    FontSize="{StaticResource NvCaptionFontSize}"
+                                    IsReadOnly="True"
+                                    TextWrapping="Wrap" />
+                                <!--  JSON syntax highlighting  -->
+                                <RichTextBlock
+                                    x:Name="JsonRichViewer"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    FontSize="{StaticResource NvCaptionFontSize}"
+                                    IsTextSelectionEnabled="True"
+                                    TextWrapping="Wrap"
+                                    Visibility="Collapsed" />
+                                <!--  XML syntax highlighting  -->
+                                <RichTextBlock
+                                    x:Name="XmlRichViewer"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    FontSize="{StaticResource NvCaptionFontSize}"
+                                    IsTextSelectionEnabled="True"
+                                    TextWrapping="Wrap"
+                                    Visibility="Collapsed" />
+                                <!--  Config file syntax highlighting (.env/.conf/.yaml/.toml/.ini)  -->
+                                <RichTextBlock
+                                    x:Name="ConfigRichViewer"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    FontSize="{StaticResource NvCaptionFontSize}"
+                                    IsTextSelectionEnabled="True"
+                                    TextWrapping="Wrap"
+                                    Visibility="Collapsed" />
+                                <!--  Markdown syntax highlighting  -->
+                                <RichTextBlock
+                                    x:Name="MarkdownRichViewer"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    FontSize="{StaticResource NvCaptionFontSize}"
+                                    IsTextSelectionEnabled="True"
+                                    TextWrapping="Wrap"
+                                    Visibility="Collapsed" />
+                                <!--  SQL syntax highlighting  -->
+                                <RichTextBlock
+                                    x:Name="SqlRichViewer"
+                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                    FontSize="{StaticResource NvCaptionFontSize}"
+                                    IsTextSelectionEnabled="True"
+                                    TextWrapping="Wrap"
+                                    Visibility="Collapsed" />
+                            </StackPanel>
+
+                            <!--  Archive contents (ZIP file listing; browse-only, no extraction)  -->
+                            <StackPanel
+                                x:Name="ArchiveSection"
+                                Spacing="8"
+                                Visibility="Collapsed">
+                                <TextBlock Style="{StaticResource SubtitleTextBlockStyle}" Text="{loc:Msg Key=Viewer.ArchiveSectionHeader}" />
+                                <TextBlock
+                                    x:Name="ArchiveEntryCountText"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                                <ListView
+                                    x:Name="ArchiveEntriesList"
+                                    MaxHeight="400"
+                                    IsItemClickEnabled="False"
+                                    SelectionMode="None">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate x:DataType="helpers:ArchiveEntryInfo">
+                                            <Grid ColumnSpacing="12">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*" />
+                                                    <ColumnDefinition Width="Auto" />
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock
+                                                    Grid.Column="0"
+                                                    FontFamily="Cascadia Code, Consolas, Courier New"
+                                                    FontSize="{StaticResource NvCaptionFontSize}"
+                                                    Text="{x:Bind FullName}"
+                                                    TextTrimming="CharacterEllipsis" />
+                                                <TextBlock
+                                                    Grid.Column="1"
+                                                    FontSize="{StaticResource NvCaptionFontSize}"
+                                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                                    Text="{x:Bind SizeDisplay}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </StackPanel>
+
+                        </StackPanel>
+                    </ScrollViewer>
+                </Grid>
+            </Border>
+
+            <Border
+                x:Name="PaneDivider"
+                Grid.Column="1"
+                Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+            <!--  Right pane: link management (full control, instant toggle)  -->
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+
+                <!--  Deleted-file notice: replaces the profile/search/secret-list controls entirely
+                     (not just disabled) while the file is soft-deleted - see ViewerViewModel.LinkPaneVisibility.  -->
+                <TextBlock Grid.Row="0" Grid.RowSpan="3"
+                           Margin="12,10,12,10"
+                           FontSize="{StaticResource NvCaptionFontSize}"
+                           Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                           Text="{x:Bind ViewModel.DeletedNoticeText, Mode=OneWay}"
+                           TextWrapping="Wrap"
+                           Visibility="{x:Bind ViewModel.DeletedNoticeVisibility, Mode=OneWay}" />
+
+                <!--  Profile row: TextBlock + pencil (after D&D on the Profile page, while unsaved) + pin button  -->
+                <StackPanel Grid.Row="0" Visibility="{x:Bind ViewModel.LinkPaneVisibility, Mode=OneWay}">
+                    <Grid Padding="12,10,12,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="32" />
+                        </Grid.ColumnDefinitions>
+                        <!-- Avatar thumbnail: committed avatar image, falls back to the nav-pane Profile glyph -->
+                        <Grid Grid.Column="0"
+                              Width="20" Height="20"
+                              Margin="0,0,8,0"
+                              VerticalAlignment="Center">
+                            <FontIcon FontSize="{StaticResource NvIconSizeSmall}"
+                                      Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                      Glyph="&#xE77B;" />
+                            <Ellipse Width="20" Height="20"
+                                     Visibility="{x:Bind ViewModel.LinkProfileAvatarVisibility, Mode=OneWay}">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="{x:Bind ViewModel.LinkProfileAvatarSource, Mode=OneWay}"
+                                                Stretch="UniformToFill" />
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </Grid>
+                        <TextBlock Grid.Column="1"
+                                   Text="{loc:Msg Key=Shell.Navi.Profile}"
+                                   FontSize="{StaticResource NvCaptionFontSize}"
+                                   VerticalAlignment="Center"
+                                   Foreground="{ThemeResource TextFillColorPrimaryBrush}" />
+                        <!-- Pencil icon: WindowEx constraints forbid Converter, so use the ViewModel's computed Visibility property instead -->
+                        <FontIcon Grid.Column="2"
+                                  Glyph="&#xE70F;"
+                                  FontSize="{StaticResource NvIconSizeSmall}"
+                                  Margin="4,0,0,0"
+                                  VerticalAlignment="Center"
+                                  Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                  Visibility="{x:Bind ViewModel.LinkProfileDraftIconVisibility, Mode=OneWay}" />
+                        <Button Grid.Column="3"
+                                Width="32" Height="32"
+                                Padding="0"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                Command="{x:Bind ViewModel.ToggleProfileLinkCommand}"
+                                ToolTipService.ToolTip="{x:Bind ViewModel.LinkProfileToggleTooltip, Mode=OneWay}">
+                            <FontIcon Glyph="{x:Bind ViewModel.LinkProfileToggleGlyph, Mode=OneWay}"
+                                      FontSize="{StaticResource NvIconSizeDefault}"
+                                      Foreground="{x:Bind ViewModel.LinkProfileForeground, Mode=OneWay}" />
+                        </Button>
+                    </Grid>
+                    <Border Height="1" Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="1" Margin="8,4,8,4" Spacing="4" Visibility="{x:Bind ViewModel.LinkPaneVisibility, Mode=OneWay}">
+                    <TextBox x:Name="LinkSearchBox"
+                             PlaceholderText="{loc:Msg Key=Common.SearchSecret}"
+                             Text="{x:Bind ViewModel.LinkSearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <Button Width="32" Height="32"
+                                Padding="0"
+                                Background="Transparent"
+                                BorderBrush="Transparent"
+                                Command="{x:Bind ViewModel.ToggleLinkedFilterCommand}"
+                                ToolTipService.ToolTip="{loc:Msg Key=Common.ToggleFilter}">
+                            <FontIcon Glyph="{x:Bind ViewModel.LinkFilterToggleGlyph, Mode=OneWay}"
+                                      FontSize="{StaticResource NvIconSizeDefault}"
+                                      Foreground="{x:Bind ViewModel.LinkFilterToggleForeground, Mode=OneWay}" />
+                        </Button>
+                        <TextBlock Text="{x:Bind ViewModel.LinkLinkedCountDisplay, Mode=OneWay}"
+                                   VerticalAlignment="Center"
+                                   FontSize="{StaticResource NvCaptionFontSize}"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <ListView x:Name="LinkListView"
+                          Grid.Row="2"
+                          Visibility="{x:Bind ViewModel.LinkPaneVisibility, Mode=OneWay}"
+                          ItemsSource="{x:Bind ViewModel.LinkFilteredItems, Mode=OneWay}"
+                          SelectedItem="{x:Bind ViewModel.LinkSelectedItem, Mode=TwoWay}"
+                          ContainerContentChanging="LinkListView_ContainerContentChanging">
+                    <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:LinkableSecretItem">
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Grid.Column="1"
+                                           FontSize="{StaticResource NvCaptionFontSize}"
+                                           VerticalAlignment="Center"
+                                           TextTrimming="CharacterEllipsis" />
+                                <!-- Shown only when IsDraftLink=true: controlled via ContainerContentChanging -->
+                                <FontIcon Grid.Column="2"
+                                          Glyph="&#xE70F;"
+                                          FontSize="{StaticResource NvIconSizeSmall}"
+                                          Margin="4,0,0,0"
+                                          VerticalAlignment="Center"
+                                          Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                          Visibility="Collapsed" />
+                                <Button Grid.Column="3"
+                                        Width="32" Height="32"
+                                        Padding="0"
+                                        Background="Transparent"
+                                        BorderBrush="Transparent"
+                                        Click="LinkToggleButton_Click"
+                                        Tag="{x:Bind}"
+                                        ToolTipService.ToolTip="{x:Bind ToggleTooltip, Mode=OneWay}">
+                                    <FontIcon Glyph="{x:Bind ToggleGlyph, Mode=OneWay}"
+                                              FontSize="{StaticResource NvIconSizeDefault}" />
+                                </Button>
+                                <!-- Favicon icon. Declared last so the existing Children[0..2] indices that
+                                     LinkListView_ContainerContentChanging relies on for the security-sensitive
+                                     title clear-on-recycle stay unchanged. -->
+                                <Grid Grid.Column="0"
+                                      Width="16" Height="16"
+                                      Margin="0,0,6,0"
+                                      VerticalAlignment="Center">
+                                    <FontIcon FontSize="{StaticResource NvIconSizeSmall}"
+                                              Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                              Glyph="&#xE8A6;" />
+                                    <Image Source="{x:Bind FaviconSource, Mode=OneWay}"
+                                           Visibility="{x:Bind FaviconVisibility, Mode=OneWay}" />
+                                </Grid>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <!--  Date/time (two lines — a single horizontal line overflows the 260px pane and clips
+                     the second date): import icon &#xE898; / document icon &#xE8A5;  -->
+                <StackPanel Grid.Row="3" Margin="8,6,8,8" Spacing="2">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <FontIcon Glyph="&#xE898;" FontSize="{StaticResource NvIconSizeSmall}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
+                        <TextBlock FontSize="{StaticResource NvCaptionFontSize}"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   VerticalAlignment="Center"
+                                   Text="{x:Bind ViewModel.LinkCreatedAtDisplay, Mode=OneWay}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <FontIcon Glyph="&#xE8A5;" FontSize="{StaticResource NvIconSizeSmall}" Foreground="{ThemeResource TextFillColorSecondaryBrush}" VerticalAlignment="Center" />
+                        <TextBlock FontSize="{StaticResource NvCaptionFontSize}"
+                                   Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                   VerticalAlignment="Center"
+                                   Text="{x:Bind ViewModel.LinkFileModifiedAtDisplay, Mode=OneWay}" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </Grid>
+</winuiex:WindowEx>

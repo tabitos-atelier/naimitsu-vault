@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Application
+    x:Class="NaimitsuVault.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:NaimitsuVault.Converters"
+    xmlns:winUi="using:Windows.UI">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+            </ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Default">
+                    <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="Transparent" />
+                    <!-- App-wide font family override (AppSettings.FontFamily). "XamlAutoFontFamily" is the
+                         WinUI sentinel meaning "system default"; FontResourceService overwrites this value
+                         at runtime (all 3 theme dictionaries kept in sync) when the user picks a font. -->
+                    <FontFamily x:Key="ContentControlThemeFontFamily">XamlAutoFontFamily</FontFamily>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="Transparent" />
+                    <FontFamily x:Key="ContentControlThemeFontFamily">XamlAutoFontFamily</FontFamily>
+
+                    <!-- ===== NaimitsuVault light-mode color system ===== -->
+
+                    <!-- Layer 1: color constants -->
+                    <winUi:Color x:Key="NvAccentColor">#FF0066CC</winUi:Color>
+
+                    <!--
+                        WARNING: NvInactiveColor - do not remove or darken (a recurring known issue)
+                        ────────────────────────────────────────────────────────────────
+                        [Settled] This value has been approved by on-device visual review. Do not change it without justification.
+
+                        [Recurring failure pattern]
+                          Every major overhaul has brought a repeated report that unlinked
+                          (inactive) icons look "black." The cause has always been one of these two:
+                          (1) Swapping in TextFillColorSecondaryBrush (a WinUI3 system key)
+                              -> designed around dark mode, so it's too strong in light mode
+                          (2) Reverting _fallbackGrey to a dark color like #444444
+                              -> since this is the fallback used when TryGetValue can't find the
+                                 theme dictionary entry, fixing only App.xaml has no effect
+
+                        [Settled value] #FF909090 (RGB 144, 144, 144)
+                          - Contrast ratio against the white background (#FFFFFF): 3.2:1 (measured, approved)
+                          - Satisfies the 3:1 threshold WCAG 1.4.11 requires for non-text elements (icons, etc.)
+                          - The sweet spot balancing accessibility for low-vision users with still "reading as gray"
+                          - Do not darken further (#767676 = 4.5:1 reads as black)
+                          - Do not lighten further (#D0D0D0 = 1.8:1 has insufficient contrast)
+
+                        [Must stay in sync] App.xaml's NvInactiveColor and
+                          ViewerViewModel._fallbackGrey / ViewerWindow._fallbackGrey -
+                          all three must always be kept at the same value. Changing only one reintroduces the bug.
+
+                        [Maintenance] Even if the accent color changes, the inactive color keeps
+                                  this value independently. Do not change it during color-system overhauls either.
+                        ────────────────────────────────────────────────────────────────
+                    -->
+                    <winUi:Color x:Key="NvInactiveColor">#FF909090</winUi:Color>
+
+                    <!-- Layer 2: custom brushes (use these when referencing from C#) -->
+                    <SolidColorBrush x:Key="NvAccentBrush"   Color="{StaticResource NvAccentColor}" />
+                    <SolidColorBrush x:Key="NvInactiveBrush" Color="{StaticResource NvInactiveColor}" />
+
+                    <!-- Layer 3-a: the SystemAccentColor family (Color type)
+                         HSL approximation based on #0066CC (H=210°, S=100%, L=40%).
+                         Verify visually on-device after implementing, and adjust as needed. -->
+                    <winUi:Color x:Key="SystemAccentColor">#FF0066CC</winUi:Color>
+                    <winUi:Color x:Key="SystemAccentColorLight1">#FF2080D6</winUi:Color>
+                    <winUi:Color x:Key="SystemAccentColorLight2">#FF5AAAE3</winUi:Color>
+                    <winUi:Color x:Key="SystemAccentColorLight3">#FF9CCAF0</winUi:Color>
+                    <winUi:Color x:Key="SystemAccentColorDark1">#FF0052A3</winUi:Color>
+                    <winUi:Color x:Key="SystemAccentColorDark2">#FF003D7A</winUi:Color>
+                    <winUi:Color x:Key="SystemAccentColorDark3">#FF002147</winUi:Color>
+
+                    <!-- Layer 3-b: accent brushes (overrides of WinUI 3 standard keys)
+                         Secondary/Tertiary's alpha transparency is intended as graduated visual feedback for hover/press. -->
+                    <SolidColorBrush x:Key="AccentFillColorDefaultBrush"
+                                     Color="{StaticResource NvAccentColor}" />
+                    <SolidColorBrush x:Key="AccentFillColorSecondaryBrush"  Color="#CC0066CC" />
+                    <SolidColorBrush x:Key="AccentFillColorTertiaryBrush"   Color="#990066CC" />
+                    <SolidColorBrush x:Key="AccentTextFillColorPrimaryBrush"
+                                     Color="{StaticResource NvAccentColor}" />
+                    <SolidColorBrush x:Key="AccentTextFillColorSecondaryBrush" Color="#CC0066CC" />
+
+                    <!-- Layer 3-c: TextBox hover background (unified across all pages)
+                         Because TextControlBackground is opaque white (#FFFFFFFF),
+                         α≥17% is required to create a visible difference from the resting state.
+                         #2C000000 (α=17%) produces a gray roughly equal to #D4D4D4 on hover.
+                         EditableLabelStyle (BorderThickness=0) has no border change, so
+                         this background change is the only hover visual feedback it gets. -->
+                    <SolidColorBrush x:Key="TextControlBackgroundPointerOver" Color="#2C000000" />
+
+                    <!-- Layer 3-c2: SubtleButtonStyle hover background AA correction
+                         The default, #09000000 (α≈3.5%), is nearly invisible against a light
+                         background. Reuse the same α=17% black as TextControlBackgroundPointerOver
+                         above so hover feedback stays legible for buttons using SubtleButtonStyle
+                         (e.g. RestoreGateButton/EmergencyQrButton/WindowsHelloButton in UnlockWindow). -->
+                    <SolidColorBrush x:Key="SubtleButtonBackgroundPointerOver" Color="#2C000000" />
+
+                    <!-- Layer 3-d: ContentDialog top border / accent fill AA correction -->
+                    <SolidColorBrush x:Key="ContentDialogBorderBrush"
+                                     Color="{StaticResource NvAccentColor}" />
+                    <SolidColorBrush x:Key="AccentAAFillColorDefaultBrush"
+                                     Color="{StaticResource NvAccentColor}" />
+
+                    <!-- Technique 1: pin the TextBox/PasswordBox resting background to solid pure white
+                         The WinUI 3 default, #99FFFFFF (α=60% translucent white), blends into the Mica backdrop.
+                         Pinning it to opaque pure white creates a visible step against the Mica. -->
+                    <SolidColorBrush x:Key="TextControlBackground" Color="#FFFFFFFF" />
+
+                    <!-- Technique 2: clamp control outline brightness
+                         The default, #0F000000 (α=6%), is invisible in light mode.
+                         Lock it down to solid gray at rest, and royal blue on hover/focus. -->
+                    <SolidColorBrush x:Key="TextControlBorderBrush"            Color="#FFD1D1D1" />
+                    <SolidColorBrush x:Key="TextControlBorderBrushPointerOver" Color="{StaticResource NvAccentColor}" />
+                    <SolidColorBrush x:Key="TextControlBorderBrushFocused"     Color="{StaticResource NvAccentColor}" />
+
+                    <!-- Technique 3: fully separate the borders between screens
+                         Override NavigationView's vertical divider, cards, and control outlines
+                         with solid gray, physically breaking the washed-out blending into white. -->
+                    <SolidColorBrush x:Key="NavigationViewBorderBrush"      Color="#FFD8D8D8" />
+                    <SolidColorBrush x:Key="CardStrokeColorDefaultBrush"    Color="#FFD8D8D8" />
+                    <SolidColorBrush x:Key="ControlStrokeColorDefaultBrush" Color="#FFD8D8D8" />
+
+                    <!-- Technique 4: unify the warning color (light mode only)
+                         The default SystemFillColorCautionBrush is #9D5D00 (leans brownish and reads as faint).
+                         Unify it to the same value as AuditLevelToBrushConverter's warning color
+                         (#B3850F, a golden tone), fixing "warning = golden" to a single color across
+                         the entire app, including Dashboard's expiring-soon icon and the native InfoBar warning color.
+                         Dark mode is excluded since the default #FCE100 (a vivid yellow) is fine as-is. -->
+                    <SolidColorBrush x:Key="SystemFillColorCautionBrush" Color="#FFB3850F" />
+
+                    <!-- Technique 5: unify the danger color (light mode only)
+                         The default SystemFillColorCriticalBrush is #C42B1C, a different red from
+                         AuditLevelToBrushConverter's danger color (#E81123); the title bar's lock
+                         icon, delete buttons, and various error displays (30+ locations) were still
+                         on #C42B1C. Unify them to #E81123.
+                         Dark mode is excluded since the default #FF99A4 is fine as-is. -->
+                    <SolidColorBrush x:Key="SystemFillColorCriticalBrush" Color="#FFE81123" />
+
+                    <!-- Technique 6: unify the success color (light mode only)
+                         The default, #0F7B0F, has no visibility problems as-is, but slightly
+                         different greens were mixed in from StrengthLevelToBrushConverter (#107C10)
+                         and DirectInjectionDialog (SeaGreen), so unify everything to #0F7B0F.
+                         Since this override matches the default value, there's no visual change;
+                         it's an explicit declaration that pins "success = #0F7B0F" against future
+                         WinUI 3 default-value changes. -->
+                    <SolidColorBrush x:Key="SystemFillColorSuccessBrush" Color="#FF0F7B0F" />
+
+                    <!-- ===== end ===== -->
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="ApplicationPageBackgroundThemeBrush" Color="Transparent" />
+                    <FontFamily x:Key="ContentControlThemeFontFamily">XamlAutoFontFamily</FontFamily>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+
+            <!-- ===== App-wide font family override (AppSettings.FontFamily) =====
+                 Most built-in control styles (Button/ComboBox/TextBox/NavigationViewItem/etc.) already
+                 reference {ThemeResource ContentControlThemeFontFamily} above, so overriding that theme
+                 resource covers them. Plain unstyled TextBlocks pick up the setting via the inherited
+                 FontFamily value applied to each window's root (see AppSettingsViewModel/*Window.xaml.cs).
+                 The two named TextBlock styles this app actually uses hardcode a literal FontFamily in
+                 WinUI's BaseTextBlockStyle instead of referencing a theme resource, so they need their own
+                 override, funneled through a shared base style that does reference the resource key. -->
+            <Style x:Key="NvBaseTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource BaseTextBlockStyle}">
+                <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+            </Style>
+            <Style x:Key="BodyStrongTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource NvBaseTextBlockStyle}">
+                <Setter Property="FontSize" Value="{StaticResource BodyStrongTextBlockFontSize}" />
+            </Style>
+            <Style x:Key="SubtitleTextBlockStyle" TargetType="TextBlock" BasedOn="{StaticResource NvBaseTextBlockStyle}">
+                <Setter Property="FontSize" Value="{StaticResource SubtitleTextBlockFontSize}" />
+                <Setter Property="OpticalMarginAlignment" Value="TrimSideBearings" />
+            </Style>
+            <!-- ===== end ===== -->
+
+            <!-- ===== Font size tokens =====
+                 Consolidates the ~350 literal FontSize values that had drifted across 11/12/13 (no
+                 intentional distinction) into a small named scale. Text and FontIcon glyphs use
+                 separate scales since their visual weight doesn't track 1:1 with adjacent text. -->
+            <x:Double x:Key="NvCaptionFontSize">12</x:Double>
+            <x:Double x:Key="NvBodyFontSize">14</x:Double>
+            <x:Double x:Key="NvSubtitleFontSize">16</x:Double>
+            <x:Double x:Key="NvTitleFontSize">24</x:Double>
+            <x:Double x:Key="NvIconSizeSmall">12</x:Double>
+            <x:Double x:Key="NvIconSizeDefault">14</x:Double>
+            <x:Double x:Key="NvIconSizeLarge">20</x:Double>
+            <x:Double x:Key="NvIconSizeXLarge">48</x:Double>
+            <!-- ===== end ===== -->
+
+            <!-- ===== App-wide ligature support (Typography.ContextualAlternates) =====
+                 Enables OpenType "calt" (contextual alternates), the feature programming-ligature fonts
+                 (Cascadia Code, Fira Code, JetBrains Mono, etc.) use for "==", "->", etc. No-op for fonts
+                 that don't define calt rules, so this is harmless for the default font. Targets free-text
+                 fields (Notes/custom fields use TextBox; most other labels are plain TextBlock; the file
+                 viewer's text/code display and the large password preview use RichTextBlock, a sibling
+                 class of TextBlock that isn't covered by a TextBlock style). generic.xaml ships no implicit
+                 default style for TextBlock/RichTextBlock, so no BasedOn is needed for those two; TextBox
+                 does have one (a full ControlTemplate), so BasedOn is required there to avoid replacing it. -->
+            <Style TargetType="TextBlock">
+                <Setter Property="Typography.ContextualAlternates" Value="True" />
+            </Style>
+            <Style TargetType="RichTextBlock">
+                <Setter Property="Typography.ContextualAlternates" Value="True" />
+            </Style>
+            <Style TargetType="TextBox" BasedOn="{StaticResource DefaultTextBoxStyle}">
+                <Setter Property="Typography.ContextualAlternates" Value="True" />
+            </Style>
+            <!-- ===== end ===== -->
+
+            <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+            <converters:InverseBoolToVisibilityConverter x:Key="InverseBoolToVisibilityConverter" />
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter" />
+            <converters:InverseNullToVisibilityConverter x:Key="InverseNullToVisibilityConverter" />
+            <converters:ByteArrayToImageSourceConverter x:Key="ByteArrayToImageSourceConverter" />
+            <converters:BoolToHighlightBrushConverter x:Key="BoolToHighlightBrushConverter" />
+            <converters:StrengthLevelToBrushConverter x:Key="StrengthLevelToBrushConverter" />
+            <converters:NotNullOrEmptyToBoolConverter x:Key="NotNullOrEmptyToBoolConverter" />
+            <converters:EmptyToDisabledOpacityConverter x:Key="EmptyToDisabledOpacityConverter" />
+            <converters:AuditLevelToBrushConverter x:Key="AuditLevelToBrushConverter" />
+            <converters:AuditSeverityBulletConverter x:Key="AuditSeverityBulletConverter" />
+            <converters:BoolToPasswordRevealModeConverter x:Key="BoolToPasswordRevealModeConverter" />
+            <converters:ZeroCountToVisibilityConverter x:Key="ZeroCountToVisibilityConverter" />
+            <converters:BoolToZoomGlyphConverter x:Key="BoolToZoomGlyphConverter" />
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

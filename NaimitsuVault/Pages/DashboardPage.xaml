@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Page
+    x:Class="NaimitsuVault.Pages.DashboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:NaimitsuVault.Localization"
+    xmlns:svc="using:NaimitsuVault.Services"
+    xmlns:vm="using:NaimitsuVault.ViewModels"
+    NavigationCacheMode="Required">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <ScrollViewer>
+            <StackPanel
+                MinWidth="720"
+                Margin="32,24,32,32"
+                HorizontalAlignment="Left"
+                Spacing="12">
+
+                <TextBlock
+                    FontSize="{StaticResource NvSubtitleFontSize}"
+                    FontWeight="SemiBold"
+                    Text="{loc:Msg Key=Dashboard.Overview}" />
+
+                <StackPanel Margin="28,0,0,0" Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="4">
+                        <FontIcon
+                            FontSize="{StaticResource NvIconSizeLarge}"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Glyph="&#xF540;"
+                            VerticalAlignment="Center" />
+                        <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="{loc:Msg Key=Dashboard.VaultCount}" />
+                        <TextBlock Text="：" />
+                        <TextBlock FontWeight="SemiBold" Text="{x:Bind ViewModel.VaultNumber, Mode=OneWay}" />
+                        <TextBlock
+                            Margin="12,0"
+                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                            Text="|" />
+                        <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="{loc:Msg Key=Dashboard.SecretCount}" />
+                        <TextBlock Text="：" />
+                        <TextBlock FontWeight="SemiBold" Text="{x:Bind ViewModel.TotalSecrets, Mode=OneWay}" />
+                        <TextBlock
+                            Margin="12,0"
+                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                            Text="|" />
+                        <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="{loc:Msg Key=Dashboard.FileCount}" />
+                        <TextBlock Text="：" />
+                        <TextBlock FontWeight="SemiBold" Text="{x:Bind ViewModel.TotalFiles, Mode=OneWay}" />
+                        <TextBlock
+                            Margin="12,0"
+                            Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                            Text="|" />
+                        <TextBlock Foreground="{ThemeResource TextFillColorSecondaryBrush}" Text="{loc:Msg Key=Dashboard.DbFileSize}" />
+                        <TextBlock Text="：" />
+                        <TextBlock FontWeight="SemiBold" Text="{x:Bind ViewModel.DbSizeText, Mode=OneWay}" />
+                    </StackPanel>
+
+                    <!-- Auto-recovery notice (shown when recovered from a shadow copy at startup)-->
+                    <InfoBar
+                        x:Name="AutoRecoveryWarningBar"
+                        IsClosable="False"
+                        IsOpen="{x:Bind ViewModel.HasAutoRecoveryWarning, Mode=OneWay}"
+                        Message="{x:Bind ViewModel.AutoRecoveryMessage, Mode=OneWay}"
+                        Severity="Warning"
+                        Visibility="{x:Bind ViewModel.HasAutoRecoveryWarning, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+
+                    <!-- Quarantine notice (shown when a StoredFile's ContentType no longer matches its FileName extension)-->
+                    <InfoBar
+                        x:Name="QuarantineWarningBar"
+                        IsClosable="False"
+                        IsOpen="{x:Bind ViewModel.HasQuarantineWarning, Mode=OneWay}"
+                        Message="{x:Bind ViewModel.QuarantineMessage, Mode=OneWay}"
+                        Severity="Warning"
+                        Visibility="{x:Bind ViewModel.HasQuarantineWarning, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+
+                    <!-- DB integrity warning (shown when PRAGMA quick_check returns anything other than ok)-->
+                    <InfoBar
+                        x:Name="UnifiedDbWarningBar"
+                        IsClosable="False"
+                        IsOpen="{x:Bind ViewModel.UnifiedDbIntegrityWarning, Mode=OneWay}"
+                        Message="{loc:Msg Key=Restore.Dialog.UnifiedDbIntegrityIssueAlert}"
+                        Severity="Error"
+                        Visibility="{x:Bind ViewModel.UnifiedDbIntegrityWarning, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+                    <InfoBar
+                        x:Name="VaultDbWarningBar"
+                        IsClosable="False"
+                        IsOpen="{x:Bind ViewModel.VaultDbIntegrityWarning, Mode=OneWay}"
+                        Message="{loc:Msg Key=Restore.Dialog.VaultDbIntegrityIssueAlert}"
+                        Severity="Error"
+                        Visibility="{x:Bind ViewModel.VaultDbIntegrityWarning, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+                </StackPanel>
+
+                <!-- 2. Expiry alert (inline row list) -->
+                <TextBlock
+                    FontSize="{StaticResource NvSubtitleFontSize}"
+                    FontWeight="SemiBold"
+                    Text="{loc:Msg Key=Common.ExpiresAt}" />
+
+                <StackPanel Margin="28,0,0,0" Spacing="8">
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="—"
+                        Visibility="{x:Bind ViewModel.HasAnyExpiryLine, Converter={StaticResource InverseBoolToVisibilityConverter}, Mode=OneWay}" />
+
+                    <!--  Grouped by nav-menu order (Secrets -> Gallery -> Profile); within each group,
+                         expired items come before expiring-soon items, matching the Security scan
+                         section's error-before-warning order.  -->
+                    <ListView
+                        x:Name="ExpiryAlertListView"
+                        ItemsSource="{x:Bind ViewModel.ExpiryAlertRows, Mode=OneWay}"
+                        KeyDown="ExpiryAlertListView_KeyDown"
+                        SelectionMode="Single"
+                        Tag="{x:Bind ViewModel}"
+                        Visibility="{x:Bind ViewModel.HasAnyExpiryLine, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Padding" Value="0,2,0,2" />
+                                <Setter Property="MinHeight" Value="0" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:ExpiryAlertItem">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <Grid>
+                                        <FontIcon
+                                            FontSize="{StaticResource NvIconSizeDefault}"
+                                            Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                                            Glyph="&#xEC92;"
+                                            Visibility="{x:Bind IsExpired, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                        <FontIcon
+                                            FontSize="{StaticResource NvIconSizeDefault}"
+                                            Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                                            Glyph="&#xEC92;"
+                                            Visibility="{x:Bind IsExpired, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                                    </Grid>
+                                    <HyperlinkButton
+                                        Padding="0"
+                                        Command="{Binding Tag.NavigateToExpiryItemCommand, ElementName=ExpiryAlertListView}"
+                                        CommandParameter="{Binding}"
+                                        Content="{x:Bind Text}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+
+                <!-- 3. Security diagnostics -->
+                <TextBlock
+                    FontSize="{StaticResource NvSubtitleFontSize}"
+                    FontWeight="SemiBold"
+                    Text="{loc:Msg Key=Dashboard.SecurityScan}" />
+
+                <StackPanel Margin="28,0,0,0" Spacing="8">
+                    <Button
+                        HorizontalAlignment="Left"
+                        Command="{x:Bind ViewModel.RunScanCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xE9D9;" />
+                            <TextBlock VerticalAlignment="Center" Text="{loc:Msg Key=Dashboard.RunScan}" />
+                        </StackPanel>
+                    </Button>
+                    <ProgressRing
+                        Width="32"
+                        Height="32"
+                        HorizontalAlignment="Left"
+                        IsActive="{x:Bind ViewModel.IsScanRunning, Mode=OneWay}"
+                        Visibility="{x:Bind ViewModel.IsScanRunning, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{loc:Msg Key=Dashboard.NotScannedYet}"
+                        Visibility="{x:Bind ViewModel.HasScanResult, Converter={StaticResource InverseBoolToVisibilityConverter}, Mode=OneWay}" />
+
+                    <StackPanel
+                        Spacing="16"
+                        Visibility="{x:Bind ViewModel.HasScanResult, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+
+                        <StackPanel
+                            Spacing="4"
+                            Visibility="{x:Bind ViewModel.HasSecurityScanRows, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                            <StackPanel Orientation="Horizontal" Spacing="16">
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    Visibility="{x:Bind ViewModel.HasWeakItems, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                                    <FontIcon
+                                        Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                                        FontSize="{StaticResource NvIconSizeDefault}"
+                                        Glyph="&#xE783;" />
+                                    <TextBlock Text="{loc:Msg Key=Dashboard.WeakPasswords}" />
+                                    <TextBlock FontWeight="SemiBold" Text="{x:Bind ViewModel.WeakCount, Mode=OneWay}" />
+                                </StackPanel>
+                                <StackPanel
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    Visibility="{x:Bind ViewModel.HasReusedItems, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                                    <FontIcon
+                                        Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                                        FontSize="{StaticResource NvIconSizeDefault}"
+                                        Glyph="&#xE7BA;" />
+                                    <TextBlock Text="{loc:Msg Key=Dashboard.ReusedPasswords}" />
+                                    <TextBlock FontWeight="SemiBold" Text="{x:Bind ViewModel.ReusedGroupCount, Mode=OneWay}" />
+                                </StackPanel>
+                            </StackPanel>
+                            <ListView
+                                x:Name="SecurityScanListView"
+                                Margin="28,0,0,0"
+                                ItemsSource="{x:Bind ViewModel.SecurityScanRows, Mode=OneWay}"
+                                KeyDown="SecurityScanListView_KeyDown"
+                                SelectionMode="Single"
+                                Tag="{x:Bind ViewModel}">
+                                <ListView.ItemContainerStyle>
+                                    <Style TargetType="ListViewItem">
+                                        <Setter Property="Padding" Value="0,2,0,2" />
+                                        <Setter Property="MinHeight" Value="0" />
+                                    </Style>
+                                </ListView.ItemContainerStyle>
+                                <ListView.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:SecurityScanRowItem">
+                                        <StackPanel Orientation="Horizontal" Spacing="8">
+                                            <Grid>
+                                                <FontIcon
+                                                    FontSize="{StaticResource NvIconSizeDefault}"
+                                                    Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                                                    Glyph="&#xE783;"
+                                                    Visibility="{x:Bind IsReused, Converter={StaticResource InverseBoolToVisibilityConverter}}" />
+                                                <FontIcon
+                                                    FontSize="{StaticResource NvIconSizeDefault}"
+                                                    Foreground="{ThemeResource SystemFillColorCautionBrush}"
+                                                    Glyph="&#xE7BA;"
+                                                    Visibility="{x:Bind IsReused, Converter={StaticResource BoolToVisibilityConverter}}" />
+                                            </Grid>
+                                            <HyperlinkButton
+                                                Padding="0"
+                                                Command="{Binding Tag.NavigateToSecurityRowCommand, ElementName=SecurityScanListView}"
+                                                CommandParameter="{Binding}"
+                                                Content="{x:Bind DisplayText}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+
+                        <StackPanel
+                            Orientation="Horizontal"
+                            Spacing="8"
+                            Visibility="{x:Bind ViewModel.HasNoIssues, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                            <FontIcon
+                                Foreground="{ThemeResource SystemFillColorSuccessBrush}"
+                                Glyph="&#xE73E;" />
+                            <TextBlock Text="{loc:Msg Key=Dashboard.NoIssuesFound}" />
+                        </StackPanel>
+
+                    </StackPanel>
+                </StackPanel>
+
+                <TextBlock
+                    FontSize="{StaticResource NvSubtitleFontSize}"
+                    FontWeight="SemiBold"
+                    Text="{loc:Msg Key=AuditLog.RecentActivityHeader}" />
+
+                <StackPanel Spacing="8">
+                    <ProgressRing
+                        Width="24"
+                        Height="24"
+                        HorizontalAlignment="Left"
+                        IsActive="{x:Bind ViewModel.IsAuditLoading, Mode=OneWay}"
+                        Visibility="{x:Bind ViewModel.IsAuditLoading, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+
+                    <TextBlock
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{loc:Msg Key=AuditLog.NoActivityPlaceholder}"
+                        Visibility="{x:Bind ViewModel.HasRecentAuditLogs, Converter={StaticResource InverseBoolToVisibilityConverter}, Mode=OneWay}" />
+
+                    <ListView
+                        x:Name="RecentActivityListView"
+                        ItemsSource="{x:Bind ViewModel.RecentAuditLogs, Mode=OneWay}"
+                        KeyDown="RecentActivityListView_KeyDown"
+                        SelectionMode="Single"
+                        Visibility="{x:Bind ViewModel.HasRecentAuditLogs, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="Padding" Value="0,4,0,4" />
+                                <Setter Property="MinHeight" Value="0" />
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                        <DataTemplate x:DataType="vm:AuditLogDisplayItem">
+                            <Grid ColumnSpacing="12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="100" />
+                                    <ColumnDefinition Width="20" />
+                                    <ColumnDefinition Width="150" />
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <!--  Log ID  -->
+                                <TextBlock
+                                    Grid.Column="0"
+                                    FontSize="{StaticResource NvBodyFontSize}"
+                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    Text="{x:Bind Id}"
+                                    TextAlignment="Right" />
+                                <!--  EventLevel icon  -->
+                                <FontIcon
+                                    Grid.Column="1"
+                                    FontSize="{StaticResource NvIconSizeDefault}"
+                                    Foreground="{x:Bind EventLevel, Converter={StaticResource AuditLevelToBrushConverter}}"
+                                    Glyph="{x:Bind EventLevel, Converter={StaticResource AuditSeverityBulletConverter}}" />
+                                <!--  Date/time (local time, OS-culture "g" format)  -->
+                                <TextBlock
+                                    Grid.Column="2"
+                                    FontSize="{StaticResource NvBodyFontSize}"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="{x:Bind CreatedAtDisplay}" />
+                                <!--  Event code  -->
+                                <TextBlock
+                                    Grid.Column="3"
+                                    FontSize="{StaticResource NvBodyFontSize}"
+                                    Foreground="{ThemeResource TextFillColorTertiaryBrush}"
+                                    Text="{x:Bind EventCodeDisplay}"
+                                    TextAlignment="Right" />
+                                <!--  Log content  -->
+                                <TextBlock
+                                    Grid.Column="4"
+                                    FontSize="{StaticResource NvBodyFontSize}"
+                                    Text="{x:Bind Summary}"
+                                    TextWrapping="Wrap" />
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                    </ListView>
+
+                    <HyperlinkButton
+                        HorizontalAlignment="Right"
+                        Command="{x:Bind ViewModel.NavigateToAuditLogCommand}"
+                        Content="{loc:Msg Key=AuditLog.SixMonthsHistoryNotice}" />
+                </StackPanel>
+
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</Page>

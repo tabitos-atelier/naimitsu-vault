@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!--  Copyright (c) 2026 Tabito's Works. Licensed under the MIT License.  -->
+<UserControl
+    x:Class="NaimitsuVault.Views.Controls.EmergencyAccessControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:loc="using:NaimitsuVault.Localization">
+
+    <StackPanel
+        MinWidth="380"
+        AllowDrop="True"
+        DragOver="QrDropZone_DragOver"
+        Drop="QrDropZone_Drop"
+        Spacing="12">
+
+        <TextBlock
+            FontSize="{StaticResource NvCaptionFontSize}"
+            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+            Text="{loc:Msg Key=Emergency.ReadOnlyModeNote}"
+            TextWrapping="Wrap" />
+
+        <Border
+            x:Name="ErrorBorder"
+            Padding="12,8"
+            Background="{ThemeResource SystemFillColorCriticalBackgroundBrush}"
+            CornerRadius="{ThemeResource ControlCornerRadius}"
+            Visibility="Collapsed">
+            <TextBlock
+                x:Name="ErrorText"
+                Foreground="{ThemeResource SystemFillColorCriticalBrush}"
+                TextWrapping="Wrap" />
+        </Border>
+
+        <!--  Drop zone + file picker button: the two ways to supply the QR PNG (same layout as RestoreWindow's backup file row)  -->
+        <Grid ColumnSpacing="8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <Border
+                x:Name="QrDropZone"
+                Grid.Column="0"
+                Padding="12,10"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource DividerStrokeColorDefaultBrush}"
+                BorderThickness="1"
+                CornerRadius="{ThemeResource ControlCornerRadius}">
+                <Grid>
+                    <StackPanel
+                        x:Name="QrPlaceholderPanel"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="8">
+                        <FontIcon
+                            FontSize="{StaticResource NvIconSizeDefault}"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Glyph="&#xEB9F;" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="{StaticResource NvCaptionFontSize}"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            Text="{loc:Msg Key=Emergency.DropQrZone}" />
+                    </StackPanel>
+                    <StackPanel
+                        x:Name="QrSuccessPanel"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="6"
+                        Visibility="Collapsed">
+                        <FontIcon
+                            FontSize="{StaticResource NvIconSizeDefault}"
+                            Foreground="{ThemeResource SystemFillColorSuccessBrush}"
+                            Glyph="&#xE73E;" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="{StaticResource NvCaptionFontSize}"
+                            FontWeight="SemiBold"
+                            Foreground="{ThemeResource SystemFillColorSuccessBrush}"
+                            Text="{loc:Msg Key=Common.QrReadSuccess}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Button
+                x:Name="QrSelectFileButton"
+                Grid.Column="1"
+                Width="48"
+                Height="48"
+                AutomationProperties.Name="{loc:Msg Key=Emergency.SelectQrFile}"
+                Command="{x:Bind ViewModel.SelectQrFileCommand}"
+                IsEnabled="{x:Bind ViewModel.IsNotBusy, Mode=OneWay}"
+                Style="{StaticResource DefaultButtonStyle}"
+                ToolTipService.ToolTip="{loc:Msg Key=Emergency.SelectQrFile}">
+                <FontIcon FontSize="{StaticResource NvIconSizeDefault}" Glyph="&#xED25;" />
+            </Button>
+        </Grid>
+
+        <PasswordBox
+            x:Name="PinBox"
+            AutomationProperties.Name="{loc:Msg Key=Emergency.Pin}"
+            IsEnabled="{x:Bind ViewModel.IsNotBusy, Mode=OneWay}"
+            MaxLength="4"
+            PasswordChanged="PinBox_PasswordChanged"
+            PlaceholderText="{loc:Msg Key=Emergency.Pin}" />
+
+        <Button
+            Height="40"
+            HorizontalAlignment="Stretch"
+            Command="{x:Bind ViewModel.ExecuteRecoveryCommand}"
+            Style="{StaticResource AccentButtonStyle}">
+            <StackPanel Orientation="Horizontal" Spacing="8">
+                <ProgressRing
+                    x:Name="BusyRing"
+                    Width="16"
+                    Height="16"
+                    IsActive="False"
+                    Visibility="Collapsed" />
+                <FontIcon FontSize="{StaticResource NvIconSizeLarge}" Glyph="&#xE785;" />
+                <TextBlock Text="{loc:Msg Key=Common.Unlock}" />
+            </StackPanel>
+        </Button>
+
+        <!--  Divider: separates the unrelated Close action from the Unlock flow above  -->
+        <Border
+            Height="1"
+            Margin="0,4,0,0"
+            Background="{ThemeResource DividerStrokeColorDefaultBrush}" />
+
+        <Button
+            Height="40"
+            HorizontalAlignment="Stretch"
+            Click="CloseButton_Click"
+            Content="{loc:Msg Key=Common.Close}"
+            IsEnabled="{x:Bind ViewModel.IsNotBusy, Mode=OneWay}" />
+
+    </StackPanel>
+</UserControl>

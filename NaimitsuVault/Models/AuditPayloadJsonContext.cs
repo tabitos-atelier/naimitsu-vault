@@ -1,0 +1,47 @@
+// Copyright (c) 2026 Tabito's Works
+// Licensed under the MIT License. See LICENSE file in the project root for full license information.
+
+using System.Text.Json.Serialization;
+
+namespace NaimitsuVault.Models;
+
+[JsonSerializable(typeof(SecretViewedPayload))]
+[JsonSerializable(typeof(TimeMachineViewedPayload))]
+[JsonSerializable(typeof(FileViewedPayload))]
+[JsonSerializable(typeof(AutoBackupSettingChangedPayload))]
+[JsonSerializable(typeof(AutoLockSettingChangedPayload))]
+[JsonSerializable(typeof(ScreenCaptureProtectionChangedPayload))]
+[JsonSerializable(typeof(WindowsHelloChangedPayload))]
+[JsonSerializable(typeof(FaviconAutoFetchChangedPayload))]
+[JsonSerializable(typeof(SecretSavedPayload))]
+[JsonSerializable(typeof(TimeMachineRestoredPayload))]
+[JsonSerializable(typeof(FileAddedPayload))]
+[JsonSerializable(typeof(SecretSoftDeletedPayload))]
+[JsonSerializable(typeof(SecretUndeletedPayload))]
+[JsonSerializable(typeof(SecretPermanentlyDeletedPayload))]
+[JsonSerializable(typeof(SecretAutoPurgedByExpiryPayload))]
+[JsonSerializable(typeof(TimeMachineSlotDeletedPayload))]
+[JsonSerializable(typeof(TimeMachineGenRotatedPayload))]
+[JsonSerializable(typeof(FileSoftDeletedPayload))]
+[JsonSerializable(typeof(FileUndeletedPayload))]
+[JsonSerializable(typeof(FilePermanentlyDeletedPayload))]
+[JsonSerializable(typeof(FileAutoPurgedByExpiryPayload))]
+[JsonSerializable(typeof(PlaintextImportExecutedPayload))]
+[JsonSerializable(typeof(PlaintextExportExecutedPayload))]
+[JsonSerializable(typeof(ImportItemFailedPayload))]
+[JsonSerializable(typeof(ExportItemFailedPayload))]
+[JsonSerializable(typeof(CsvFormulaGuardAppliedPayload))]
+[JsonSerializable(typeof(FileExportedPayload))]
+[JsonSerializable(typeof(SecretFieldCopiedToClipboardPayload))]
+[JsonSerializable(typeof(SecretAutoTypeExecutedPayload))]
+[JsonSerializable(typeof(TimeMachineValueCopiedToClipboardPayload))]
+[JsonSerializable(typeof(ProfileFieldCopiedToClipboardPayload))]
+[JsonSerializable(typeof(LocaleImportSucceededPayload))]
+[JsonSerializable(typeof(LocaleImportKeyMissingPayload))]
+[JsonSerializable(typeof(LocaleImportValueTooLongPayload))]
+[JsonSerializable(typeof(LocaleImportPlaceholderBrokenPayload))]
+[JsonSerializable(typeof(NoOpDraftDiscardedPayload))]
+[JsonSerializable(typeof(FileContentTypeRepairedPayload))]
+[JsonSerializable(typeof(AuditLogsPurgedPayload))]
+[JsonSerializable(typeof(VaultDbAutoRecoveredPayload))]
+internal partial class AuditPayloadJsonContext : JsonSerializerContext { }

@@ -1,0 +1,660 @@
+{
+  "locale": "en",
+  "displayName": "English",
+  "localeVersion": 1,
+  "messages": {
+    "Common": {
+      "#01-01: Common Actions": {
+        "Ok": "OK",
+        "Cancel": "Cancel",
+        "Verify": "Verify",
+        "AuthWithWindowsHello": "Verify with Windows Hello",
+        "AuthWithWindowsHelloPrompt": "This will unlock the lock protecting your sensitive data.",
+        "WarningAutoLockNotice": "After this operation, the app will lock automatically.",
+        "Close": "Close",
+        "Save": "Save",
+        "Discard": "Discard",
+        "Restart": "Restart App",
+        "Add": "Add",
+        "Delete": "Delete",
+        "Import": "Import",
+        "Export": "Export",
+        "IdentityVerification": "Confirm Identity",
+        "Backup": "Backup",
+        "Unlock": "Unlock"
+      },
+      "#01-02: Status Display": {
+        "On": "On",
+        "Off": "Off",
+        "All": "All",
+        "Current": "Current",
+        "Warning": "Warning",
+        "Error": "Error",
+        "Expired": "Expired",
+        "Loading": "Loading...",
+        "PleaseWait": "Please wait...",
+        "SafeWritingLock": "Saving data safely. The screen will lock automatically upon completion for security.",
+        "MemoryClearedLock": "For your safety, sensitive data was cleared and the screen was locked."
+      },
+      "#01-03: Password Strength": {
+        "StrengthVeryWeak": "Very Weak",
+        "StrengthWeak": "Weak",
+        "StrengthFair": "Fair",
+        "StrengthStrong": "Strong",
+        "StrengthVeryStrong": "Very Strong"
+      },
+      "#01-04: Input Field Names": {
+        "Title": "Title",
+        "Username": "Username",
+        "Password": "Password",
+        "Email": "Email Address",
+        "Website": "Website",
+        "TotpSecret": "Two-Factor Auth",
+        "Notes": "Notes",
+        "ExpiresAt": "Expiry"
+      },
+      "#01-05: Additional Field Forms": {
+        "CustomField": "Additional Fields",
+        "NewText": "New Text",
+        "NewPassword": "New Password",
+        "NewWebsite": "New Website",
+        "NewDate": "New Date"
+      },
+      "#01-06: Input Guidance and Search": {
+        "EnterText": "Enter text",
+        "EnterPassword": "Enter password",
+        "EnterWebsite": "Enter website URL",
+        "SelectDate": "Select a date",
+        "FreeInput": "Free text",
+        "EnterMasterPassword": "Enter your master password",
+        "PasswordLengthHint": "8+ characters",
+        "SearchSecret": "Search secrets...",
+        "DropZonePrompt": "Drag and drop files here to add",
+        "DropTooltip": "Up to {0} files per drop / {1}MB max per file"
+      },
+      "#01-07: Extra Actions and Tooltips": {
+        "AddTextField": "Add Text Field",
+        "AddPasswordField": "Add Password Field",
+        "AddWebsiteField": "Add Website Field",
+        "AddDateField": "Add Date Field",
+        "ClearExpiry": "Clear Expiry Date",
+        "ExpiryAlarmNotice": "An alert will appear {0} days before the expiry date.",
+        "OpenInBrowser": "Open in Browser",
+        "DeleteConfirm": "Confirm Delete",
+        "AttachedFiles": "Attachments",
+        "AttachedFileQuarantined": "This file may be damaged or altered. Preview is unavailable for your safety.",
+        "CommonOperations": "Common Actions",
+        "DropToAttach": "Drop here to attach",
+        "DropZone": "Drop your backup file (.nkdb) here",
+        "FileFilter": "{0} file (*.{1})",
+        "AllFiles": "All Files",
+        "FileTypeCertKey": "Certificate / Key Files",
+        "FileTypeXmlJson": "XML / JSON Files",
+        "FileTypeImage": "Image Files"
+      },
+      "#01-08: File Links": {
+        "NoLinks": "Not linked to any secrets",
+        "SelectToView": "Select a file to view link info",
+        "AddLink": "Add link",
+        "RemoveLink": "Remove link",
+        "ToggleFilter": "Toggle linked-only filter"
+      },
+      "#01-09: Completion and Success Notices": {
+        "SuccessSaveComplete": "Saved",
+        "SuccessExportedToPath": "Saved to \"{0}\".",
+        "ImportSuccess": "Import Success",
+        "QrReadSuccess": "QR code scanned successfully.",
+        "InfoDeleteComplete": "Deleted",
+        "InfoUnifiedDbAutoRecovered": "The app's core data was automatically repaired. Some settings from the last session may not have been saved.",
+        "InfoVaultDbAutoRecovered": "Vault {0} was automatically repaired. Some edits from the last session may not have been saved.",
+        "InfoOversizeFilesSkipped": "{0} file(s) exceeded the {1}MB limit and were skipped.",
+        "InfoFilesQuarantined": "{0} file(s) were excluded from the gallery because they may have been tampered with or corrupted.",
+        "InfoFilesAddFailed": "{0} file(s) failed to be added.",
+        "InfoFilesLoadFailed": "{0} file(s) could not be displayed."
+      },
+      "#01-10: Expiry Alerts": {
+        "ExpiresInDays": "Expires in {0} day(s)"
+      },
+      "#01-11: Input Errors": {
+        "GeneralError": "An error occurred",
+        "ErrorAuthFailed": "Authentication Error",
+        "ErrorHelloAuthFailed": "Windows Hello authentication failed",
+        "ErrorHelloProfileMismatch": "This Windows Hello registration cannot be used on the current PC or Windows account.",
+        "ErrorIncorrectPassword": "Incorrect password. Please verify the master password used for this backup.",
+        "ErrorPasswordMismatch": "Passwords do not match.",
+        "ErrorPasswordTooShort": "Password must be at least 8 characters.",
+        "ErrorPinMismatch": "PINs do not match.",
+        "WarningInvalidBase32Secret": "The setup key format is invalid. Enter at least 8 characters using letters A-Z and digits 2-7."
+      },
+      "#01-12: System Errors": {
+        "WarningUnifiedDbIntegrityIssue": "Data structure issue detected in the app's core data",
+        "WarningVersionMismatch": "Version Mismatch",
+        "ErrorBrowserOpenFailed": "Could not open browser: {0}",
+        "ErrorCaptureFailed": "Screen capture failed.",
+        "ErrorDecryptionFailed": "Failed to unlock the encrypted file.",
+        "ErrorFileDataNotFound": "File data not found.",
+        "ErrorPartialLoadTitle": "Some items could not be loaded",
+        "ErrorPartialLoadText": "{0} of {1} item(s) could not be displayed because the data appears to be corrupted.",
+        "ErrorLockBlockedRunningTask": "Cannot lock while a task is in progress.",
+        "ErrorWriteAccessDenied": "The selected folder is not writable. Please choose a different folder.",
+        "ErrorInvalidEncoding": "The file's text encoding is not valid UTF-8. Open it in a text editor such as Notepad and save it again with \"UTF-8\" selected as the encoding."
+      },
+      "#01-13: Common Shortcuts and Misc": {
+        "BrowseFolder": "Browse for backup destination folder",
+        "ClearFolder": "Clear backup folder",
+        "CopyToClipboard": "Copy to clipboard",
+        "DeleteField": "Remove this field",
+        "FocusSearchBar": "Focus search bar",
+        "KeyboardShortcuts": "Keyboard Shortcuts",
+        "PurgePermanently": "Permanently delete",
+        "ToggleLeftPane": "Show/Hide left pane",
+        "ToggleRightPane": "Show/Hide right pane",
+        "ToggleMask": "Show/Hide masked values",
+        "ToggleVisibility": "Show / hide",
+        "EnlargeDisplay": "Enlarge display",
+        "UndoDelete": "Undo Delete",
+        "ToggleDeletedFilter": "Toggle deleted filter",
+        "ToggleDraftFilter": "Toggle draft filter",
+        "ToggleExpirationFilter": "Toggle expiration filter",
+        "ToggleFavoriteFilter": "Toggle favorite filter",
+        "ToggleFavoriteItem": "Toggle favorite"
+      }
+    },
+    "Unlock": {
+      "#02: Unlock": {
+        "SetupStart": "Start Setup",
+        "WindowsHello": "Unlock with Windows Hello",
+        "Main": "Unlock",
+        "SelectVault": "Select a Vault",
+        "ConfirmPassword": "Master Password (Confirm)",
+        "PasswordForgetWarning": "If you forget this password, you will not be able to unlock it.",
+        "ErrorUnifiedDbCorrupted": "The app's core data is corrupted. Use the wrench button below to restore from a backup.",
+        "ErrorVaultDbCorrupted": "Corruption detected in Vault {0}. No spare copy was found for recovery. Use the wrench button below to restore from a backup.",
+        "WarningDbRecreatedBackup": "The database could not be loaded and a new one was created.\nThe original database has been saved as a backup:\n{0}"
+      },
+      "#02-01: Unlock (Windows Hello unavailable dialog)": {
+        "Dialog": {
+          "HelloProfileMismatchTitle": "Disable Windows Hello (All Vaults)",
+          "HelloProfileMismatchBody": "This Windows Hello registration was created on a different PC and cannot be used in the current environment.\nDisable Windows Hello for all vaults?\n\nPlease unlock with your master password.\n(Note: You can re-enable Windows Hello in Settings after signing in.)",
+          "HelloProfileMismatchDisableButton": "Disable All"
+        }
+      }
+    },
+    "Shell": {
+      "#03: Main Menu": {
+        "Navi": {
+          "Secrets": "Secrets",
+          "TimeMachine": "Time Machine",
+          "Gallery": "Gallery",
+          "Profile": "Profile",
+          "AuditLog": "Audit Log",
+          "Settings": "Settings",
+          "About": "About"
+        },
+        "LockNow": "Lock Now",
+        "SelectPagePrompt": "Select a page from the left menu",
+        "ExpiryAlertBadge": "Some items have expired or are expiring soon",
+        "TrayExit": "Exit"
+      }
+    },
+    "Secrets": {
+      "#04: Secrets": {
+        "Add": "Add Secret",
+        "GeneratePassword": "Generate Password",
+        "SymbolSet": "Symbol Set",
+        "Dialog": {
+          "CopyCommitted": "Copy saved value",
+          "ReviewDraft": "Review or discard draft",
+          "DisableTotpConfirm": "Disabling two-factor authentication will erase the registered setup key. Disable it?",
+          "DisableTotpButton": "Disable"
+        },
+        "CategorySelection": "Category",
+        "SearchPlaceholder": "Search title, ID, URL, email",
+        "SelectOrCreatePrompt": "Select a secret from the list on the left, or click Add to create a new one",
+        "UntitledSecret": "Untitled",
+        "WarningTitleRequired": "Title is required.",
+        "ExampleEmail": "e.g. info@example.com",
+        "ExampleTitle": "e.g. My Account",
+        "ExampleUrl": "e.g. https://example.com",
+        "ExampleUsername": "e.g. username",
+        "NoExpiry": "No expiry",
+        "CopyTotpCodeTooltip": "Copy Code",
+        "DisableTotpTooltip": "Disable Two-Factor Authentication (TOTP)",
+        "GoToTimeMachineTooltip": "Go to Time Machine for this item",
+        "HasDraftBadgeTooltip": "Has draft",
+        "ToggleTotpTooltip": "Enable / disable Two-Factor Auth (TOTP)"
+      }
+    },
+    "Totp": {
+      "#05: Two-Factor Authentication": {
+        "ScreenCapture": "Capture Screen",
+        "BackupCodeOptional": "Backup Code (optional)",
+        "CaptureGuideText": "Click the button, then drag to select the QR code area. Press Esc to cancel.",
+        "DirectInputOption": "Or enter the setup key manually",
+        "DiscardButton": "Discard",
+        "DropBackupCodeInstructions": "Drop backup code images or PDFs here (saved as attachments)",
+        "ReadQrOption": "Scan QR Code",
+        "SecretKeyBase32": "Two-Factor Setup Key",
+        "TimeDriftCodes": "-{2}s: {0}   +{2}s: {1}",
+        "TimeSyncNotice": "If the code doesn't match, check your PC's time settings",
+        "WarningQrRecognitionFailed": "QR code not recognized. Try selecting a larger area or enter manually.",
+        "ExampleSecret": "JBSWY3DPEHPK3PXP"
+      }
+    },
+    "DirectInjection": {
+      "#06: Direct Injection": {
+        "InjectPassword": "Fill Password",
+        "InjectUsername": "Fill Username",
+        "Title": "Keyboard Auto-Fill",
+        "Step1FocusTarget": "1. Place the cursor in the target app's username field",
+        "Step2InjectUsername": "2. Click \"Fill Username\" to enter it automatically (Clipboard-free)",
+        "Step3InjectPassword": "3. Move to the password field and click \"Fill Password\"",
+        "ErrorHwndMismatchInterrupted": "Safe stop — the active window changed while typing; input was stopped immediately",
+        "ErrorTargetWindowNotFound": "Target window not found — please launch the target app and try again",
+        "ErrorSendInputWin32Failed": "Auto-fill system failed to respond. Please check if the target app is running correctly. (Code: {0})",
+        "InfoMonitoringForeground": "Ready — monitoring the foreground window",
+        "SuccessPasswordInjected": "Password filled successfully",
+        "SuccessUsernameInjected": "Username filled successfully"
+      }
+    },
+    "TimeMachine": {
+      "#07: Time Machine": {
+        "Dialog": {
+          "GenerationSwap": "Swap with History",
+          "BeforeSwap": "Before Swap",
+          "AfterSwap": "After Swap",
+          "DeletedItemNotice": "This secret is deleted. It will be permanently deleted from the trash on {0}. You can restore it using the \"Undo Delete\" button.",
+          "PurgeConfirmText": "Permanently delete \"{0}\".\nThis removes all Time Machine history and cannot be undone.\n\nAre you sure?"
+        },
+        "SearchPlaceholder": "Search title, update date",
+        "SelectSecretPrompt": "Select a secret from the left list",
+        "GoToSecretsPageTooltip": "Go to Secret details for this item",
+        "UndoToGen1Tooltip": "Revert to 1 generation back",
+        "UndoToGen2Tooltip": "Revert to 2 generations back",
+        "SuccessRestoreComplete": "Restore Complete",
+        "SuccessItemRestored": "Restored \"{0}\".",
+        "DraftBlocksRestoreNotice": "Restoring a previous version is unavailable while a draft is in progress"
+      }
+    },
+    "Gallery": {
+      "#08: Gallery": {
+        "Dialog": {
+          "SoftDeleteConfirmText": "Move this file to the trash. It can be restored for 30 days, but links to secrets and the profile will be removed.",
+          "PurgeFileConfirmText": "Permanently delete this file. This action cannot be undone."
+        },
+        "DeletedFilterLabel": "Deleted",
+        "DeletedItemPurgeNotice": "Will be permanently deleted from the trash on {0}",
+        "SearchPlaceholder": "Search file name, date",
+        "FilterImages": "Images {0}",
+        "FilterPdf": "PDF {0}",
+        "FilterCerts": "Certificate / Key {0}",
+        "FilterJsonXml": "JSON / XML {0}",
+        "FilterConfigs": "Config files {0}",
+        "FilterMarkdown": "Markdown {0}",
+        "FilterLicense": "License {0}",
+        "FilterArchive": "Archive {0}",
+        "FilterSql": "SQL {0}",
+        "InfoAlreadyRegistered": "All selected files are already registered. (Skipped: {0})",
+        "InfoUnsupportedSkipped": "{0} file(s) skipped — unsupported format.",
+        "InfoAutoUndeletedDuplicate": "Restored a matching file found in the trash",
+        "SuccessImportedCount": "Imported {0} file(s). (Duplicates skipped: {1})",
+        "SuccessFileUndeleted": "File restored from trash",
+        "WarningCertExpiredCount": "{0} certificate(s) expired",
+        "WarningCertExpiringSoonCount": "{0} certificate(s) expiring within {1} day(s)",
+        "WarningCertMixedExpiryAlert": "{0} certificate(s) expired, {1} expiring within {2} day(s)"
+      }
+    },
+    "Viewer": {
+      "#09: File Viewer": {
+        "Main": "Viewer",
+        "CertSectionHeader": "Certificate Details",
+        "CertIssuer": "Issuer",
+        "CertSubject": "Subject",
+        "CertKeyUsage": "Key Usage",
+        "CertThumbprint": "Thumbprint (SHA1)",
+        "CertValidFrom": "Valid From",
+        "CertValidTo": "Valid To",
+        "JsonSectionHeader": "JSON Metadata",
+        "OauthType": "Type",
+        "OauthProjectId": "Project ID",
+        "OauthClientId": "Client ID",
+        "OauthClientEmail": "Client Email",
+        "TextSectionHeader": "Text Content",
+        "ArchiveSectionHeader": "Archive Contents",
+        "ArchiveEntryCount": "{0} files",
+        "ArchiveEntryCountTruncated": "Showing {0} of {1} files (truncated)",
+        "ArchiveEmpty": "This archive is empty",
+        "PreviewUnsupported": "Preview is not available for this file type. Export to use it.",
+        "PreviewFailed": "Failed to display the preview. The file may be too large. Export it to use it instead.",
+        "PreviewQuarantined": "Preview is unavailable: this file may have been tampered with or corrupted. If you don't recognize it, consider deleting it.",
+        "ErrorCertExpired": "Expired {0} days ago",
+        "WarningCertExpiringSoon": "Expires in {0} days"
+      }
+    },
+    "Profile": {
+      "#10: Profile": {
+        "Avatar": "Avatar",
+        "ChangeAvatar": "Change",
+        "CompareDraft": "Compare with Draft",
+        "Dialog": {
+          "AvatarCrop": "Adjust Avatar Position",
+          "ZoomIn": "Zoom in",
+          "ZoomOut": "Zoom out"
+        },
+        "Name": "Name",
+        "Nickname": "Nickname / Alias",
+        "HomePhone": "Home / Landline",
+        "MobilePhone": "Mobile Phone",
+        "PostalCode": "Postal Code",
+        "AddressLine1": "Address 1",
+        "AddressLine2": "Address 2",
+        "IdentityItem1": "SSN / National ID",
+        "IdentityItem2": "Driver's License No.",
+        "IdentityItem3": "Passport No.",
+        "RealName": "Your legal name",
+        "ExampleNickname": "e.g. Tabito",
+        "ExampleEmail": "e.g. tabito@example.com",
+        "ExampleHomePhone": "e.g. +1-xxx-xxx-xxxx",
+        "ExampleMobile": "e.g. +1-xxx-xxx-xxxx",
+        "ExamplePostalCode": "e.g. 10001",
+        "ExampleAddress1": "e.g. 123 Main Street",
+        "ExampleAddress2": "e.g. Apt 777",
+        "ExampleIdentityItem1": "e.g. XXX-XX-XXXX",
+        "ExampleIdentityItem2": "e.g. A1234567",
+        "ExampleIdentityItem3": "e.g. A12345678"
+      }
+    },
+    "Categories": {
+      "#11: Category presets (freely addable/editable by the user; shown in ascending code order)": {
+        "01": "Logins",
+        "10": "IT & Infrastructure",
+        "20": "Licenses",
+        "30": "Projects",
+        "40": "Education & Learning",
+        "50": "Finance & Cards",
+        "60": "Identities",
+        "70": "Contracts & Documents",
+        "80": "Memberships & Lifestyle",
+        "90": "Secure Notes",
+        "99": "Other",
+        "Uncategorized": "Uncategorized"
+      }
+    },
+    "Dashboard": {
+      "#12: Dashboard": {
+        "Main": "Dashboard",
+        "Overview": "Overview",
+        "SecretCount": "Secrets",
+        "FileCount": "Files",
+        "VaultCount": "Vault",
+        "DbFileSize": "Vault Size",
+        "SecurityScan": "Security Scan",
+        "RunScan": "Run Scan",
+        "NotScannedYet": "Not scanned yet",
+        "WeakPasswords": "Weak Passwords",
+        "ReusedPasswords": "Duplicate Passwords",
+        "NoIssuesFound": "No security risks detected"
+      }
+    },
+    "AuditLog": {
+      "#13-01: List and Filters": {
+        "Code": "Code",
+        "Severity": "Severity",
+        "SeverityNormal": "Normal",
+        "SeverityNotice": "Notice",
+        "SeverityImportant": "Important",
+        "FilterCategoryAuth": "Auth",
+        "FilterCategoryWrite": "Save",
+        "FilterCategoryRead": "View",
+        "FilterCategoryConfig": "Config/Settings",
+        "FilterCategoryPrivilege": "Critical Op.",
+        "FilterCategoryPurge": "Delete",
+        "FilterCategorySystem": "System",
+        "NoMatchingActivityPlaceholder": "No matching activity",
+        "SearchPlaceholder": "Search events or codes"
+      },
+      "#13-02: Event Summary Templates": {
+        "AddFileLink": "File \"{0}\" added",
+        "AuthenticationFailed": "Authentication failed",
+        "AuthenticationSuccess": "Authentication succeeded",
+        "AutoPurgeExpiredFile": "Automatically deleted {0} expired attached file(s)",
+        "AutoPurgeExpiredSecret": "Automatically deleted due to expiry",
+        "ChangeAutoBackupConfig": "Auto-backup setting changed",
+        "ChangeAutoLockConfig": "Auto-lock setting changed",
+        "ChangeCaptureProtectionConfig": "Screen capture protection changed",
+        "ChangeFaviconFetchConfig": "Favicon auto-fetch changed",
+        "ChangeMasterPassword": "Master password changed",
+        "ChangeWindowsHelloConfig": "Windows Hello setting changed",
+        "DeleteTimeMachineSlot": "Time Machine slot deleted",
+        "DeletedItemPlaceholder": "(deleted)",
+        "ExecuteAutoBackup": "Automatic backup executed",
+        "ExecuteEmergencyAccessRecovery": "Recovery executed via emergency access code",
+        "ExecuteLogRotation": "Deleted audit logs past the retention period",
+        "ExecuteManualBackup": "Backup executed",
+        "ExecuteManualRestore": "Restore executed",
+        "ExecuteSilentSelfHealing": "Automatic repair completed",
+        "SelfHealNoOpDraft": "Auto-discarded {0} draft(s) identical to the saved data",
+        "SelfHealUnifiedDb": "App core data automatically repaired from a spare copy",
+        "SelfHealVaultDb": "Vault {0} automatically repaired from a spare copy",
+        "RepairFileContentType": "Auto-corrected the file-type info of \"{0}\" ({1} → {2})",
+        "CsvFormulaGuardApplied": "Neutralized dangerous formula characters in CSV export of \"{0}\"",
+        "ExportFileFromGallery": "File \"{0}\" exported",
+        "ExportItemFailed": "Failed to export \"{0}\"",
+        "ExportPlainText": "Unencrypted export completed ({0} items)",
+        "GenerateEmergencyCode": "Emergency kit generated",
+        "ImportItemFailed": "Import record #{0} failed ({1} format)",
+        "ImportPlainText": "Unencrypted import completed ({0} items)",
+        "LocaleImportFailed": "Custom locale import failed",
+        "LocaleImportKeyMissing": "Custom locale is missing key \"{0}\" - patched with the default value",
+        "LocaleImportPlaceholderBroken": "Custom locale key \"{0}\" dropped a required placeholder - skipped",
+        "LocaleImportSucceeded": "Custom locale \"{0}\" imported ({1} keys patched)",
+        "LocaleImportValueTooLong": "Custom locale key \"{0}\" value was too long - skipped",
+        "MoveFileToTrash": "Moved file \"{0}\" to trash",
+        "MoveSecretToTrash": "Deleted \"{0}\" (moved to trash)",
+        "NoActivityPlaceholder": "No activity",
+        "ProfileFieldCopiedToClipboard": "Copied profile field \"{0}\" to clipboard",
+        "PurgeFilePermanently": "File \"{0}\" permanently deleted",
+        "PurgeSecretPermanently": "Permanently deleted {0}",
+        "ReadProfile": "Viewed profile",
+        "ReadSecret": "Viewed {0}",
+        "ReadSecretAttachment": "Viewed file {0}",
+        "ReadSecretHistory": "Viewed history of {0}",
+        "RecentActivityHeader": "Recent Security Activity",
+        "RestoreTimeMachineGeneration": "Time Machine restore",
+        "RevokeEmergencyCode": "Emergency kit revoked",
+        "RotateTimeMachineGeneration": "Saved history to Time Machine",
+        "SaveProfile": "Saved profile",
+        "SaveSecret": "Saved secret \"{0}\"",
+        "SecretAutoTypeExecuted": "Auto-typed field \"{0}\" of {1} into an external window",
+        "SecretFieldCopiedToClipboard": "Copied field \"{0}\" of {1} to clipboard",
+        "SixMonthsHistoryNotice": "View audit logs from the past 6 months",
+        "TimeMachineValueCopiedToClipboard": "Copied \"{0}\" ({1}) from {2}'s Time Machine to clipboard",
+        "UndoDeleteFile": "Restored file \"{0}\"",
+        "UndoDeleteSecret": "Undeleted {0} (restored)",
+        "VaultCreated": "This vault was created"
+      }
+    },
+    "AppSettings": {
+      "#14-01: Page-level": {
+        "TabTitle": "App Settings"
+      },
+      "#14-02: Theme": {
+        "ThemeMode": "Theme",
+        "ThemeLight": "Light",
+        "ThemeDark": "Dark",
+        "ThemeSystem": "Use System Settings"
+      },
+      "#14-03: Font": {
+        "FontFamily": "Font",
+        "FontFamilyDesc": "Changes the app font. Adjust text size in Windows settings.",
+        "FontFamilySystemDefault": "System default"
+      },
+      "#14-04: Security": {
+        "ScreenCaptureProtection": "Screen Capture Protection",
+        "CaptureProtectionAffinity": "Prevents screenshots and recording by screen capture and sharing tools.",
+        "HideOnMinimize": "Hide from taskbar when minimized",
+        "MinimizeBehavior": "Minimizes to the system tray instead of the taskbar. Click the tray icon to restore."
+      },
+      "#14-06: Language": {
+        "Language": "Language",
+        "LangCustom": "Custom",
+        "JsonFilterName": "Language file (*.json)",
+        "CustomLangInstructions": "Export a language file, edit it, and import to apply.",
+        "ExportCustomLanguage": "Export",
+        "ImportCustomLanguage": "Import",
+        "RestartRequiredHint": "Takes effect on next startup.",
+        "Dialog": {
+          "RestartRequiredAlert": "Language changes will take effect after restarting the app.",
+          "ImportLanguageSuccess": "Language file imported successfully",
+          "ImportPatchedCountReport": "{0} text entries were patched and imported. Takes effect on next startup.",
+          "VersionMismatchPatchNotice": "Language file version differs ({0}). Missing text will be patched automatically."
+        }
+      },
+      "#14-07: Network": {
+        "Network": "Network",
+        "AutoFaviconFetch": "Auto-fetch website icons",
+        "FaviconPrivacyWarning": "Sends domain names externally to fetch icons, which may reveal which services you use."
+      }
+    },
+    "VaultSettings": {
+      "#14-04: Security": {
+        "SecurityGroup": "Security",
+        "AutoLockTimeout": "Auto-lock when idle",
+        "MinutesCountFormat": "{0} min",
+        "AddNewVault": "Add New Vault",
+        "AuthRequiredToCreate": "Enter your current master password to add a new vault",
+        "VaultManagement": "Vault"
+      },
+      "#14-05: Backup": {
+        "BackupRestoreSection": "Backup",
+        "RestoreRequiresMasterPasswordNotice": "Restoring on another device requires the master password (Windows Hello only works on this device).",
+        "BackupDatabaseAction": "Saves the encrypted database file to a location of your choice.",
+        "AutoBackupOnExit": "Auto Backup on Exit",
+        "AutoBackupInstructions": "Automatically backs up data to the selected folder on exit.",
+        "BackupTargetFolder": "Backup Destination Folder",
+        "SuccessBackupSavedToPath": "Saved to {0}.",
+        "WarningAutoBackupContext": "Auto Backup",
+        "WarningLastExitBackupFailedAlert": "Auto backup failed on the last exit. Please check the backup folder in Settings.",
+        "WarningNoFolderAutoBackupDisabled": "Auto backup has been turned off because no backup folder was configured.",
+        "WarningBackupBlockedReadOnlyAlert": "Backup cannot be run in the read-only mode opened with an emergency access code.",
+        "Dialog": {
+          "ClearBackupPathConfirmText": "This will remove the backup folder setting.\nAre you sure?"
+        }
+      },
+      "#15-01: Page-level": {
+        "TabTitleFormat": "Vault {0} Settings"
+      },
+      "#15-02: Security (Windows Hello)": {
+        "WindowsHelloUnlock": "Windows Hello Unlock (Valid on this device only)",
+        "BiometricEnrollment": "Unlocks the app using biometric authentication or PIN."
+      },
+      "#15-03: Security (Change Master Password)": {
+        "CurrentMasterPassword": "Current master password",
+        "NewMasterPassword": "New master password",
+        "ConfirmMasterPassword": "Confirm new master password",
+        "Dialog": {
+          "ChangeMasterPassword": "Change Master Password",
+          "ForceResetViaHelloInstructions": "Resets your master password using Windows Hello if you forgot the current one.",
+          "HelloForceReset": "Reset with Windows Hello",
+          "ForceResetViaHelloPrompt": "This verifies your authorization to set a new master password.",
+          "CannotReuseCurrentMasterPassword": "New master password must differ from the current master password.",
+          "MasterPasswordChangedSuccessfully": "Master password changed successfully.",
+          "PasswordResetViaHelloSuccessfully": "Password reset via Windows Hello succeeded.",
+          "EmergencyCodeRemainsValid": "Your emergency access code is still valid."
+        }
+      },
+      "#15-04: Security (Emergency Access Code)": {
+        "Dialog": {
+          "EmergencyAccessSetup": "Emergency Access Code",
+          "EmergencyAccessConcept": "Print and store the QR code with your PIN in a safe for emergency access or family handoff (read-only).",
+          "EmergencyCodeStatusIssued": "Issued",
+          "FourDigitsPin": "4-digit PIN",
+          "ConfirmPin": "Confirm PIN",
+          "EncryptQrWithPin": "Encrypts the QR with a 4-digit PIN and saves it as PNG.",
+          "GenerateOrReissueCode": "Issue / Reissue",
+          "RevokeEmergencyCode": "Deletes the emergency access code. The deleted QR code can no longer unlock the vault.",
+          "DeleteEmergencyCodeConfirmText": "The current QR code will no longer work after deletion.\nAre you sure?",
+          "ReissueEmergencyCodeConfirm": "Confirm Emergency Access Code Reissue",
+          "ReissueEmergencyCodeConfirmText": "Reissuing will invalidate your current QR code.\n(Note: If you cancel saving the new QR code, your current code remains active.)\nAre you sure you want to reissue?",
+          "QrCodeSavedToPath": "Saved to {0}. Keep it in a safe place.",
+          "OldQrRevokedNotice": "The old QR code can no longer unlock the vault."
+        }
+      },
+      "#15-05: Data Migration": {
+        "DataMigrationGroup": "Data Migration",
+        "PlainTextExportAction": "Exports all information as an unencrypted, regular file (CSV/JSON).",
+        "PlainTextImportAction": "Imports data from an external CSV/JSON file. Duplicates are suffixed with \"(Import)\".",
+        "IncludeTotpInExport": "Include two-factor authentication (2FA) setup keys in export",
+        "ExportTotpRiskWarning": "Includes 2FA setup keys in the export. Be mindful of data leakage risks.",
+        "Dialog": {
+          "ExportPlaintextWarning": "Unencrypted Export Warning",
+          "PlaintextExportDangerAlert": "All secrets will be exported as an unencrypted file (CSV/JSON) that anyone can read.",
+          "ExportPartialSuccessTitle": "Some items were skipped",
+          "ExportPartialSuccessText": "{0} of {1} items could not be decrypted and were excluded from the export. The remaining items were exported successfully.",
+          "ImportPlaintextConfirm": "Unencrypted Import Confirmation",
+          "PlaintextImportConfirmText": "Import secrets from an unencrypted file (CSV/JSON)."
+        },
+        "SuccessImportedCountReport": "Imported {0} item(s).",
+        "SuccessImportDetailsReport": " (Renamed for duplicates: {0}, Moved to uncategorized: {1})",
+        "SuccessImportFailedCountReport": " (Failed to import: {0} - see audit log for details)",
+        "ErrorImportExceptionReport": "Import failed: {0}"
+      },
+      "#15-06: Common (Confirmation Dialogs)": {
+        "Dialog": {
+          "AuthRequiredToProceed": "Please enter your master password to confirm your identity."
+        }
+      }
+    },
+    "Restore": {
+      "#16: Restore (Rev.22 removed selective restore; only full overwrite restore remains)": {
+        "Dialog": {
+          "StartRestore": "Restore",
+          "UnifiedDbIntegrityIssueAlert": "An issue was detected in the app's core data. Export and back up immediately.",
+          "VaultDbIntegrityIssueAlert": "A problem was detected in the vault's data. Export and back up immediately."
+        },
+        "SelectBackupFile": "Select File",
+        "MainPage": "Restore",
+        "Description": "Restores all vault data from a backup file. Current data will be replaced with the state at backup time.",
+        "ExecuteButton": "Restore",
+        "AuthDialogTitle": "Backup Authentication",
+        "AuthDialogMessage": "Enter the master password of any one vault that was set when the backup was created.",
+        "AuthPasswordPlaceholder": "Master password",
+        "AuthButton": "Authenticate",
+        "OverwriteWarningTitle": "Overwrite vault data with this restore?",
+        "OverwriteWarningMessage": "All current vault data will be overwritten and replaced with the state of the backup file (created {0}).\n\nFor safety, your current data will be automatically saved to an archive folder.\n\nWindows Hello (biometrics/PIN) will be disabled. Unlock with your master password after restoring, then set it up again.",
+        "OverwriteConfirmButton": "Restore and Overwrite",
+        "NoFilesFoundAlert": "No files were found to restore. Please check the contents of the backup folder.",
+        "ErrorInvalidBackupFileAborted": "Restore aborted: the backup file \"{0}\" is corrupted or in an invalid format. No local data was changed.",
+        "ErrorActiveDbSelected": "The app's core data currently in use cannot be selected as a restore source."
+      }
+    },
+    "Emergency": {
+      "#17: Emergency Access": {
+        "WindowTitle": "Emergency Access",
+        "DropQrZone": "Drop QR code PNG here",
+        "SelectQrFile": "Select QR code PNG",
+        "Pin": "Emergency access code PIN (4 digits)",
+        "ErrorQrOrPinInvalid": "Invalid QR code or incorrect PIN.",
+        "ErrorQrReadFailed": "Could not read QR code. Please select the correct PNG file.",
+        "ErrorMultipleFilesDropped": "Please drop only one PNG file.",
+        "ErrorNoVaultMatchingQr": "No vault matching this QR code was found.",
+        "ReadOnlyModeNote": "Opens the vault in read-only mode using the QR code and PIN."
+      }
+    },
+    "System": {
+      "#98: Built-in Language Names": {
+        "LangJa": "Japanese",
+        "LangEn": "English"
+      },
+      "#99: Product Info": {
+        "Product": {
+          "Name": "Naimitsu Vault",
+          "Description": "Passwords, IDs, and certificates. All your secrets, in a single vault.",
+          "Copyright": "© 2026 Tabito's Works",
+          "License": "MIT License — Free to use, modify, and redistribute.",
+          "Disclaimer": "This software is a personal open-source project without a third-party security audit. Regular backups are recommended. Provided \"AS IS\", entirely at your own risk."
+        }
+      }
+    }
+  }
+}

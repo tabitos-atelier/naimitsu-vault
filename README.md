@@ -88,7 +88,7 @@ Choose whichever form fits your use case. Both forms share the same encryption b
 
 > Naimitsu Vault is designed for native Windows operation in a fully local environment. As such, there are no plans to port or develop versions for other operating systems (macOS / Linux) or mobile platforms (iOS / Android).
 
-If Windows SmartScreen blocks the first launch, or you want to update the portable version, see the **[FAQ](docs/faq.md)**.
+If Windows SmartScreen blocks the first launch, the app does not start, or you want to update the portable version, see the **[FAQ](docs/faq.md)**.
 
 ---
 
@@ -97,7 +97,7 @@ If Windows SmartScreen blocks the first launch, or you want to update the portab
 | Document                                                             | Contents                                                           |
 | -------------------------------------------------------------------- | ------------------------------------------------------------------ |
 | [Features](docs/features.md)                                         | Complete feature list, limitations, and where data is stored       |
-| [FAQ](docs/faq.md)                                                   | SmartScreen warning, updating the portable version, and more       |
+| [FAQ](docs/faq.md)                                                   | SmartScreen warning, launch problems, updating the portable version, and more       |
 | [Export / Import Format Specification](docs/import-export-format.md) | CSV/JSON data format for migrating from other tools                |
 | [Languages - Custom Locales](docs/locale-guide.md)                   | Adding a language or restyling the UI wording with a locale file   |
 | [SECURITY.md](SECURITY.md)                                           | Encryption specification, threat boundary, vulnerability reporting |

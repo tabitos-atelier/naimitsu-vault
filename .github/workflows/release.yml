@@ -1,0 +1,161 @@
+name: Release
+
+# Builds the installer and the portable ZIP, then creates a DRAFT GitHub release.
+# Nothing is published automatically: a maintainer reviews the draft and publishes it by hand.
+#
+# - Push a tag "v<version>" (e.g. v1.0.1) to build a release draft for that version.
+# - Run manually (workflow_dispatch) to rehearse the pipeline; the files are kept as a
+#   short-lived workflow artifact and no release is created.
+
+on:
+  push:
+    tags:
+      - "v*"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # Visual Studio 2026 image: provides MSBuild 18, the .NET 10 SDK, and Inno Setup 6.
+    runs-on: windows-2025-vs2026
+    timeout-minutes: 45
+    permissions:
+      contents: write # create the draft release
+    env:
+      DOTNET_NOLOGO: "true"
+      DOTNET_CLI_TELEMETRY_OPTOUT: "true"
+      PUBLISH_DIR: NaimitsuVault\bin\x64\NaimitsuVault-x64
+      TEST_EXE: NaimitsuVault.Tests\bin\x64\Debug\net10.0-windows10.0.26100.0\win-x64\NaimitsuVault.Tests.exe
+
+    steps:
+      - name: Check out
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      # The version lives in two files. A tag that disagrees with either would ship an installer
+      # whose reported version differs from the release it is attached to.
+      - name: Resolve and verify the version
+        id: version
+        run: |
+          [xml]$csproj = Get-Content NaimitsuVault\NaimitsuVault.csproj
+          $csprojVersion = ($csproj.Project.PropertyGroup.Version | Where-Object { $_ } | Select-Object -First 1)
+          $issLine = Select-String -Path Setup\NaimitsuVault.iss -Pattern '^#define MyAppVersion "(.+)"' | Select-Object -First 1
+          if (-not $csprojVersion -or -not $issLine) { throw "Could not read the version from the csproj or the Inno Setup script." }
+          $issVersion = $issLine.Matches[0].Groups[1].Value
+          if ($csprojVersion -ne $issVersion) {
+            throw "Version mismatch: csproj=$csprojVersion, Inno Setup script=$issVersion"
+          }
+          if ($env:GITHUB_REF_TYPE -eq 'tag') {
+            $tagVersion = $env:GITHUB_REF_NAME -replace '^v', ''
+            if ($tagVersion -ne $csprojVersion) {
+              throw "Tag $env:GITHUB_REF_NAME does not match the project version $csprojVersion"
+            }
+          }
+          "version=$csprojVersion" >> $env:GITHUB_OUTPUT
+          Write-Host "Version: $csprojVersion"
+
+      - name: Locate MSBuild
+        id: msbuild
+        run: |
+          $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
+          $msbuild = & $vswhere -latest -requires Microsoft.Component.MSBuild -find 'MSBuild\**\Bin\MSBuild.exe' | Select-Object -First 1
+          if (-not $msbuild) { throw "MSBuild.exe was not found." }
+          "path=$msbuild" >> $env:GITHUB_OUTPUT
+          & $msbuild -version -nologo
+
+      - name: Build and run the tests
+        run: |
+          dotnet build NaimitsuVault.Tests\NaimitsuVault.Tests.csproj -p:Platform=x64
+          if ($LASTEXITCODE -ne 0) { throw "Test project build failed." }
+          & $env:TEST_EXE
+          if ($LASTEXITCODE -ne 0) { throw "Tests failed." }
+
+      # The release binaries are published with Visual Studio's MSBuild, the same toolchain as a
+      # publish from the Visual Studio IDE.
+      - name: Publish
+        run: |
+          & "${{ steps.msbuild.outputs.path }}" NaimitsuVault\NaimitsuVault.csproj `
+            -restore -t:Publish -p:Configuration=Release -p:Platform=x64 -p:PublishProfile=FolderProfile `
+            -nologo -v:minimal
+          if ($LASTEXITCODE -ne 0) { throw "Publish failed." }
+
+      # Dependencies must reach the user with their vendor's Authenticode signature intact; Smart App
+      # Control blocks unsigned files. Anything that rewrites assemblies at publish time (for example
+      # ReadyToRun) silently strips those signatures, so fail the release if a file that is not on the
+      # known-unsigned list turns up unsigned.
+      - name: Verify dependency signatures
+        run: |
+          $expectedUnsigned = @(
+            'NaimitsuVault.exe', 'NaimitsuVault.dll',
+            'e_sqlite3.dll',
+            'Konscious.Security.Cryptography.Argon2.dll', 'Konscious.Security.Cryptography.Blake2.dll',
+            'NLog.dll', 'NLog.Extensions.Logging.dll',
+            'SQLitePCLRaw.batteries_v2.dll', 'SQLitePCLRaw.core.dll', 'SQLitePCLRaw.provider.e_sqlite3.dll',
+            'zxcvbn-core.dll', 'zxing.dll'
+          )
+          $files = Get-ChildItem $env:PUBLISH_DIR -File -Recurse -Include *.dll, *.exe
+          $unsigned = $files | Where-Object { (Get-AuthenticodeSignature $_.FullName).Status -ne 'Valid' }
+          $unexpected = $unsigned | Where-Object { $expectedUnsigned -notcontains $_.Name }
+          Write-Host "Binaries: $($files.Count), unsigned: $(@($unsigned).Count)"
+          if ($unexpected) {
+            $unexpected | ForEach-Object { Write-Host "::error::Unexpected unsigned file: $($_.Name)" }
+            throw "Files that should carry a vendor signature are unsigned."
+          }
+
+      # Runtime folders must never be shipped. They cannot exist on a fresh runner, but a later
+      # change that launches the app during the workflow would create them.
+      - name: Ensure no runtime data in the publish output
+        run: |
+          foreach ($name in 'data', 'logs') {
+            if (Test-Path (Join-Path $env:PUBLISH_DIR $name)) { throw "Publish output contains a '$name' folder." }
+          }
+
+      - name: Build the installer
+        run: |
+          $iscc = "${env:ProgramFiles(x86)}\Inno Setup 6\ISCC.exe"
+          if (-not (Test-Path $iscc)) { throw "Inno Setup compiler was not found." }
+          & $iscc Setup\NaimitsuVault.iss
+          if ($LASTEXITCODE -ne 0) { throw "Installer build failed." }
+
+      # The ZIP holds a single top-level folder "NaimitsuVault-x64", matching earlier releases.
+      - name: Build the portable ZIP
+        run: |
+          Compress-Archive -Path $env:PUBLISH_DIR -DestinationPath Setup\Output\NaimitsuVault-x64.zip -CompressionLevel Optimal
+
+      - name: Write checksums
+        run: |
+          Push-Location Setup\Output
+          Get-ChildItem NaimitsuVault-Setup-x64.exe, NaimitsuVault-x64.zip | ForEach-Object {
+            "{0}  {1}" -f (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLowerInvariant(), $_.Name
+          } | Set-Content -Encoding ascii SHA256SUMS.txt
+          Get-Content SHA256SUMS.txt
+          Pop-Location
+
+      - name: Create the draft release
+        if: github.ref_type == 'tag'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create $env:GITHUB_REF_NAME `
+            Setup\Output\NaimitsuVault-Setup-x64.exe `
+            Setup\Output\NaimitsuVault-x64.zip `
+            Setup\Output\SHA256SUMS.txt `
+            --draft --verify-tag --generate-notes --title $env:GITHUB_REF_NAME
+          if ($LASTEXITCODE -ne 0) { throw "Creating the draft release failed." }
+
+      - name: Upload the rehearsal build
+        if: github.ref_type != 'tag'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: NaimitsuVault-${{ steps.version.outputs.version }}-rehearsal
+          path: |
+            Setup/Output/NaimitsuVault-Setup-x64.exe
+            Setup/Output/NaimitsuVault-x64.zip
+            Setup/Output/SHA256SUMS.txt
+          retention-days: 3
+          if-no-files-found: error

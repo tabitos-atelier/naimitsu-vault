@@ -85,11 +85,11 @@ public sealed partial class UserIdLargePreviewControl : UserControl
     // generate a tiny single-character string from a slice via new string(span.Slice(i, 1)).
     // These single-character strings are physically erased with ZeroMemory in ZeroAndClearBlocks().
     //
-    // When the value is entirely digits (e.g. a credit card number), spaces are inserted for
+    // When the value is entirely digits (e.g. a credit card number), gaps are inserted for
     // readability using the digit-grouping pattern GetDigitGroups resolves for it (brand-specific for
     // a recognized Amex/Diners Club number, 4-4-4-... otherwise). This is a display-only transform:
-    // the underlying buffer is untouched, and the inserted separator is a freshly allocated
-    // (non-interned) string so it is safe to ZeroMemory alongside the real digit runs.
+    // the underlying buffer is untouched, and the gap is LargePreviewGap (an empty element, not a
+    // space character - see there), so selecting and copying the preview yields the digits only.
     private void Render(ReadOnlySpan<char> userId)
     {
         var res         = Application.Current.Resources;
@@ -107,7 +107,7 @@ public sealed partial class UserIdLargePreviewControl : UserControl
         for (int i = 0; i < userId.Length; i++)
         {
             if (groups is not null && i > 0 && IsGroupBoundary(i, groups))
-                paragraph.Inlines.Add(new Run { Text = new string(' ', 1) });
+                paragraph.Inlines.Add(LargePreviewGap.Create(PreviewBlock.FontSize));
 
             char c = userId[i];
             var run = new Run { Text = new string(userId.Slice(i, 1)) };

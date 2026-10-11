@@ -6,7 +6,9 @@ using NaimitsuVault.Services;
 namespace NaimitsuVault.Tests;
 
 /// <summary>
-/// "Auto-lock boundary values" - all 6 cases for IdleTimeoutService (Phase 2).
+/// "Auto-lock boundary values" for IdleTimeoutService (TC-IDL-01 .. TC-IDL-07, Phase 2).
+/// TC-IDL-01..06: timeout boundary values. TC-IDL-07: re-entrancy - the lock callback fires only
+/// once when two expiry checks land back-to-back without a reset.
 ///
 /// Controls the clock without a DispatcherQueue by injecting <c>Func&lt;DateTime&gt;</c>.
 /// Simulates elapsed time by rewriting the mutable array <c>fakeNow[0]</c> around calls

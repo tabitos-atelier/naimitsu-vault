@@ -68,6 +68,10 @@ namespace NaimitsuVault.Tests;
 ///            true no-op for such a secret, no matter what else was reverted.
 /// TC-EAT-03: same add-then-remove sequence with no ExpiresAt set at all still clears the draft
 ///            (control case, isolating TC-EAT-02 from unrelated custom-field regressions).
+/// TC-LBL-01: renaming a standard field's label (Username/Password/Website/Email/Title/Notes) enters
+///            draft mode - regression coverage for a real bug where FindFirstMismatch didn't compare
+///            LabelOverrides at all, so the would-be draft was discarded as "identical to Gen0".
+/// TC-LBL-02: reverting that renamed label to its original value clears the draft again.
 /// </summary>
 [Collection("SequentialMessenger")]
 public sealed class SecretsViewModelTests

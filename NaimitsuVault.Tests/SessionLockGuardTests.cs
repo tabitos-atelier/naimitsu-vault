@@ -169,13 +169,18 @@ public sealed class SessionLockGuardTests
     {
         using var guard = new SessionLockGuard();
 
+        // The worker signals once it has passed the lock check, and its wait is far longer than the
+        // test, so the outcome does not depend on how quickly the thread pool schedules either side.
+        var started = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+
         var task = Task.Run(async () =>
         {
             guard.ThrowIfLocked(); // passes at the start
-            await Task.Delay(200, guard.Token); // receives the cancellation while waiting
+            started.SetResult();
+            await Task.Delay(TimeSpan.FromSeconds(30), guard.Token); // receives the cancellation while waiting
         }, TestContext.Current.CancellationToken);
 
-        await Task.Delay(50, TestContext.Current.CancellationToken);
+        await started.Task.WaitAsync(TestContext.Current.CancellationToken);
         guard.Barricade();
         guard.Cancel();
 

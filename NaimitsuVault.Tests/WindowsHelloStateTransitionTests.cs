@@ -17,6 +17,8 @@ namespace NaimitsuVault.Tests;
 /// AcquireKSharedWithHelloAsync — the method the Unlock screen actually calls (stage 1 of the
 /// two-stage multi-vault Hello flow). Uses FakeUserConsentVerifierAdapter / FakeProtectedDataService
 /// to fully eliminate WinRT dependencies.
+/// Also covers TC-WH-21: a corrupted/unreadable vault DB in the per-vault scan must not abort the
+/// loop for other, unrelated vaults - the remaining vault is still returned.
 /// </summary>
 public sealed class WindowsHelloStateTransitionTests
 {

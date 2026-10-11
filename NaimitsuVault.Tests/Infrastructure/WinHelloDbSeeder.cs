@@ -12,7 +12,8 @@ namespace NaimitsuVault.Tests;
 
 /// <summary>
 /// DB pre-seeding helper for TC-WH-01 and WindowsHelloDekMemoryTests.
-/// Assumes FakeProtectedDataService (identity transform) and INSERTs a known DEK into VaultMetadata.Hello.
+/// Assumes FakeProtectedDataService (identity transform) and INSERTs a known DEK into VaultMetadata
+/// as VaultDEKHello.
 ///
 /// Precondition: FakeProtectedDataService must already be injected into AuthService.
 ///       Protect(x) = x, Unprotect(x) = x (returns the input as-is)
@@ -20,8 +21,9 @@ namespace NaimitsuVault.Tests;
 /// After seeding, the DB contains:
 ///   ConfigKey = VaultMetadataKey.VaultDEKHello
 ///   ConfigValue = UTF-8(Convert.ToBase64String(dek))
-/// UnlockWithWindowsHelloAsync reads this back, Base64-decodes it, Unprotect()s it (identity), and
-/// succeeds via SetKey.
+/// AcquireKSharedWithHelloAsync (stage 1) only checks that this row exists, to list the vault as
+/// Hello-registered. EnterVaultWithHelloAsync (stage 2) reads it back, Base64-decodes it,
+/// Unprotect()s it (identity), and succeeds via SetKey.
 ///
 /// Security note: test code only. Not used in production DI.
 /// </summary>

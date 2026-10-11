@@ -63,7 +63,7 @@ Should any dispute arise regarding the use, specifications, licensing, or interp
 
 **Name**: The names "Naimitsu Vault" and "ないみつクン" identify the origin (the developer) of this software. The MIT License in Section 1 does not grant permission to use these names in a way that misleads others about the origin of a distribution — for example, redistributing a modified version under the same name, or presenting it as the official release or as endorsed by the author.
 
-If you distribute a modified version, you must give it a name that adds your own word to the original name (for example, "Naimitsu Vault Xxx"), so that it can be told apart from the original release and its bugs, security issues, and support requests are not attributed to the original author. Factually stating where your work came from (for example, "based on Naimitsu Vault") and keeping the copyright and license notices required by the MIT License are not affected by this section.
+If you distribute a modified version, you must give it a name that is clearly distinguishable from the original name — either a name that adds your own word to the original name (for example, "Naimitsu Vault Xxx") or an entirely different name that does not include the original name — so that it can be told apart from the original release and its bugs, security issues, and support requests are not attributed to the original author. Factually stating where your work came from (for example, "based on Naimitsu Vault") and keeping the copyright and license notices required by the MIT License are not affected by this section.
 
 ---
 

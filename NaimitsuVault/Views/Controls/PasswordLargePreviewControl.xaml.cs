@@ -82,6 +82,12 @@ public sealed partial class PasswordLargePreviewControl : UserControl
     // Because Run.Text requires a string due to the WinUI 3 API's constraints,
     // generate a tiny single-character string from a slice via new string(span.Slice(i, 1)).
     // These single-character strings are physically erased with ZeroMemory in ZeroAndClearBlocks().
+    //
+    // A gap is inserted after every PasswordPreviewGrouping.GroupSize characters so a password that
+    // has to be typed by hand can be read off in chunks. The gap is LargePreviewGap (an empty element,
+    // not a space character - see there), the same one the digit grouping in UserIdLargePreviewControl
+    // uses. Display only - the underlying buffer is untouched. PasswordPreviewGrouping.ShouldGroup turns the gaps off for a value that
+    // already has its own separators (whitespace, or one symbol used repeatedly as a separator).
     private void Render(ReadOnlySpan<char> password)
     {
         var res         = Application.Current.Resources;
@@ -89,8 +95,12 @@ public sealed partial class PasswordLargePreviewControl : UserControl
         var isDark      = ActualTheme == ElementTheme.Dark;
         var symbolBrush = isDark ? res["SystemFillColorCautionBrush"] as Brush : _symbolBrushLight;
         var paragraph   = new Paragraph();
+        bool grouped = PasswordPreviewGrouping.ShouldGroup(password);
         for (int i = 0; i < password.Length; i++)
         {
+            if (grouped && i > 0 && i % PasswordPreviewGrouping.GroupSize == 0)
+                paragraph.Inlines.Add(LargePreviewGap.Create(PreviewBlock.FontSize));
+
             char c = password[i];
             var run = new Run { Text = new string(password.Slice(i, 1)) };
             if      (char.IsDigit(c))   run.Foreground = digitBrush;

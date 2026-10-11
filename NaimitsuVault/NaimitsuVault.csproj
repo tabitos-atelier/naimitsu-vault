@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
     <Authors>Tabito's Works</Authors>
     <Company>Tabito's Works</Company>
     <Copyright>Copyright (c) 2026 Tabito's Works</Copyright>
@@ -37,8 +37,18 @@
 
   <!-- Publish settings (effective only during dotnet publish, not dotnet build) -->
   <PropertyGroup>
-    <PublishReadyToRun Condition="'$(Configuration)' == 'Debug'">False</PublishReadyToRun>
-    <PublishReadyToRun Condition="'$(Configuration)' != 'Debug'">True</PublishReadyToRun>
+    <!--
+      PublishReadyToRun is disabled.
+      ReadyToRun compilation rewrites an assembly, which invalidates its Authenticode signature. The
+      Microsoft-signed dependencies (EF Core, Microsoft.Extensions.*, WinUI, Windows SDK projections, ...)
+      then reach the user unsigned, and Smart App Control blocks an unsigned file until Microsoft's cloud
+      reputation service has evaluated that exact build. This was observed in practice: the app failed to
+      start because loading Microsoft.Extensions.DependencyInjection.Abstractions.dll was blocked, and
+      with ReadyToRun limited to this project's own assembly, NaimitsuVault.dll was blocked instead.
+      With it disabled, every dependency is published byte-for-byte as shipped by its vendor, signature
+      included. The cost is JIT compilation at startup.
+    -->
+    <PublishReadyToRun>False</PublishReadyToRun>
     <!--
       PublishTrimmed is permanently disabled.
       EF Core uses Activator.CreateInstance() inside CurrentValueComparerFactory.Create() to build

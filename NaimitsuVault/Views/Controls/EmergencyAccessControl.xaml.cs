@@ -139,6 +139,15 @@ public sealed partial class EmergencyAccessControl : UserControl
     private void PinBox_PasswordChanged(object sender, RoutedEventArgs e)
         => ViewModel.PinLength = SecurePasswordHelper.BorrowLength(PinBox);
 
+    // Enter in the PIN box confirms like the Unlock button, under the same condition that enables it
+    // (same as UnlockWindow's password box).
+    private void PinBox_KeyDown(object sender, KeyRoutedEventArgs e)
+    {
+        if (e.Key != VirtualKey.Enter || !ViewModel.ExecuteRecoveryCommand.CanExecute(null)) return;
+        e.Handled = true;
+        ViewModel.ExecuteRecoveryCommand.Execute(null);
+    }
+
     private void CloseButton_Click(object sender, RoutedEventArgs e)
     {
         _isFinalizing = true; // the Unloaded that follows Hide() is the final one

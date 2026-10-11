@@ -183,13 +183,18 @@ public partial class CustomFieldModel : ObservableObject, IDisposable
     [JsonIgnore] public bool ShowAsPasswordBox      => !IsDate && IsPassword;
     [JsonIgnore] public bool HasValue              => !string.IsNullOrEmpty(Value);
 
+    // Value is persisted (inside the encrypted CustomFields JSON), so the date string is always
+    // written and read with the invariant culture. With the current culture, a non-Gregorian
+    // default calendar (e.g. ar-SA, th-TH, fa-IR) would store a different year and the same vault
+    // would show a different date once opened on a machine with another culture.
     [JsonIgnore]
     public DateTimeOffset? DateValue
     {
-        get => DateTimeOffset.TryParse(Value, out var d) ? d : null;
+        get => DateTimeOffset.TryParse(Value, System.Globalization.CultureInfo.InvariantCulture,
+                   System.Globalization.DateTimeStyles.None, out var d) ? d : null;
         set
         {
-            Value = value?.DateTime.ToString("yyyy-MM-dd") ?? string.Empty;
+            Value = value?.DateTime.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture) ?? string.Empty;
             OnPropertyChanged();
         }
     }

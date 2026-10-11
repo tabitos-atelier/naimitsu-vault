@@ -210,13 +210,13 @@ internal static class VaultImportExportHelper
                 using (var relaxedCf = RelaxCustomFieldsEscaping(cfSp))
                     guarded |= await WriteSecureCsvFieldAsync(sw, relaxedCf);
                 await sw.WriteAsync(',');
-                await sw.WriteAsync(s.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"));
+                await sw.WriteAsync(s.CreatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture));
                 await sw.WriteAsync(',');
-                await sw.WriteAsync(s.UpdatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss"));
+                await sw.WriteAsync(s.UpdatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture));
                 await sw.WriteAsync(',');
                 await sw.WriteAsync(s.IsFavorite ? "true" : "false");
                 await sw.WriteAsync(',');
-                if (s.ExpiresAt.HasValue) await sw.WriteAsync(s.ExpiresAt.Value.ToLocalTime().ToString("yyyy-MM-dd"));
+                if (s.ExpiresAt.HasValue) await sw.WriteAsync(s.ExpiresAt.Value.ToLocalTime().ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture));
                 await sw.WriteLineAsync();
                 written++;
                 // Title is required/non-null (unlike the other 6 guarded fields), so it's always

@@ -1577,7 +1577,7 @@ public partial class ProfileViewModel : ObservableObject, IDisposable,
 
         // Serialized against AutoSaveDraftCoreAsync: without this, a save still mid-flight from
         // before this discard was invoked could write to the draft concurrently with this method's
-        // own DiscardDraftAsync call. Same fix/rationale as SecretsViewModel.DiscardDraftWithGcAsync.
+        // own DiscardDraftAsync call. Same fix/rationale as SecretsViewModel.DiscardDraftGuardedAsync.
         _saveDraftCts?.Cancel();
         await _saveSemaphore.WaitAsync();
         try
@@ -1752,7 +1752,9 @@ public partial class ProfileViewModel : ObservableObject, IDisposable,
         !s.IsEmpty && DateTime.TryParse(s, null, DateTimeStyles.RoundtripKind, out var dt)
             ? dt.ToLocalTime().ToString("yyyy/MM/dd HH:mm") : "";
 
+    // The stored custom-field date is an invariant-culture "yyyy-MM-dd" (CustomFieldModel.DateValue),
+    // so it's parsed with the invariant culture too.
     private static string DateOnlyDisplay(ReadOnlySpan<char> s) =>
-        !s.IsEmpty && DateTime.TryParse(s, null, DateTimeStyles.RoundtripKind, out var dt)
+        !s.IsEmpty && DateTime.TryParse(s, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind, out var dt)
             ? dt.ToLocalTime().ToString("yyyy/MM/dd") : new string(s);
 }

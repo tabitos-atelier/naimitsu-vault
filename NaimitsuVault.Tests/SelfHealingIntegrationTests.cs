@@ -3,6 +3,7 @@
 
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging.Abstractions;
+using NaimitsuVault.Localization;
 using NaimitsuVault.Models;
 using NaimitsuVault.Services;
 using NaimitsuVault.Services.Interfaces;
@@ -18,7 +19,7 @@ namespace NaimitsuVault.Tests;
 /// the NKDB_SHADOW magic. FindByMagic(NKDB_SHADOW) identifies the shadow via an in-memory reverse lookup.
 ///
 ///   TC-SHI-01 - Happy path: proves recovery I/O happens zero times when the primary DB is healthy
-///   TC-SHI-02 - Auto-heal: primary DB corrupt + shadow healthy -> silent recovery, audit log 0xFF02, InfoBar shown
+///   TC-SHI-02 - Auto-heal: primary DB corrupt + shadow healthy -> silent recovery, audit log 0xFF01, InfoBar shown
 ///   TC-SHI-03 - Fail-fast: primary DB corrupt + no valid shadow -> immediate freeze
 ///   TC-SHI-04 - Multiple-shadow fail-fast: 2+ NKDB_SHADOW candidates -> immediate freeze
 ///   TC-SHI-08 - Vault auto-heal: vault DB present but corrupted (not missing) + healthy shadow -> silent recovery
@@ -76,7 +77,7 @@ public sealed class SelfHealingIntegrationTests : IDisposable
     }
 
     // ──────────────────────────────────────────────────────────────────────────
-    // TC-SHI-02: primary DB corrupt + shadow healthy -> silent heal, audit log 9900, InfoBar shown
+    // TC-SHI-02: primary DB corrupt + shadow healthy -> silent heal, audit log 0xFF01, InfoBar shown
     // ──────────────────────────────────────────────────────────────────────────
     [Fact]
     public async Task GivenCorruptNkdb_AndHealthyShadow_WhenDiscoveryRuns_ThenSilentHealingAndAuditLog()
@@ -119,10 +120,12 @@ public sealed class SelfHealingIntegrationTests : IDisposable
         var dashVm = MakeDashboardVm();
         Assert.True(dashVm.HasAutoRecoveryWarning);
 
-        var msg = dashVm.AutoRecoveryMessage;
-        Assert.True(
-            msg.Contains("Common.InfoUnifiedDbAutoRecovered") || msg.Contains("統合データベース"),
-            $"AutoRecoveryMessage does not correspond to D1MI01: {msg}");
+        // Compare against the locale lookup instead of a hard-coded wording: LocalizationManager is static,
+        // so whether it returns the key itself (no locale loaded) or the localized text depends on which
+        // tests ran earlier in the same process, and the wording itself can be revised.
+        Assert.Equal(
+            LocalizationManager.Get("Common.InfoUnifiedDbAutoRecovered"),
+            dashVm.AutoRecoveryMessage);
 
         // The recovered nkdb carries the NKDB_ORIGIN magic
         var restoredMagic = await ShadowFileService.ReadMagicAsync(nkdbPath);

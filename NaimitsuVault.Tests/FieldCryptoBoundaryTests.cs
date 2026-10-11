@@ -18,7 +18,7 @@ namespace NaimitsuVault.Tests;
 internal partial class TestJsonContext : System.Text.Json.Serialization.JsonSerializerContext { }
 
 /// <summary>
-/// FieldCrypto 512-byte boundary values + zero-memory tests (TC-FC-01 .. TC-FC-28)
+/// FieldCrypto 512-byte boundary values + zero-memory tests (TC-FC-01 .. TC-FC-29)
 /// </summary>
 public sealed class FieldCryptoBoundaryTests
 {

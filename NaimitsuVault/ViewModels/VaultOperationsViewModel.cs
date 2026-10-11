@@ -317,7 +317,7 @@ public partial class VaultOperationsViewModel : ObservableObject, IDisposable
 
             var ext = ExportFormat == "JSON" ? "json" : "csv";
             using var pathBuf = await _filePicker.SaveAsync(
-                $"Naimitsu_vlt{_session.DisplayedVaultNumber}_export_{DateTime.Now:yyyyMMdd_HHmmss}",
+                $"Naimitsu_vlt{_session.DisplayedVaultNumber}_export_{DateTime.Now.ToString("yyyyMMdd_HHmmss", System.Globalization.CultureInfo.InvariantCulture)}",
                 [(string.Format(LocalizationManager.Get("Common.FileFilter"), ExportFormat, ext), $".{ext}")]);
             if (pathBuf == null) return;
 
@@ -593,11 +593,11 @@ public partial class VaultOperationsViewModel : ObservableObject, IDisposable
             string? customFields = fields.Count > 7  ? VaultImportExportHelper.NullIfEmpty(fields[7])  : null;
 
             DateTime? createdAt = null, updatedAt = null;
-            if (fields.Count > 8  && DateTime.TryParseExact(fields[8],  "yyyy-MM-dd HH:mm:ss", null, System.Globalization.DateTimeStyles.None, out var ca)) createdAt = ca;
-            if (fields.Count > 9  && DateTime.TryParseExact(fields[9],  "yyyy-MM-dd HH:mm:ss", null, System.Globalization.DateTimeStyles.None, out var ua)) updatedAt = ua;
+            if (fields.Count > 8  && DateTime.TryParseExact(fields[8],  "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var ca)) createdAt = ca;
+            if (fields.Count > 9  && DateTime.TryParseExact(fields[9],  "yyyy-MM-dd HH:mm:ss", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var ua)) updatedAt = ua;
             bool isFavorite = fields.Count > 10 && bool.TryParse(fields[10], out var fav) && fav;
             DateTime? expiresAt = null;
-            if (fields.Count > 11 && DateTime.TryParseExact(fields[11], "yyyy-MM-dd", null, System.Globalization.DateTimeStyles.None, out var ea)) expiresAt = ea;
+            if (fields.Count > 11 && DateTime.TryParseExact(fields[11], "yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture, System.Globalization.DateTimeStyles.None, out var ea)) expiresAt = ea;
 
             try
             {

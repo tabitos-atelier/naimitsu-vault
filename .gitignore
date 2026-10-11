@@ -225,6 +225,7 @@ ehthumbs.db
 Thumbs.db
 
 # Development tools
+AGENTS.md
 .claude/
 CLAUDE.md
 .gemini/

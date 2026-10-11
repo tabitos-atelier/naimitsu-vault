@@ -259,7 +259,7 @@ public partial class AuthService
 
             var existingFiles = Directory.GetFiles(localDataDir);
 
-            var archiveName = $"archived_{DateTime.Now:yyyyMMdd_HHmmss}";
+            var archiveName = $"archived_{DateTime.Now.ToString("yyyyMMdd_HHmmss", System.Globalization.CultureInfo.InvariantCulture)}";
             var archivePath = Path.Combine(localDataDir, archiveName);
             for (int suffix = 2; Directory.Exists(archivePath); suffix++)
                 archivePath = Path.Combine(localDataDir, $"{archiveName}-{suffix}");

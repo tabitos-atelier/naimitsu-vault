@@ -716,6 +716,52 @@ public sealed class RestoreHelperTests : IDisposable
         Assert.DoesNotContain("archived_20260101_000001", remaining);
     }
 
+    // The archive folder's timestamp is always Gregorian, whatever the current culture's default
+    // calendar is. Regression: it was formatted with the current culture, so under ar-SA (Um Al-Qura
+    // calendar) the folder was named archived_1448MMdd_... - which sorts below every Gregorian
+    // archived_20xx... folder, so generation pruning treated the folder it had just created as the
+    // oldest one and deleted it instead of an actually old folder.
+
+    [Theory]
+    [InlineData("ar-SA")]
+    [InlineData("th-TH")]
+    [InlineData("fa-IR")]
+    public async Task RestoreAllFromBackupAsync_ArchiveFolderName_IsGregorianRegardlessOfCurrentCulture(string cultureName)
+    {
+        var backupDir = Path.Combine(_tempDir, "backup");
+        var localDir  = Path.Combine(_tempDir, "local");
+        Directory.CreateDirectory(backupDir);
+        Directory.CreateDirectory(localDir);
+
+        var seedPath = Path.Combine(localDir, "NaimitsuVault.nkdb");
+        await File.WriteAllBytesAsync(seedPath, "seed"u8.ToArray(), TestContext.Current.CancellationToken);
+        _tempFiles.Add(seedPath);
+
+        var fileName = MakeValidVaultFileName();
+        await CreateSeededVaultFileAsync(backupDir, fileName, "password-A");
+        var nkdbPath = await CreateMinimalNkdbAsync("backup.nkdb", dbNumbers: [1]);
+
+        using var unifiedDb = TestUnifiedDb.Create();
+        var auth = MakeFileAndLocalUnifiedDbAuth(unifiedDb.Factory);
+
+        var yearBefore = DateTime.Now.Year; // DateTime.Year is always Gregorian
+        var original   = System.Globalization.CultureInfo.CurrentCulture;
+        try
+        {
+            System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo(cultureName);
+            await auth.RestoreAllFromBackupAsync(nkdbPath, backupDir, localDir);
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentCulture = original;
+        }
+        var yearAfter = DateTime.Now.Year;
+
+        var archiveName = Path.GetFileName(Assert.Single(Directory.GetDirectories(localDir, "archived_*")));
+        var year = int.Parse(archiveName.AsSpan("archived_".Length, 4), System.Globalization.CultureInfo.InvariantCulture);
+        Assert.InRange(year, yearBefore, yearAfter);
+    }
+
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     // RestoreAllFromBackupAsync : Windows Hello invalidation (Rev.22)
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

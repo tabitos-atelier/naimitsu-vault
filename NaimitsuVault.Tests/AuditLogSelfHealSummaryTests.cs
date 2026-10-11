@@ -8,10 +8,11 @@ using NaimitsuVault.Services;
 namespace NaimitsuVault.Tests;
 
 /// <summary>
-/// AuditLogService.BuildSummary tests for the automatic-healing event codes (TC-AL-20..23):
+/// AuditLogService.BuildSummary tests for the automatic-healing event codes (TC-AL-20..24):
 /// AuditEventCode.FileContentTypeRepaired (one row per repaired StoredFile),
 /// AuditEventCode.UnifiedDbAutoRecovered and AuditEventCode.VaultDbAutoRecovered (shadow-file DB
-/// recovery, each with its own dedicated code rather than a shared code with a free-text payload).
+/// recovery, each with its own dedicated code rather than a shared code with a free-text payload),
+/// and AuditEventCode.NoOpDraftDiscarded (an aggregate count of discarded no-op drafts).
 /// LocalizationManager has no locale loaded in this test process, so Get() falls back to "[key]" -
 /// these tests assert on which locale KEY was selected (via that bracketed fallback), not on the
 /// localized Japanese/English text.

@@ -102,6 +102,7 @@
             x:Name="PinBox"
             AutomationProperties.Name="{loc:Msg Key=Emergency.Pin}"
             IsEnabled="{x:Bind ViewModel.IsNotBusy, Mode=OneWay}"
+            KeyDown="PinBox_KeyDown"
             MaxLength="4"
             PasswordChanged="PinBox_PasswordChanged"
             PlaceholderText="{loc:Msg Key=Emergency.Pin}" />

@@ -9,7 +9,7 @@ using NaimitsuVault.Services.Interfaces;
 namespace NaimitsuVault.Tests;
 
 /// <summary>
-/// ShadowFileService.WriteAll() orphan-cleanup tests (TC-SHI-05..06).
+/// ShadowFileService.WriteAll() orphan-cleanup tests (TC-SHI-05..07).
 ///
 /// Before this fix, orphan cleanup only ran when exactly one old-shadow candidate existed
 /// (nkdb side) or by comparing against a single DB-read "old path" (vault side). Once an abrupt
@@ -17,7 +17,9 @@ namespace NaimitsuVault.Tests;
 /// magic, WriteAll() gave up on cleanup permanently - every future successful call added yet
 /// another shadow without ever clearing the backlog (reproduced for real: 3 VLSH-magic files
 /// found under a single-vault dev data/ folder on 2026-08-20). These tests confirm the fix:
-/// WriteAll() now deletes every stale candidate it finds, regardless of how many accumulated.
+/// WriteAll() now deletes every stale candidate it finds, regardless of how many accumulated
+/// (TC-SHI-05..06). TC-SHI-07 covers the opposite, fail-safe direction: when VaultRegistries can't
+/// be read, WriteAll() skips the deletion scan entirely and leaves every existing shadow untouched.
 /// </summary>
 [Collection("SequentialSqlitePool")]
 public sealed class ShadowFileServiceCleanupTests : IDisposable

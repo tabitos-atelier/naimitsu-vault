@@ -79,7 +79,7 @@ The following defines the scope of threats that Naimitsu Vault is **designed to 
 
 * The DEK is zero-cleared with `CryptographicOperations.ZeroMemory` on lock.
 * Intermediate byte sequences for passwords and encryption keys are zero-cleared immediately after use.
-* **Pinned Object Heap (POH) prevents GC-compaction ghosts**: Buffers holding key material or decrypted plaintext are allocated on the Pinned Object Heap via `GC.AllocateArray(pinned: true)`, preventing residue (a "GC ghost") from being left at the buffer's pre-move address during GC compaction, and are zero-cleared with `CryptographicOperations.ZeroMemory` immediately after use.
+* **Pinned Object Heap (POH) prevents GC-compaction ghosts**: Buffers holding key material or decrypted plaintext are allocated on the Pinned Object Heap via `GC.AllocateArray(pinned: true)`, preventing residue (a "GC ghost") from being left at the buffer's pre-move address during GC compaction, and are zero-cleared with `CryptographicOperations.ZeroMemory` immediately after use. Values converted to a .NET `string` for on-screen display and editing are not covered by this protection (see item 5 under "Outside the Security Boundary").
 * AutoLock defaults to 5 minutes, automatically wiping the DEK after a period of inactivity.
 * Clipboard writes are excluded from OS history and cloud sync (via Win32 P/Invoke).
 * **30-second auto-erase of clipboard contents**: Secret text copied to the clipboard is **automatically wiped in the background after 30 seconds** (via `CancellationTokenSource`-based timing). This avoids creating plaintext `string` instances where possible, minimizing the risk of residue in memory.
@@ -125,11 +125,12 @@ Defending against them requires OS- or hardware-level countermeasures.
 
 * Vulnerabilities in the .NET runtime, NuGet packages, or Windows itself, which this software depends on. Dependencies are kept to a minimum, but complete elimination is impossible.
 
-### 5. Internal native buffers of UI controls (WinUI 3)
+### 5. Internal native buffers of UI controls (WinUI 3) and display strings
 
 * Standard UI controls such as `PasswordBox` and `TextBox` keep their own native (WinRT) internal buffers for display, undo history, and IME composition, and no managed API exists to reach or zero that buffer.
 * For the master password field, the managed-side copies (the `string` returned by the `.Password` getter, and the `char[]` used for authentication) are reliably zero-cleared immediately after use, but this software cannot touch the native buffer that `PasswordBox` itself retains. Since the unlock window is re-created on every attempt, this residual copy accumulates across generations of unlock attempts.
-* This is a structural limitation of the WinUI 3 framework, and no mitigation is currently available on this software's side.
+* **`string` instances used for display and editing**: When a secret is shown or edited on screen, its values are converted to ordinary .NET `string` instances so they can be handed to controls such as `TextBox`. This applies to fields such as the title, user ID, password, and notes, and to the values of additional (custom) fields. .NET has no public API for pinning a `string` in memory, so if the GC moves one during compaction, the contents left at its previous address cannot be erased. In addition, some of these `string` instances, such as custom field values, cannot be zero-cleared at all and remain in memory until the GC reclaims them.
+* These are structural limitations of the WinUI 3 framework and the .NET runtime, and no mitigation is currently available on this software's side.
 
 ---
 

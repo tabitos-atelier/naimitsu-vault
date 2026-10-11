@@ -12,8 +12,11 @@ using NaimitsuVault.ViewModels;
 namespace NaimitsuVault.Tests;
 
 /// <summary>
-/// "Custom field boundary values" - all 7 cases for AES-256-GCM encrypt/decrypt round-trips.
-/// CustomFields is verified by round-tripping a UTF-8 JSON string through Encrypt/Decrypt.
+/// "Custom field boundary values" (TC-CFR-01 .. TC-CFR-10).
+/// TC-CFR-01..07: AES-256-GCM encrypt/decrypt round-trips. CustomFields is verified by
+/// round-tripping a UTF-8 JSON string through Encrypt/Decrypt.
+/// TC-CFR-08..09: CustomFieldModel.FieldType's JSON round-trip and its plain-integer serialization.
+/// TC-CFR-10: a date-type field's stored value is culture-invariant.
 /// </summary>
 public sealed class CustomFieldRoundtripTests
 {
@@ -171,5 +174,36 @@ public sealed class CustomFieldRoundtripTests
         var fields = new List<CustomFieldModel> { new() { FieldId = 1, FieldType = CustomFieldType.Password } };
         var json   = JsonSerializer.Serialize(fields, SecretsViewModel.SecretListJsonContext.Default.ListCustomFieldModel);
         Assert.Contains("\"FieldType\":1", json);
+    }
+
+    // ── TC-CFR-10 ─────────────────────────────────────────────────────────────────
+    // A date-type field's Value is persisted, so DateValue must write and read it with the invariant
+    // culture. Regression: with the current culture, a non-Gregorian default calendar stored a
+    // different year (th-TH: 2569, ar-SA: 1448, fa-IR: 1405), so the same vault showed a different
+    // date after being opened on a machine with another culture.
+
+    [Theory]
+    [InlineData("th-TH")]
+    [InlineData("ar-SA")]
+    [InlineData("fa-IR")]
+    [InlineData("ja-JP")]
+    public void CustomFieldModel_DateValue_IsStoredAndReadInvariantRegardlessOfCurrentCulture(string cultureName)
+    {
+        var original = System.Globalization.CultureInfo.CurrentCulture;
+        try
+        {
+            System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo(cultureName);
+
+            var field = new CustomFieldModel { FieldType = CustomFieldType.Date };
+            field.DateValue = new DateTimeOffset(2026, 10, 8, 0, 0, 0, TimeSpan.Zero);
+
+            Assert.Equal("2026-10-08", field.Value);
+            Assert.NotNull(field.DateValue);
+            Assert.Equal(new DateTime(2026, 10, 8), field.DateValue!.Value.Date);
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentCulture = original;
+        }
     }
 }

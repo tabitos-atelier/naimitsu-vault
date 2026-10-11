@@ -13,10 +13,12 @@ using NaimitsuVault.ViewModels;
 namespace NaimitsuVault.Tests;
 
 /// <summary>
-/// Export/import boundary values - all 6 cases of SettingsViewModel's pure logic
-/// plus 3 Phase 2 stream-based test cases.
+/// Export/import boundary values and pure logic of VaultImportExportHelper (TC-EXP-01 .. TC-EXP-22):
+/// CSV parsing and row counting, stream-based CSV/JSON export, duplicate-title resolution,
+/// skip-and-continue on decrypt failure, the CSV formula-injection guard, encoding /
+/// line-ending normalization, and culture-invariant CSV date columns.
 ///
-/// UI flows involving the file picker, ContentDialog, or InfoBar are out of scope (Phase 2).
+/// UI flows involving the file picker, ContentDialog, or InfoBar are out of scope.
 /// ParseCsvLine / IsCsvRecordComplete / MapCategory are promoted to internal and tested directly.
 /// Import row counts use ParseAndCountCsvAsync (internal static).
 ///
@@ -264,6 +266,61 @@ public sealed class ExportImportTests
         // Assert - the Notes field is wrapped in double quotes
         Assert.NotNull(dataLine);
         Assert.Contains("\"line1, line2\"", dataLine);
+    }
+
+    // ── TC-EXP-22: CSV date columns are culture-invariant ───────────────────────
+    // Regression: the CSV date columns were formatted with the current culture, so a culture whose
+    // default calendar isn't Gregorian wrote a different year (th-TH: 2569, ar-SA: 1448, fa-IR: 1405)
+    // and a culture with another time separator wrote e.g. "13.05.09" (fi-FI). Such a file could not
+    // be imported correctly on a machine with a different culture. The columns must always be
+    // Gregorian "yyyy-MM-dd HH:mm:ss" / "yyyy-MM-dd".
+
+    [Theory]
+    [InlineData("th-TH")]
+    [InlineData("ar-SA")]
+    [InlineData("fa-IR")]
+    [InlineData("fi-FI")]
+    public async Task WriteCsvToStream_DateColumns_AreInvariantRegardlessOfCurrentCulture(string cultureName)
+    {
+        var crypto    = Crypto();
+        var dek       = MakeDek();
+        var createdAt = new DateTime(2026, 10, 8, 4, 5, 9, DateTimeKind.Utc);
+        var updatedAt = new DateTime(2026, 10, 9, 4, 5, 9, DateTimeKind.Utc);
+        var expiresAt = new DateTime(2027, 3, 15, 4, 0, 0, DateTimeKind.Utc);
+        var secret = new Secret
+        {
+            Title     = crypto.Encrypt(Encoding.UTF8.GetBytes("TestEntry"), dek.Span),
+            CreatedAt = createdAt,
+            UpdatedAt = updatedAt,
+            ExpiresAt = expiresAt,
+        };
+
+        var invariant = System.Globalization.CultureInfo.InvariantCulture;
+        var expected  = string.Join(',',
+            createdAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss", invariant),
+            updatedAt.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss", invariant),
+            "false",
+            expiresAt.ToLocalTime().ToString("yyyy-MM-dd", invariant));
+
+        await using var ms = new MemoryStream();
+        var original = System.Globalization.CultureInfo.CurrentCulture;
+        try
+        {
+            System.Globalization.CultureInfo.CurrentCulture = new System.Globalization.CultureInfo(cultureName);
+            await VaultImportExportHelper.WriteCsvToStreamAsync([secret], crypto, dek, ms);
+        }
+        finally
+        {
+            System.Globalization.CultureInfo.CurrentCulture = original;
+        }
+
+        ms.Seek(0, SeekOrigin.Begin);
+        using var reader = new StreamReader(ms, Encoding.UTF8);
+        await reader.ReadLineAsync(TestContext.Current.CancellationToken); // skip the header
+        var dataLine = await reader.ReadLineAsync(TestContext.Current.CancellationToken);
+
+        Assert.NotNull(dataLine);
+        Assert.EndsWith(expected, dataLine);
     }
 
     // ════════════════════════════════════════════════════════════════════════

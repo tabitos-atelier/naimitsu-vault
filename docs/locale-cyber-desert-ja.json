@@ -386,7 +386,7 @@
         "Overview": "オアシスの現況",
         "SecretCount": "羊皮紙の数",
         "FileCount": "収蔵品の数",
-        "VaultCount": "宝物庫の数",
+        "VaultCount": "宝物庫",
         "DbFileSize": "宝物庫の重さ",
         "SecurityScan": "結界の綻び検知",
         "RunScan": "検知の儀式を始める",

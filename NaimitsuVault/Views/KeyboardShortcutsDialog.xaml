@@ -272,6 +272,29 @@
                     TextWrapping="Wrap" />
             </Grid>
 
+            <!--  Edit form: keyboard auto-type button next to the credential fields  -->
+            <Grid ColumnSpacing="8">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border
+                    MinWidth="88"
+                    Padding="5,2"
+                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                    BorderThickness="1"
+                    CornerRadius="3">
+                    <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + D" />
+                </Border>
+                <TextBlock
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    FontSize="{StaticResource NvCaptionFontSize}"
+                    Text="{loc:Msg Key=DirectInjection.Title}"
+                    TextWrapping="Wrap" />
+            </Grid>
+
             <!--  Edit screen footer toolbar, left to right: pane toggle -> draft review -> save -> delete -> jump to Time Machine  -->
             <Grid ColumnSpacing="8">
                 <Grid.ColumnDefinitions>
@@ -389,213 +412,265 @@
             Grid.Column="1"
             Fill="{ThemeResource DividerStrokeColorDefaultBrush}" />
 
-        <!--  ===== Column 2: Time Machine =====  -->
+        <!--  ===== Column 2: Time Machine + Profile =====  -->
         <StackPanel
             Grid.Row="2"
             Grid.Column="2"
             Margin="16,0,16,0"
-            Spacing="6">
-            <TextBlock FontWeight="SemiBold" Text="{loc:Msg Key=Shell.Navi.TimeMachine}" />
+            Spacing="20">
 
-            <!--  Left pane, top to bottom: filter row (Favorites/Deleted) -> list (per-item favorite star)  -->
-            <Grid ColumnSpacing="8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border
-                    MinWidth="88"
-                    Padding="5,2"
-                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    CornerRadius="3">
-                    <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + 6" />
-                </Border>
-                <TextBlock
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    FontSize="{StaticResource NvCaptionFontSize}"
-                    Text="{loc:Msg Key=Common.ToggleFavoriteFilter}"
-                    TextWrapping="Wrap" />
-            </Grid>
+            <StackPanel Spacing="6">
+                <TextBlock FontWeight="SemiBold" Text="{loc:Msg Key=Shell.Navi.TimeMachine}" />
 
-            <Grid ColumnSpacing="8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border
-                    MinWidth="88"
-                    Padding="5,2"
-                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    CornerRadius="3">
-                    <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + 9" />
-                </Border>
-                <TextBlock
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    FontSize="{StaticResource NvCaptionFontSize}"
-                    Text="{loc:Msg Key=Common.ToggleDeletedFilter}"
-                    TextWrapping="Wrap" />
-            </Grid>
+                <!--  Left pane, top to bottom: filter row (Favorites/Deleted) -> list (per-item favorite star)  -->
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        MinWidth="88"
+                        Padding="5,2"
+                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                        <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + 6" />
+                    </Border>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        Text="{loc:Msg Key=Common.ToggleFavoriteFilter}"
+                        TextWrapping="Wrap" />
+                </Grid>
 
-            <Grid ColumnSpacing="8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border
-                    MinWidth="88"
-                    Padding="5,2"
-                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    CornerRadius="3">
-                    <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + 5" />
-                </Border>
-                <TextBlock
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    FontSize="{StaticResource NvCaptionFontSize}"
-                    Text="{loc:Msg Key=Common.ToggleFavoriteItem}"
-                    TextWrapping="Wrap" />
-            </Grid>
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        MinWidth="88"
+                        Padding="5,2"
+                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                        <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + 9" />
+                    </Border>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        Text="{loc:Msg Key=Common.ToggleDeletedFilter}"
+                        TextWrapping="Wrap" />
+                </Grid>
 
-            <!--  Comparison-screen header toolbar, left to right: pane toggle -> restore Gen1 -> restore Gen2 -> undo delete -> purge -> jump to Secrets  -->
-            <Grid ColumnSpacing="8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border
-                    MinWidth="88"
-                    Padding="5,2"
-                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    CornerRadius="3">
-                    <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + B" />
-                </Border>
-                <TextBlock
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    FontSize="{StaticResource NvCaptionFontSize}"
-                    Text="{loc:Msg Key=Common.ToggleLeftPane}"
-                    TextWrapping="Wrap" />
-            </Grid>
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        MinWidth="88"
+                        Padding="5,2"
+                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                        <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + 5" />
+                    </Border>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        Text="{loc:Msg Key=Common.ToggleFavoriteItem}"
+                        TextWrapping="Wrap" />
+                </Grid>
 
-            <Grid ColumnSpacing="8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border
-                    MinWidth="88"
-                    Padding="5,2"
-                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    CornerRadius="3">
-                    <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + 1" />
-                </Border>
-                <TextBlock
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    FontSize="{StaticResource NvCaptionFontSize}"
-                    Text="{loc:Msg Key=TimeMachine.UndoToGen1Tooltip}"
-                    TextWrapping="Wrap" />
-            </Grid>
+                <!--  Comparison-screen header toolbar, left to right: pane toggle -> restore Gen1 -> restore Gen2 -> undo delete -> purge -> jump to Secrets  -->
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        MinWidth="88"
+                        Padding="5,2"
+                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                        <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + B" />
+                    </Border>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        Text="{loc:Msg Key=Common.ToggleLeftPane}"
+                        TextWrapping="Wrap" />
+                </Grid>
 
-            <Grid ColumnSpacing="8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border
-                    MinWidth="88"
-                    Padding="5,2"
-                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    CornerRadius="3">
-                    <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + 2" />
-                </Border>
-                <TextBlock
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    FontSize="{StaticResource NvCaptionFontSize}"
-                    Text="{loc:Msg Key=TimeMachine.UndoToGen2Tooltip}"
-                    TextWrapping="Wrap" />
-            </Grid>
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        MinWidth="88"
+                        Padding="5,2"
+                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                        <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + 1" />
+                    </Border>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        Text="{loc:Msg Key=TimeMachine.UndoToGen1Tooltip}"
+                        TextWrapping="Wrap" />
+                </Grid>
 
-            <Grid ColumnSpacing="8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border
-                    MinWidth="88"
-                    Padding="5,2"
-                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    CornerRadius="3">
-                    <TextBlock Style="{StaticResource KeyLabel}" Text="Ins" />
-                </Border>
-                <TextBlock
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    FontSize="{StaticResource NvCaptionFontSize}"
-                    Text="{loc:Msg Key=Common.UndoDelete}"
-                    TextWrapping="Wrap" />
-            </Grid>
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        MinWidth="88"
+                        Padding="5,2"
+                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                        <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + 2" />
+                    </Border>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        Text="{loc:Msg Key=TimeMachine.UndoToGen2Tooltip}"
+                        TextWrapping="Wrap" />
+                </Grid>
 
-            <Grid ColumnSpacing="8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border
-                    MinWidth="88"
-                    Padding="5,2"
-                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    CornerRadius="3">
-                    <TextBlock Style="{StaticResource KeyLabel}" Text="Del" />
-                </Border>
-                <TextBlock
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    FontSize="{StaticResource NvCaptionFontSize}"
-                    Text="{loc:Msg Key=Common.PurgePermanently}"
-                    TextWrapping="Wrap" />
-            </Grid>
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        MinWidth="88"
+                        Padding="5,2"
+                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                        <TextBlock Style="{StaticResource KeyLabel}" Text="Ins" />
+                    </Border>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        Text="{loc:Msg Key=Common.UndoDelete}"
+                        TextWrapping="Wrap" />
+                </Grid>
 
-            <Grid ColumnSpacing="8">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Border
-                    MinWidth="88"
-                    Padding="5,2"
-                    Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
-                    BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
-                    BorderThickness="1"
-                    CornerRadius="3">
-                    <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + J" />
-                </Border>
-                <TextBlock
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    FontSize="{StaticResource NvCaptionFontSize}"
-                    Text="{loc:Msg Key=Shell.Navi.Secrets}"
-                    TextWrapping="Wrap" />
-            </Grid>
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        MinWidth="88"
+                        Padding="5,2"
+                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                        <TextBlock Style="{StaticResource KeyLabel}" Text="Del" />
+                    </Border>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        Text="{loc:Msg Key=Common.PurgePermanently}"
+                        TextWrapping="Wrap" />
+                </Grid>
+
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        MinWidth="88"
+                        Padding="5,2"
+                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                        <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + J" />
+                    </Border>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        Text="{loc:Msg Key=Shell.Navi.Secrets}"
+                        TextWrapping="Wrap" />
+                </Grid>
+            </StackPanel>
+
+            <StackPanel Spacing="6">
+                <TextBlock FontWeight="SemiBold" Text="{loc:Msg Key=Shell.Navi.Profile}" />
+
+                <!--  Footer toolbar, left to right: draft review -> save  -->
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        MinWidth="88"
+                        Padding="5,2"
+                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                        <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + E" />
+                    </Border>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        Text="{loc:Msg Key=Profile.CompareDraft}"
+                        TextWrapping="Wrap" />
+                </Grid>
+
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Border
+                        MinWidth="88"
+                        Padding="5,2"
+                        Background="{ThemeResource CardBackgroundFillColorSecondaryBrush}"
+                        BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                        BorderThickness="1"
+                        CornerRadius="3">
+                        <TextBlock Style="{StaticResource KeyLabel}" Text="Ctrl + S" />
+                    </Border>
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        FontSize="{StaticResource NvCaptionFontSize}"
+                        Text="{loc:Msg Key=Common.Save}"
+                        TextWrapping="Wrap" />
+                </Grid>
+            </StackPanel>
         </StackPanel>
 
         <Rectangle

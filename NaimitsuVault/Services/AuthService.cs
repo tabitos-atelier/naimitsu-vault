@@ -1043,7 +1043,7 @@ public partial class AuthService(
         // Matches the "yyyyMMdd_HHmmss" date/time naming convention used elsewhere (AutoBackupService,
         // AuthService.Restore) - a timestamp distinguishes files from repeated generation as reliably
         // as a content hash would, without the extra computation.
-        var suggestedFileName = $"Naimitsu_vlt{session.DisplayedVaultNumber}_{DateTime.Now:yyyyMMdd_HHmmss}.png";
+        var suggestedFileName = $"Naimitsu_vlt{session.DisplayedVaultNumber}_{DateTime.Now.ToString("yyyyMMdd_HHmmss", System.Globalization.CultureInfo.InvariantCulture)}.png";
         return (qrPayload, suggestedFileName, wrappedDek);
         }
         finally { pinBuf.Dispose(); }

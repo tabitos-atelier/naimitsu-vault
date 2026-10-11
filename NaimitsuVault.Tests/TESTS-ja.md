@@ -21,7 +21,7 @@ ID 列の `—` は、そのクラスにケース ID を割り当てていない
 | AuditLogImportExportLocaleSummaryTests.cs | `AuditLogImportExportLocaleSummaryTests` | TC-AL-25〜32 | インポート・エクスポートの個別失敗、CSV数式インジェクション対策、カスタムロケールインポートに関するイベントコード（`ImportItemFailed`・`ExportItemFailed`・`LocaleImportKeyMissing`・`LocaleImportValueTooLong`・`CsvFormulaGuardApplied`・`LocaleImportSucceeded`・`LocaleImportFailed`・`LocaleImportPlaceholderBroken`）に対する `AuditLogService.BuildSummary` の出力を検証する |
 | AuditLogSelfHealSummaryTests.cs | `AuditLogSelfHealSummaryTests` | TC-AL-20〜24 | 自動セルフヒーリングのイベントコード（`FileContentTypeRepaired`・`UnifiedDbAutoRecovered`・`VaultDbAutoRecovered`・`NoOpDraftDiscarded`）に対する `AuditLogService.BuildSummary` の出力を検証する |
 | AuditLogServiceRestoreFlushTests.cs | `AuditLogServiceRestoreFlushTests` | — | `AuditLogService.FlushPendingRestoreAuditAsync` が復元マーカー（`RestoreAuditMarker`）の対象保管庫にのみログを書き込み、無関係な保管庫には触れないことを検証する |
-| AuditLogViewModelTests.cs | `AuditLogViewModelTests` | TC-ALV-01–14 | `AuditLogViewModel` の3条件絞り込み（重要度・コード分類・テキスト。AND 結合）、空表示の「アクティビティなし」と「一致なし」の出し分け、`AuditLogWrittenMessage` に対する `IsActive`/`NeedsReload` 規律（他画面の表示中はクエリしない）、最新要求優先の読み込み順序、表示期間に `AppConstants.AuditLogRetentionDays` を使うことを検証する |
+| AuditLogViewModelTests.cs | `AuditLogViewModelTests` | TC-ALV-01〜14 | `AuditLogViewModel` の3条件絞り込み（重要度・コード分類・テキスト。AND 結合）、空表示の「アクティビティなし」と「一致なし」の出し分け、`AuditLogWrittenMessage` に対する `IsActive`/`NeedsReload` 規律（他画面の表示中はクエリしない）、最新要求優先の読み込み順序、表示期間に `AppConstants.AuditLogRetentionDays` を使うことを検証する |
 | AuditLogWrittenMessageTests.cs | `AuditLogWrittenMessageTests` | — | `AuditLogService` の各書き込み経路（`LogAsync`・`LogAuthFailedAsync`・`FlushPreAuthFailuresAsync`・`FlushPendingRestoreAuditAsync`）から `AuditLogWrittenMessage` が正しい `Code`/`EventLevel` で1回だけ発行されること、および何も書き込まれない場合は発行されないことを検証する |
 | AuditPayloadRegistrationTests.cs | `AuditPayloadRegistrationTests` | — | リフレクションにより全 `AuditEventCode` に対応する `AuditPayload` レコードが `AuditPayloadJsonContext` に登録されていることを検証し、AOT用 `[JsonSerializable]` 登録漏れを検出する |
 | AuditWiringTests.cs | `AuditWiringTests` | — | プロダクションの `.cs` ソースを直接走査し、全 `AuditEventCode` に実際の呼び出し箇所（`LogAsync`／`LogSettingAsync*`／`LogSettingChanged*`／`RestoreAuditMarker.Write`）が存在することを検証する（誰も配線していない新規コードの追加を検出する） |
@@ -31,13 +31,14 @@ ID 列の `—` は、そのクラスにケース ID を割り当てていない
 | ClipboardAutoEraserTests.cs | `ClipboardAutoEraserTests` | TC-CAE-01〜04 | クリップボード自動消去タイマー（`ClipboardAutoEraser`）の全4ケースを実クリップボードを用いて検証する |
 | CryptoServiceTests.cs | `CryptoServiceTests` | TC-CRY-01〜08 | `CryptoService` の暗号化・復号の境界値を全8ケースで検証する |
 | CryptoVectorTests.cs | `CryptoVectorTests` | TC-VEC-01〜04, TC-ARG-01〜03, TC-ROB-01〜06 | AES-256-GCM（NIST SP 800-38D）と Argon2id（RFC 9106）の公定ベクターで暗号プリミティブの正確性を検証する既知解答テストスイート |
-| CustomFieldRoundtripTests.cs | `CustomFieldRoundtripTests` | TC-CFR-01〜09 | カスタムフィールドの AES-256-GCM 暗号化・復号往復を全7ケースで検証する（TC-CFR-01〜07）。加えて CustomFieldModel.FieldType（IsPassword/IsUrl/IsDate の bool 3本を廃止した enum 移行）の JSON 往復と整数シリアライズを検証する（TC-CFR-08〜09） |
+| CustomFieldRoundtripTests.cs | `CustomFieldRoundtripTests` | TC-CFR-01〜10 | カスタムフィールドの AES-256-GCM 暗号化・復号往復を全7ケースで検証する（TC-CFR-01〜07）。加えて CustomFieldModel.FieldType（IsPassword/IsUrl/IsDate の bool 3本を廃止した enum 移行）の JSON 往復と整数シリアライズを検証する（TC-CFR-08〜09）。さらに、日付型フィールドの保存値が、現在のカルチャの暦にかかわらずインバリアントカルチャで読み書きされることを検証する（TC-CFR-10） |
 | DbCorruptionTests.cs | `DbCorruptionTests` | TC-DBC-01〜09 | DB 破損・バックアップに関するシナリオをインメモリ／ファイルベース SQLite で検証する |
 | DbRestoreValidatorTests.cs | `DbRestoreValidatorTests` | — | `DatabaseRestoreValidator` の3段防御（マジックヘッダー検査・SQLite接続/バイナリ構造検査・スキーマ+`PRAGMA integrity_check`）を検証する |
 | DirectInjectionResultTests.cs | `DirectInjectionResultTests` | TC-DI-01〜04 | `DirectInjectionResult` のファクトリメソッドと相互排他的なプロパティ不変条件を検証する（Win32依存のない純粋ロジック） |
 | EmergencyAccessViewModelTests.cs | `EmergencyAccessViewModelTests` | TC-EAV-01〜05 | 緊急アクセスコードの QR PNG を、ドロップの代わりにファイル選択で渡す経路（`SelectQrFileCommand`）を検証する。 詳細は[備考](#emergencyaccessviewmodeltests)を参照。 |
 | EmergencyAccessUnlockTests.cs | `EmergencyAccessUnlockTests` | TC-EAC-01〜07 | 緊急アクセスコード（QR+PIN）による制限閲覧モード復元（`AuthService.EmergencyAccessUnlockAsync`）、生成/確定の2フェーズ分離、および推奨QRファイル名の書式を検証する。TC-EAC-07は、走査が `NoMatchingVault` で終わった場合でも、走査した候補ファイルにプール済み接続が残らないこと（走査後もそのファイルを削除できること）を検証する |
-| ExportImportTests.cs | `ExportImportTests` | TC-EXP-01〜21 | エクスポート・インポートの境界値と純粋ロジック（CSV解析・重複タイトル解決・空行の扱い・復号失敗時のスキップ継続・CSV数式インジェクション対策・JSON/CSVのエンコードと改行の正規化）を検証する。 詳細は[備考](#exportimporttests)を参照。 |
+| ExceptionChainFormatterTests.cs | `ExceptionChainFormatterTests` | TC-EXC-01〜04 | 起動時のエラーハンドラーが例外の連鎖を型名と HRESULT だけでログ出力するために使う `ExceptionChainFormatter.Format` の検証。単一の例外、外側から内側への連鎖、メッセージやファイル名・パスが出力に一切含まれないこと、8段を超える連鎖の打ち切り |
+| ExportImportTests.cs | `ExportImportTests` | TC-EXP-01〜22 | エクスポート・インポートの境界値と純粋ロジック（CSV解析・重複タイトル解決・空行の扱い・復号失敗時のスキップ継続・CSV数式インジェクション対策・JSON/CSVのエンコードと改行の正規化・CSV日付列のカルチャ非依存）を検証する。 詳細は[備考](#exportimporttests)を参照。 |
 | FaviconServiceTests.cs | `FaviconServiceTests` | TC-FAV-01〜03 | 2026-09-17是正の回帰テスト。`ComputeCacheKey` が上限長のみチェックしており、空文字・空白のみのドメインでも有効なHMACキャッシュキーが生成され、`PrefetchAsync` が無意味な `.../ip3/.ico` リクエストを構築しうる不具合の回帰を検証する。`GetCachedAsync` が空文字・空白ドメインで null を返すこと、`PrefetchAsync` がDBに一切触れないことを確認する |
 | FieldCryptoBoundaryTests.cs | `FieldCryptoBoundaryTests` | TC-FC-01〜29 | `FieldCrypto` の512バイト境界値とゼロメモリ処理を検証する |
 | FontSettingsTests.cs | `FontSettingsTests` | TC-FNT-01〜06 | `InstalledFontEnumerator` の実GDI列挙、ポータブル利用時のフォールバック判定（`AppSettingsViewModel.ResolveFontFamily`）、`FontFamilyChangedMessage` のブロードキャストを検証する |
@@ -66,9 +67,10 @@ ID 列の `—` は、そのクラスにケース ID を割り当てていない
 | PasswordGeneratorEntropyTests.cs | `PasswordGeneratorEntropyTests` | TC-PG-01〜20 | `PasswordGenerator` のエントロピー・境界値・文字種保証を検証する |
 | PasswordGeneratorStrengthTests.cs | `PasswordGeneratorStrengthTests` | TC-PGS-01, TC-PGS-03 | パスワード生成ボタン押下後の `EditingSecret` 強度プロパティ更新と呼び出し回数を検証する |
 | PasswordGeneratorTests.cs | `PasswordGeneratorTests` | TC-PWG-01〜06 | `PasswordGenerator` のパスワード生成ロジックを全6ケースで検証する |
+| PasswordPreviewGroupingTests.cs | `PasswordPreviewGroupingTests` | TC-PPG-01〜04 | パスワード拡大表示で4文字ごとの区切りを入れるかを決める `PasswordPreviewGrouping.ShouldGroup` の検証。通常のパスワードは区切る。空白（全角スペースを含む）を含む値は区切らない。英数字を1種類の記号で区切り、その記号が2回以上現れる値（ライセンスキー・シークレットキーの形式、記号でつないだパスフレーズ）は区切らない。その形に当たらない記号（1回だけ、記号が2種類以上、先頭・連続・末尾の記号）では区切りを維持する |
 | PostUnlockMaintenanceServiceTests.cs | `PostUnlockMaintenanceServiceTests` | TC-PUM-01〜07 | 30日経過したソフト削除済みの機密情報・添付ファイルのパージと FileModifiedAt バックフィルが、実際の呼び出し経路（`App.xaml.cs` がアンロック後に呼ぶ `PostUnlockMaintenanceService.RunAsync`）を通しても確実に発火することを検証する回帰テスト。 詳細は[備考](#postunlockmaintenanceservicetests)を参照。 |
 | ProfileServiceTests.cs | `ProfileServiceTests` | TC-PS-01〜03 | 2026-09-17是正の回帰テスト。`ParseIso(char[]?)` のゼロアロケーション化と、`ScanDisplayName` の stackalloc バッファへの明示的なゼロ化を検証する。 詳細は[備考](#profileservicetests)を参照。 |
-| ProfileViewModelTests.cs | `ProfileViewModelTests` | TC-CFD-01〜11、TC-PLC-01〜03 | `ProfileViewModel` が、新規追加したカスタムフィールドを実際に編集した時点で初めて下書きモードに入ること、並び替えは安全な場合のみ TwinA へ直接コミットすること、セッションロック後の呼び出しで未観測の例外を出さないこと、`StorageChangedMessage` の受信が `IsActive` / `UnregisterAll` のライフサイクル規律に従うことを検証する。 詳細は[備考](#profileviewmodeltests)を参照。 |
+| ProfileViewModelTests.cs | `ProfileViewModelTests` | TC-CFD-01〜11, TC-PLC-01〜03 | `ProfileViewModel` が、新規追加したカスタムフィールドを実際に編集した時点で初めて下書きモードに入ること、並び替えは安全な場合のみ TwinA へ直接コミットすること、セッションロック後の呼び出しで未観測の例外を出さないこと、`StorageChangedMessage` の受信が `IsActive` / `UnregisterAll` のライフサイクル規律に従うことを検証する。 詳細は[備考](#profileviewmodeltests)を参照。 |
 | ReadOnlyRestrictedModeTests.cs | `ReadOnlyRestrictedModeTests` | TC-ROM-01〜10 | 制限閲覧モード（Route A）における完全読取専用化とシード書き込み抑止を検証する。TC-ROM-09〜10は、制限閲覧モードでは手動バックアップ（`BackupDatabaseCommand`）がフォルダ選択ダイアログを開く前に警告通知つきで拒否されること、通常モードでは通常どおり進むこと（対照実験）を検証する |
 | RestoreAuditMarkerTests.cs | `RestoreAuditMarkerTests` | — | `RestoreExecuted` イベントの監査ログ記録を遅延させるマーカーファイル（`RestoreAuditMarker`）の回帰を検証する |
 | RestoreHelperTests.cs | `RestoreHelperTests` | — | Rev.22 で個別リストア（Mode 2）を廃止した後の `AuthService.Restore` ヘルパー群（保管庫候補走査・バックアップ本人確認ゲート・事前検証・全体上書きコピー・復元後の Windows Hello 無効化）を検証する。 詳細は[備考](#restorehelpertests)を参照。 |
@@ -133,6 +135,7 @@ ID 列の `—` は、そのクラスにケース ID を割り当てていない
 - **TC-EXP-19**: インポートしたNotesの値に含まれるCRLF/CRが暗号化前にLFへ正規化され、`SecretEditModel.Notes`のセッターがUI入力時に常に生成する正規化済みの形式と一致する。
 - **TC-EXP-20**: `ParseCsvRecordsAsync`が複数行にまたがるクォート付きCSVフィールドを、元ファイルの改行形式（CRLF/LF）に関わらず常にLFのみへ再結合することを固定化する（CSVインポートはTC-EXP-19がJSON向けに修正した不具合の影響を元々受けていなかったことの根拠）。
 - **TC-EXP-21**: 空行・カンマだけの行（`,,,,`）・空白だけの行が、空の機密情報として取り込まれず無視される（`IsBlankCsvRecord`）。
+- **TC-EXP-22**: 現在のカルチャの既定の暦が西暦でない場合（th-TH・ar-SA・fa-IR）や時刻の区切り文字が異なる場合（fi-FI）でも、CSVの日付列が常に西暦の `yyyy-MM-dd HH:mm:ss`／`yyyy-MM-dd` で出力される。別のカルチャのPCで正しく取り込めないファイルが出力されていた不具合の回帰テスト。
 
 ### KeyDerivationOffloadTests
 
@@ -183,6 +186,7 @@ ID 列の `—` は、そのクラスにケース ID を割り当てていない
 - **Rev.22 の対象**: 保管庫候補走査、`AuthenticateBackupNkdbAsync` バックアップ本人確認ゲート、`ValidateBackupFilesAsync`/`HasExistingLocalData`（Rev.22 で分離した事前検証・第1ガード発火条件）、全体上書きコピー、復元後の Windows Hello 無効化。
 - **Rev.23 の回帰**: WALモードのバックアップファイルを素の `Mode=ReadOnly` で開くとバックアップ元フォルダに `-wal`/`-shm` が残留する不具合。`immutable=1` URIパラメータで修正。
 - **Rev.24**: `archived_*` 退避フォルダの無条件3世代ローテーション（4件目以降が存在する状態からのリストアで最新3件のみ残ることを検証）。
+- **フォルダ名のカルチャ非依存**: `archived_yyyyMMdd_HHmmss` のタイムスタンプが ar-SA・th-TH・fa-IR でも西暦になる。既定の暦が西暦でない環境で、作成直後の退避フォルダが最古と判定され3世代ローテーションで削除されていた不具合の回帰テスト。
 
 ### SecretsViewModelTests
 

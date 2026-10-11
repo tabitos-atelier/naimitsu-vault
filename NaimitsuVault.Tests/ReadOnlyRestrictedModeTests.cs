@@ -18,13 +18,13 @@ namespace NaimitsuVault.Tests;
 /// TC-ROM-01..04: even when the add/edit/delete secret commands are invoked directly, bypassing
 ///             CanExecute, they must never access EF Core (vault DB) (proven via FaultInjectionDbContextFactory).
 /// TC-ROM-05..06: when AutoBackupService.IsReadOnlyRestricted=true, RunBackup() must never create any files.
+/// TC-ROM-07..08: structurally verifies the seed guards in App.xaml.cs's OnLaunched and after re-unlock.
+///             Proves that at both call sites, the IsReadOnlyRestricted guard fully prevents both
+///             DatabaseInitializer/ProfileService writes (EnsureVaultDbMigratedAsync,
+///             SeedEmptyProfileIfAbsentAsync) from ever being called; normal mode seeds the profile
+///             (control experiment).
 /// TC-ROM-09..10: a manual backup (BackupDatabaseCommand) is refused with a warning in restricted mode
 ///             and never reaches the folder picker; normal mode proceeds (control experiment).
-///
-/// Additionally: structurally verifies the seed guards in App.xaml.cs's OnLaunched and after re-unlock.
-///       Proves that at both call sites, the IsReadOnlyRestricted guard fully prevents both
-///       DatabaseInitializer/ProfileService writes (EnsureVaultDbMigratedAsync,
-///       SeedEmptyProfileIfAbsentAsync) from ever being called.
 /// </summary>
 public sealed class ReadOnlyRestrictedModeTests : IDisposable
 {

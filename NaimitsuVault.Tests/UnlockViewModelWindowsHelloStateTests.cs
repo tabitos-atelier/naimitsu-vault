@@ -14,8 +14,11 @@ using Windows.Security.Credentials.UI;
 namespace NaimitsuVault.Tests;
 
 /// <summary>
-/// UnlockViewModel form state transition synchronization tests (TC-WH-15..18).
+/// UnlockViewModel form state transition synchronization tests (TC-WH-15..18, TC-WH-24..25).
 /// Verifies ViewModel-layer state changes through UnlockWithWindowsHelloCommand.
+/// TC-WH-15..18: IsBusy reset, error message, and the Succeeded event on the basic paths.
+/// TC-WH-24..25: when the Hello scan excludes one vault (unrecoverable, or auto-recovered without
+/// a Hello registration), a non-blocking notice is shown and the remaining vault still enters.
 /// </summary>
 public sealed class UnlockViewModelWindowsHelloStateTests
 {

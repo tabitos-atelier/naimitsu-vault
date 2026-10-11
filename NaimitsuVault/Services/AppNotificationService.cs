@@ -45,8 +45,7 @@ public class AppNotificationService : IAppNotificationService
         _queue?.TryEnqueue(() =>
         {
             if (_infoBar == null) return;
-            _infoBar.Title   = LocalizationManager.GetById(titleKey);
-            _infoBar.Message = LocalizationManager.GetById(messageKey);
+            SetText(_infoBar, LocalizationManager.GetById(titleKey), LocalizationManager.GetById(messageKey));
             ApplySeverityAndOpen(_infoBar, _queue, severity, duration, generation);
         });
     }
@@ -60,10 +59,17 @@ public class AppNotificationService : IAppNotificationService
         _queue?.TryEnqueue(() =>
         {
             if (_infoBar == null) return;
-            _infoBar.Title   = LocalizationManager.GetById(titleKey);
-            _infoBar.Message = message;
+            SetText(_infoBar, LocalizationManager.GetById(titleKey), message);
             ApplySeverityAndOpen(_infoBar, _queue, severity, duration, generation);
         });
+    }
+
+    // When the message just repeats the title (e.g. Show(LK.Common_Saved, LK.Common_Saved)), show
+    // the title alone instead of printing the same text twice side by side.
+    private static void SetText(InfoBar bar, string title, string message)
+    {
+        bar.Title   = title;
+        bar.Message = string.Equals(title, message, StringComparison.Ordinal) ? string.Empty : message;
     }
 
     private void ApplySeverityAndOpen(InfoBar bar, DispatcherQueue? queue,

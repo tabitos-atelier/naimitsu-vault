@@ -12,7 +12,7 @@ namespace NaimitsuVault.Services;
 public record AvatarChangedMessage(byte[]? AvatarBytes);
 
 /// <summary>
-/// Encrypts and saves/loads the avatar image to the VaultMetadata table (ConfigKey="AvatarImage_TwinA").
+/// Encrypts and saves/loads the avatar image to the VaultMetadata table (ConfigKey = VaultMetadataKey.AvatarImage_TwinA).
 /// The image bytes are cached in AppSession to prevent references from outliving session disposal.
 /// </summary>
 public class AvatarService(

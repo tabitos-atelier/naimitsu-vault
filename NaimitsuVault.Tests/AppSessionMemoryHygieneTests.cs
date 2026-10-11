@@ -7,7 +7,7 @@ using NaimitsuVault.Services;
 namespace NaimitsuVault.Tests;
 
 /// <summary>
-/// AppSession memory hygiene tests (TC-AS-01 .. TC-AS-17).
+/// AppSession memory hygiene tests (TC-AS-01 .. TC-AS-19).
 /// Verifies DEK's GC pinning, ZeroMemory, and zeroing in the AvatarBytes setter.
 /// </summary>
 public sealed class AppSessionMemoryHygieneTests
@@ -230,13 +230,13 @@ public sealed class AppSessionMemoryHygieneTests
         var session = new AppSession();
         session.SetKey(MakeKey());
         session.LastSelectedSecretId       = 42;
-        session.LastActivePageTag          = "SecretListPage";
+        session.LastActivePageTag          = "secrets";
         session.LastSelectedTimeMachineId  = 99;
 
         session.Lock();
 
         Assert.Equal(42,               session.LastSelectedSecretId);
-        Assert.Equal("SecretListPage", session.LastActivePageTag);
+        Assert.Equal("secrets", session.LastActivePageTag);
         Assert.Equal(99,               session.LastSelectedTimeMachineId);
     }
 

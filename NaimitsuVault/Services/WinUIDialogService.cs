@@ -510,6 +510,16 @@ public class WinUIDialogService : IDialogService
         bool verified = false;
         verifyButton.Click += (_, _) => { verified = true; dialog.Hide(); };
         cancelButton.Click += (_, _) => dialog.Hide();
+        // Enter in the password box confirms like the Verify button (same as UnlockWindow). Handled on
+        // pwBox.KeyDown rather than the panel root so that Enter on a focused Cancel/Hello button keeps
+        // activating that button, and gated on the same condition that enables Verify.
+        pwBox.KeyDown += (_, e) =>
+        {
+            if (e.Key != VirtualKey.Enter || !verifyButton.IsEnabled) return;
+            e.Handled = true;
+            verified = true;
+            dialog.Hide();
+        };
 
         helloBtn.Click += async (_, _) =>
         {

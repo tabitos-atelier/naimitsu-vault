@@ -10,8 +10,8 @@ using NaimitsuVault.Services.Interfaces;
 namespace NaimitsuVault.Tests;
 
 /// <summary>
-/// SecretDraftsRepository scenarios (TC-SDR-01..05).
-/// Moved from SecretHistoryRepositoryTests.cs (formerly TC-SHR-12..16) and rewritten against the
+/// SecretDraftsRepository scenarios (TC-SDR-01..07).
+/// TC-SDR-01..05 were moved from SecretHistoryRepositoryTests.cs (formerly TC-SHR-12..16) and rewritten against the
 /// now-independent SecretDrafts table, split out of SecretHistory on 2026-08-21. A draft row's
 /// existence now means "a draft exists"; its absence means "no draft" - there is no longer a
 /// nullable BLOB column to check.

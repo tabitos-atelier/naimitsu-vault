@@ -3,9 +3,9 @@
 ;   dotnet publish NaimitsuVault\NaimitsuVault.csproj -c Release -p:Platform=x64 -p:PublishProfile=FolderProfile
 
 #define MyAppName "NaimitsuVault"
-#define MyAppVersion "1.0.0"
+#define MyAppVersion "1.0.1"
 #define MyAppPublisher "Tabito's Works"
-#define MyAppURL "https://github.com/tabitos-atelier/naimitsu"
+#define MyAppURL "https://github.com/tabitos-atelier/naimitsu-vault"
 #define MyAppBlogURL "https://tabitos-voyage.com/about"
 #define MyAppExeName "NaimitsuVault.exe"
 

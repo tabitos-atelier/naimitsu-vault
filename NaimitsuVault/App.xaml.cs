@@ -88,7 +88,7 @@ public partial class App : Application
         // event handler (Page Loaded, Click, etc.), turning a single bad record into a full crash.
         UnhandledException += (_, e) =>
         {
-            Logger.LogCritical("UnhandledException: {ExType}", e.Exception.GetType().Name);
+            Logger.LogCritical("UnhandledException: {ExChain}", ExceptionChainFormatter.Format(e.Exception));
             e.Handled = true;
         };
         TaskScheduler.UnobservedTaskException += (_, e) =>
@@ -265,7 +265,9 @@ public partial class App : Application
             {
                 // Detected unified DB corruption: don't back up or recreate it. Keep the corrupted
                 // file as-is and show UnlockWindow in a frozen state to guide the user to the recovery screen.
-                Logger.LogWarning("DB initialization failed. Setting the corruption flag and freezing the unlock screen. [{ExType}]", dbEx.GetType().Name);
+                // Log the inner exception chain with HRESULTs: the outer type alone (often TypeInitializationException)
+                // cannot tell a blocked assembly load (Smart App Control, antivirus) apart from real corruption.
+                Logger.LogWarning("DB initialization failed. Setting the corruption flag and freezing the unlock screen. [{ExChain}]", ExceptionChainFormatter.Format(dbEx));
                 Services.GetRequiredService<AppSession>().IsUnifiedDbCorrupted = true;
                 _wasCorruptedOnStartup = true;
             }
@@ -338,7 +340,7 @@ public partial class App : Application
         }
         catch (Exception ex)
         {
-            Logger.LogCritical("A fatal error occurred during startup. [{ExType}]", ex.GetType().Name);
+            Logger.LogCritical("A fatal error occurred during startup. [{ExChain}]", ExceptionChainFormatter.Format(ex));
             // Application.Exit() only posts a shutdown request to the message pump. When the crash
             // happens before any window was ever shown (e.g. during ShellWindow construction), the
             // pump may never settle it, leaving a zombie process behind. Force a hard process

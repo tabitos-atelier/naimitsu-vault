@@ -166,7 +166,7 @@ public class AutoBackupService(ILogger<AutoBackupService> logger)
             // GenerationFolderPattern below and survives RotateGenerations instead of being
             // misjudged as corrupt/invalid and deleted right after creation. Matches the same
             // collision-handling scheme as AuthService.Restore's ArchiveExistingDataFolder.
-            var folderName = $"Naimitsu_{DateTime.Now:yyyyMMdd_HHmmss}";
+            var folderName = $"Naimitsu_{DateTime.Now.ToString("yyyyMMdd_HHmmss", System.Globalization.CultureInfo.InvariantCulture)}";
             var finalPath = Path.Combine(destinationFolder, folderName);
             for (int suffix = 2; Directory.Exists(finalPath); suffix++)
                 finalPath = Path.Combine(destinationFolder, $"{folderName}-{suffix}");

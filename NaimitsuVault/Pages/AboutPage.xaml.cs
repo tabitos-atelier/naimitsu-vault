@@ -30,13 +30,17 @@ public sealed partial class AboutPage : Page
         if (sender is not HyperlinkButton { Tag: string url }) return;
         try
         {
-            await Launcher.LaunchUriAsync(new Uri(url));
+            bool success = await Launcher.LaunchUriAsync(new Uri(url));
+            if (!success) NotifyOpenFailed(url);
         }
-        catch (Exception ex)
+        catch (Exception)
         {
-            _notification.Show(LK.Common_Error,
-                string.Format(LocalizationManager.GetById(LK.Common_ErrorBrowserOpenFailed), ex.GetType().Name),
-                NotificationSeverity.Error);
+            NotifyOpenFailed(url);
         }
     }
+
+    private void NotifyOpenFailed(string url)
+        => _notification.Show(LK.Common_Error,
+            string.Format(LocalizationManager.GetById(LK.Common_ErrorBrowserOpenFailed), url),
+            NotificationSeverity.Error);
 }

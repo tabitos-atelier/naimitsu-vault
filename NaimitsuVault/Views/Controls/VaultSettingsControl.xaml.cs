@@ -93,6 +93,14 @@ public sealed partial class VaultSettingsControl : UserControl
     // Ctrl+H toggles all three fields together so a mismatch (e.g. a stray key) is visible at a glance.
     private void MasterPasswordBox_KeyDown(object sender, KeyRoutedEventArgs e)
     {
+        // Enter confirms like the Change button, under the same condition that enables it.
+        if (e.Key == VirtualKey.Enter)
+        {
+            if (!VaultOpsVm.ChangePasswordCommand.CanExecute(null)) return;
+            e.Handled = true;
+            VaultOpsVm.ChangePasswordCommand.Execute(null);
+            return;
+        }
         if (e.Key != VirtualKey.H || !IsCtrlDown()) return;
         var mode = OldPasswordBox.PasswordRevealMode == PasswordRevealMode.Visible
             ? PasswordRevealMode.Hidden
@@ -109,6 +117,14 @@ public sealed partial class VaultSettingsControl : UserControl
     // Ctrl+H toggles both EAC PIN fields together, mirroring MasterPasswordBox_KeyDown above.
     private void EacPinBox_KeyDown(object sender, KeyRoutedEventArgs e)
     {
+        // Enter confirms like the Create/Reissue button, under the same condition that enables it.
+        if (e.Key == VirtualKey.Enter)
+        {
+            if (!VaultOpsVm.CreateEmergencyAccessCodeCommand.CanExecute(null)) return;
+            e.Handled = true;
+            VaultOpsVm.CreateEmergencyAccessCodeCommand.Execute(null);
+            return;
+        }
         if (e.Key != VirtualKey.H || !IsCtrlDown()) return;
         var mode = EacPinBox.PasswordRevealMode == PasswordRevealMode.Visible
             ? PasswordRevealMode.Hidden

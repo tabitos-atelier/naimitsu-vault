@@ -7,9 +7,11 @@ the text under that heading into the GitHub release notes, and fails if the head
 
 ## v1.0.1
 
+> **Known issue: Smart App Control may block the app for a while after a new release.** The app is not code-signed, so on PCs with Smart App Control turned on, `NaimitsuVault.exe` can be blocked until Windows has evaluated the new file. In our test the app started about an hour after the first attempt. This affects both the installer version and the portable version. PCs with Smart App Control turned off are not affected. See the FAQ for what you can do.
+
 ### Fixed
 
-- **The app did not start, or reported "The app's core data is corrupted", on PCs with Smart App Control turned on.** The build process had invalidated the vendor signatures of the bundled libraries, so Windows blocked them. The libraries now ship with their original signatures intact. As a side effect the downloads are smaller (installer: 83.2 MB → 70.1 MB, ZIP: 117 MB → 100 MB).
+- **The bundled libraries were blocked on PCs with Smart App Control turned on, and the app reported "The app's core data is corrupted".** The build process had invalidated the vendor signatures of the bundled libraries. The libraries now ship with their original signatures intact. As a side effect the downloads are smaller (installer: 83.2 MB → 70.1 MB, ZIP: 117 MB → 100 MB).
 - **Dates in file names, stored values, and CSV files depended on the Windows regional settings.** On systems whose default calendar is not Gregorian (for example Arabic, Thai, or Persian), the backup folder created by a restore could be treated as the oldest one and removed, and CSV date columns and date-type custom fields could not be read on a PC with different regional settings. These dates are now written in a fixed format.
 - The notification bar showed the same text twice when the title and the message were identical.
 - The shortcut list was missing `Ctrl+D` (keyboard auto-type) and, on the Profile page, `Ctrl+E` and `Ctrl+S`.

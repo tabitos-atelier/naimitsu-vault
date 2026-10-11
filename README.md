@@ -88,7 +88,7 @@ Choose whichever form fits your use case. Both forms share the same encryption b
 
 > Naimitsu Vault is designed for native Windows operation in a fully local environment. As such, there are no plans to port or develop versions for other operating systems (macOS / Linux) or mobile platforms (iOS / Android).
 
-If Windows SmartScreen blocks the first launch, the app does not start, or you want to update the portable version, see the **[FAQ](docs/faq.md)**.
+The app is not code-signed, so Smart App Control may block it for a while after a new release. If Smart App Control or Windows SmartScreen blocks the first launch, the app does not start, or you want to update the portable version, see the **[FAQ](docs/faq.md)**.
 
 ---
 

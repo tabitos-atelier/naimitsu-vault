@@ -8,13 +8,21 @@
 
 As a new open-source release, Windows SmartScreen may show a warning until reputation is built. Click **"More info"** and select **"Run anyway"** to launch.
 
+## Q. "Smart App Control blocked an app that may be unsafe" appears and the app does not start.
+
+Naimitsu Vault is not code-signed, so Smart App Control cannot confirm its publisher and may block `NaimitsuVault.exe` until Windows has evaluated the new file. This happens with both the installer version and the portable (ZIP) version (the installer itself finishes, and the installed app is blocked), and it can happen again with each new release, because each release is a new file to Windows. Unlike the SmartScreen warning above, this dialog has no "Run anyway" option. PCs with Smart App Control turned off are not affected.
+
+**Wait a while and launch the app again.** In our test the app started about an hour after the first attempt, without changing any setting. How long it takes is decided by Windows and is not guaranteed.
+
+If the app still does not start, you can turn Smart App Control off under **Windows Security → App & browser control → Smart App Control settings**. On current Windows 11 you can turn it back on afterwards, but on older versions without recent updates it may not be possible to re-enable it once disabled. Smart App Control protects the whole PC, so decide for yourself whether to turn it off.
+
 ## Q. The app does not start, or "The app's core data is corrupted" appears on first launch.
 
 If this happens on the very first launch right after installing or extracting the ZIP, your data is not corrupted. A Windows security feature is preventing the app from loading some of its files or from writing to its data folder. **Do not restore with the wrench button.** Close the app and check the following.
 
 1. **Smart App Control is on**
    Naimitsu Vault is not code-signed, so for a newly published version, some of the app's files may be blocked from loading until Microsoft's cloud reputation service has evaluated them. Wait a while and launch the app again. In one case the app started working after installing Windows updates and restarting the PC. You can see which file was blocked under **Windows Security → Protection history**.
-   If the app still does not start, you can turn Smart App Control off under **Windows Security → App & browser control → Smart App Control settings**. On current Windows 11 you can turn it back on afterwards, but on older versions without recent updates it may not be possible to re-enable it once disabled.
+   If the app still does not start, you can turn Smart App Control off as described in the previous question.
 2. **Smart App Control is on, and the portable ZIP version does not start from a shortcut**
    If the app starts when you open `NaimitsuVault.exe` directly but not from a shortcut you created, the files extracted from the downloaded ZIP still carry the "downloaded from the internet" mark. Right-click `NaimitsuVault.exe` → **Properties** → on the **General** tab, check **Unblock** at the bottom and select **OK**. The shortcut will then work. If you have not extracted the ZIP yet, checking **Unblock** in the ZIP file's properties before extracting avoids the problem altogether. The installer version is not affected.
 3. **Controlled folder access is on, and you extracted the portable ZIP into a protected folder such as Documents or Pictures**

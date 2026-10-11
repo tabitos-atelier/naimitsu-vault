@@ -24,6 +24,18 @@ If this happens on the very first launch right after installing or extracting th
 
 Extract the new ZIP and **overwrite** your existing folder directly. The distribution ZIP does not contain a `data\` folder, so overwriting will never delete your encrypted databases.
 
+**Do not launch the app from the extracted folder before you copy it over.** Launching it even once creates an empty `data\` folder there, and the copy then replaces the registration of your existing data. If that happens, the app shows the first-time setup screen on the next launch.
+
+If you are already in this state, your vault data is still there. Close the app **without going through the setup**, and recover as follows.
+
+Work in **the folder you have been using all along (the one you copied over)**, not in the folder you extracted from the download.
+
+1. In the folder you have been using, copy the whole `data` folder to another location as a safety copy.
+2. In the folder you have been using, move `data\NaimitsuVault.nkdb` out of the `data` folder (do not delete it). Leave the other files in the `data` folder untouched.
+3. Launch the app from the folder you have been using. The registration is restored automatically and the usual unlock screen appears.
+
+Once you have confirmed that everything is back, you can delete the safety copy from step 1 and the file you moved in step 2. The folder you extracted from the download is no longer needed either.
+
 ## Q. Why does a full-width space show up as `\uXXXX` in exported JSON?
 
 This is expected, not a bug. .NET's JSON encoder always escapes certain whitespace characters (including the full-width space) this way regardless of settings, while other CJK characters (kanji, hiragana, katakana) are exported as literal, readable text. The exported JSON is fully valid and re-imports correctly either way.

@@ -32,9 +32,10 @@ If this happens on the very first launch right after installing or extracting th
 
 Extract the new ZIP and **overwrite** your existing folder directly. The distribution ZIP does not contain a `data\` folder, so overwriting will never delete your encrypted databases.
 
-**Do not launch the app from the extracted folder before you copy it over.** Launching it even once creates an empty `data\` folder there, and the copy then replaces the registration of your existing data. If that happens, the app shows the first-time setup screen on the next launch.
+**Do not launch the app from the extracted folder before you copy it over.** Launching it even once creates an empty `data\` folder there, and the copy then replaces the registration of your existing data.
 
-If you are already in this state, your vault data is still there. Close the app **without going through the setup**, and recover as follows.
+- **If you updated to v1.0.2 or later**: the registration is restored automatically on the next launch and the usual unlock screen appears. You do not need to do anything.
+- **If you updated to v1.0.1 or earlier**: the app shows the first-time setup screen on the next launch. Your vault data is still there. **Do not go through the setup (doing so deletes your existing vaults).** Close the app and recover as follows.
 
 Work in **the folder you have been using all along (the one you copied over)**, not in the folder you extracted from the download.
 
@@ -43,6 +44,12 @@ Work in **the folder you have been using all along (the one you copied over)**, 
 3. Launch the app from the folder you have been using. The registration is restored automatically and the usual unlock screen appears.
 
 Once you have confirmed that everything is back, you can delete the safety copy from step 1 and the file you moved in step 2. The folder you extracted from the download is no longer needed either.
+
+## Q. There is a folder named `orphaned_<date>_<time>` inside the `data` folder.
+
+It holds files that were not registered as a vault, which the app moved there instead of deleting them (v1.0.2 or later). It is created, for example, when the registration is replaced as described under "How do I update the portable (ZIP) version?" above. The app never deletes this folder by itself.
+
+Once you have confirmed that all your vaults are present and working, you can delete the whole folder. If a vault is missing, keep the folder.
 
 ## Q. Why does a full-width space show up as `\uXXXX` in exported JSON?
 

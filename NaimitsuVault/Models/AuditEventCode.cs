@@ -110,8 +110,10 @@ public enum AuditEventCode
         // (skipped, fallback value used instead - same soft-patch treatment as a missing key).
     LocaleImportPlaceholderBroken = 0x7804, // Critical op × Settings × 04: one entry per imported
         // custom-locale value that dropped a format placeholder (e.g. "{0}") required by the
-        // built-in fallback, which would otherwise throw FormatException at display time (skipped,
-        // fallback value used instead - same soft-patch treatment as a missing key).
+        // built-in fallback, or that contains a brace other than a plain "{N}" the fallback also
+        // uses (unclosed brace, out-of-range index, alignment or format specifier), which would
+        // otherwise throw FormatException or pad the text at display time (skipped, fallback value
+        // used instead - same soft-patch treatment as a missing key).
     VaultCreated                 = 0x7805,   // Critical op × Settings × 05: recorded once, immediately
         // after a new vault finishes creating, into that NEW vault's own audit log (not the vault the
         // user was in when they triggered AddVaultAsync) - CreateNewVaultCoreAsync switches the active

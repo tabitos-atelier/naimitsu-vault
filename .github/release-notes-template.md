@@ -7,7 +7,7 @@
 - **`NaimitsuVault-Setup-x64.exe`** (recommended): per-user installer. It does not require administrator rights and adds a Start Menu shortcut.
 - **`NaimitsuVault-x64.zip`**: portable version. Extract it anywhere and run `NaimitsuVault.exe`. All data stays in the `data` folder next to the app.
 
-If Windows blocks the app or it does not start on first launch, see the [FAQ]({{REPO_URL}}/blob/{{TAG}}/docs/faq.md).
+If Windows blocks the app or it does not start on first launch, see the [FAQ]({{REPO_URL}}/blob/main/docs/faq.md).
 
 ## System Requirements
 

@@ -97,6 +97,13 @@ public sealed class AppSession : ISecurityContext
     public int? VaultDbAutoRecoveredNumber { get; set; }
 
     /// <summary>
+    /// Name of the data/orphaned_* folder that unregistered vault files were moved to during this
+    /// unlock, or null if none were moved (for the dashboard InfoBar). A folder name only, never a
+    /// path or file content. Reset on lock.
+    /// </summary>
+    public string? OrphanedFilesEvacuatedTo { get; set; }
+
+    /// <summary>
     /// True if the most recent vault entry attempt failed because the vault DB is missing/corrupted and no
     /// usable shadow was found (no shadow, ambiguous shadows, or shadow restore itself failed) - as opposed to
     /// a wrong password. Used by UnlockViewModel to show a dedicated message instead of "wrong password".
@@ -228,5 +235,6 @@ public sealed class AppSession : ISecurityContext
         VaultDbAutoRecoveredNumber  = null;
         VaultDbUnrecoverable        = false;
         VaultDbUnrecoverableNumber  = null;
+        OrphanedFilesEvacuatedTo    = null;
     }
 }

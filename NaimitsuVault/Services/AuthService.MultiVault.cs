@@ -11,6 +11,7 @@ using System.Text.Json.Serialization;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using NaimitsuVault.Helpers;
 using NaimitsuVault.Models;
 using NaimitsuVault.Repositories;
 using NaimitsuVault.Services.Interfaces;
@@ -225,29 +226,37 @@ public partial class AuthService
             return false;
         }
 
-        // Orphan file GC must complete before SetActiveVault, while K_shared is still valid.
+        // Unregistered vault file scan: must complete before SetActiveVault, while K_shared is still valid.
         //   BuildRegisteredHashesAsync decrypts the unified DB's VaultRegistries with K_shared to build the hash set.
-        //   This call is completed by "awaiting on the caller's thread", and only the pure disk scan
-        //   (RunOrphanGcDiskScanSync), which does not depend on K_shared's clearing timing, is deferred to the background.
-        //   After SetActiveVault, focus exclusively on deriving vault_DEK; GC processing must never be mixed in.
+        //   After SetActiveVault, focus exclusively on deriving vault_DEK; the scan must never be mixed in.
+        //
+        // A vault DB file that no VaultRegistries row accounts for is moved to data/orphaned_*/, never
+        // deleted. "Unregistered" is also what every existing vault looks like after the unified DB
+        // has been replaced by a fresh one, so deleting here could destroy the user's only copy.
+        // The scan is awaited (it only lists data/ and normally moves nothing) so that the session
+        // flag below is set before the dashboard reads it.
         //
         // Fail-safe direction: if the registered-hash set cannot be built completely and reliably
-        // (any exception, or even a single VaultRegistries row that fails to decrypt), skip the GC
-        // scan entirely for this unlock rather than running it with an incomplete set. Substituting
-        // an empty set on failure previously meant the scan ran against zero known vaults - which
-        // would delete every vault DB file on disk, including the one being unlocked right now.
-        HashSet<string>? orphanHashes;
+        // (any exception, or even a single VaultRegistries row that fails to decrypt), skip the scan
+        // entirely for this unlock rather than running it with an incomplete set. An incomplete set
+        // would make registered vaults - including the one being unlocked right now - look unregistered.
+        HashSet<string>? registeredHashes;
         try
         {
-            orphanHashes = await BuildRegisteredHashesAsync();
+            registeredHashes = await BuildRegisteredHashesAsync();
         }
         catch (Exception ex)
         {
-            logger.LogWarning("Skipping orphan file GC: could not safely build the registered-hash set. [{ExType}]", ex.GetType().Name);
-            orphanHashes = null;
+            logger.LogWarning("Skipping the unregistered vault file scan: could not safely build the registered-hash set. [{ExType}]", ex.GetType().Name);
+            registeredHashes = null;
         }
-        if (orphanHashes != null)
-            _ = Task.Run(() => RunOrphanGcDiskScanSync(dataDir, orphanHashes));
+        if (registeredHashes != null)
+        {
+            var evacuatedTo = await Task.Run(
+                () => OrphanedFileEvacuator.EvacuateUnregisteredVaultFiles(dataDir, registeredHashes, logger));
+            if (evacuatedTo != null)
+                session.OrphanedFilesEvacuatedTo = evacuatedTo;
+        }
 
         // Unlock vault_DEK (receive vault_salt_pwd from VaultPayload, avoiding the DB reading itself)
         connectionProvider.SetActiveVault(vaultPath);
@@ -652,11 +661,12 @@ public partial class AuthService
         return blob;
     }
 
-    // ── Orphan file GC ──────────────────────────────────────────────────
+    // ── Unregistered vault file scan ────────────────────────────────────
 
     /// <summary>
     /// Builds the set of registered FileHashes while K_shared is still valid (the DB access part).
-    /// Called by EnterVaultCoreAsync before Task.Run, passing the set to the background task (avoiding races).
+    /// Called by EnterVaultCoreAsync, which passes the set to the disk scan
+    /// (OrphanedFileEvacuator.EvacuateUnregisteredVaultFiles).
     /// </summary>
     private async Task<HashSet<string>> BuildRegisteredHashesAsync()
     {
@@ -667,60 +677,16 @@ public partial class AuthService
         foreach (var reg in registries)
         {
             var payload = DecryptVaultPayload(reg.EncryptedPayload);
-            // A single undecryptable registry must abort the whole GC pass, not just be excluded
+            // A single undecryptable registry must abort the whole scan, not just be excluded
             // from the hash set - excluding it would make the disk scan treat that vault's real,
-            // still-registered DB file as an orphan and delete it.
+            // still-registered DB file as unregistered and move it away.
             if (payload == null)
                 throw new InvalidOperationException(
-                    $"Failed to decrypt VaultRegistries[DbNumber={reg.DbNumber}]'s EncryptedPayload during orphan file GC hash collection.");
+                    $"Failed to decrypt VaultRegistries[DbNumber={reg.DbNumber}]'s EncryptedPayload while collecting the registered vault file hashes.");
             hashes.Add(payload.FileHash);
         }
 
         return hashes;
-    }
-
-    /// <summary>
-    /// Pure disk scan only (no DB access). Operates on the result passed in from BuildRegisteredHashesAsync.
-    /// Call from within Task.Run.
-    /// </summary>
-    private void RunOrphanGcDiskScanSync(string dataDir, HashSet<string> registeredHashes)
-    {
-        try
-        {
-            foreach (var filePath in Directory.EnumerateFiles(dataDir))
-            {
-                try
-                {
-                    var fileName = Path.GetFileName(filePath);
-                    if (fileName.StartsWith("NaimitsuVault.nkdb", StringComparison.OrdinalIgnoreCase))
-                        continue;
-                    if (fileName.Length != 48) continue;
-                    if (!IsBase64Url(fileName)) continue;
-
-                    byte[] raw;
-                    try { raw = DecodeBase64UrlNoPad(fileName); }
-                    catch { continue; }
-
-                    if (raw.Length < 4) continue;
-                    if (raw[0] != 'n' || raw[1] != 'k' || raw[2] != 'd' || raw[3] != 'b') continue;
-
-                    var fileHash = Convert.ToBase64String(raw[4..]);
-                    if (registeredHashes.Contains(fileHash)) continue;
-
-                    SqliteConnection.ClearAllPools();
-                    File.Delete(filePath);
-                    logger.LogInformation("Deleted orphan residual file: {Name}", fileName);
-                }
-                catch (Exception ex)
-                {
-                    logger.LogWarning("Orphan file GC: error while processing a file (skipped). [{ExType}]", ex.GetType().Name);
-                }
-            }
-        }
-        catch (Exception ex)
-        {
-            logger.LogWarning("An error occurred during orphan file GC as a whole (ignored). [{ExType}]", ex.GetType().Name);
-        }
     }
 
     // ── Getting available slots ─────────────────────────────────────────────────
@@ -745,14 +711,6 @@ public partial class AuthService
             .Select(v => v.DbNumber)
             .OrderBy(n => n)
             .ToListAsync();
-    }
-
-    private static bool IsBase64Url(string s)
-    {
-        foreach (char c in s)
-            if (!char.IsAsciiLetterOrDigit(c) && c != '-' && c != '_')
-                return false;
-        return true;
     }
 
     private static byte[] DecodeBase64UrlNoPad(string s)

@@ -23,7 +23,7 @@ public sealed class LocaleImportEncodingTests
     // format ever shipped to real users).
     private static byte[] MakeLocaleJson(
         Dictionary<string, object>? messages = null,
-        int version = 1)
+        int version = LocalizationService.CurrentLocaleVersion)
     {
         var obj = new
         {
@@ -185,6 +185,79 @@ public sealed class LocaleImportEncodingTests
 
         Assert.True(result.Success);
         Assert.DoesNotContain("AppSettings.Dialog.VersionMismatchPatchNotice", result.PatchedKeys);
+    }
+
+    // A brace is accepted only as a plain "{N}" that the built-in text also uses. Each of these
+    // values keeps the required {0}, so only the brace scan can reject them: a trial Format with
+    // dummy string arguments accepts the alignment and format-specifier cases.
+    [Theory]
+    [InlineData("v{0} {0:Q}")]      // format specifier: throws for a numeric argument at display time
+    [InlineData("v{0} {0,9999999}")] // alignment: pads the output to that width
+    [InlineData("v{0} {1}")]        // index the caller passes no argument for
+    [InlineData("v{0} {10}")]
+    [InlineData("v{0} {")]          // unclosed
+    [InlineData("v{0} }")]          // stray closing brace
+    [InlineData("v{0} {{x}}")]      // escaped braces
+    [InlineData("v{0} { 0 }")]
+    public async Task ImportCustomAsync_PlaceholderMalformed_PatchesFromFallback(string value)
+    {
+        using var db = TestUnifiedDb.Create();
+        var svc = CreateService(db);
+
+        var messages = new Dictionary<string, object>
+        {
+            ["AppSettings"] = new Dictionary<string, object>
+            {
+                ["Dialog"] = new Dictionary<string, string> { ["VersionMismatchPatchNotice"] = value },
+            },
+        };
+
+        var result = await svc.ImportCustomAsync(MakeLocaleJson(messages));
+
+        Assert.True(result.Success);
+        Assert.Contains("AppSettings.Dialog.VersionMismatchPatchNotice", result.PlaceholderBrokenKeys ?? []);
+    }
+
+    [Fact]
+    public async Task ImportCustomAsync_PlaceholderMovedAndRepeated_DoesNotPatch()
+    {
+        using var db = TestUnifiedDb.Create();
+        var svc = CreateService(db);
+
+        var messages = new Dictionary<string, object>
+        {
+            ["AppSettings"] = new Dictionary<string, object>
+            {
+                ["Dialog"] = new Dictionary<string, string> { ["VersionMismatchPatchNotice"] = "{0} / v{0}" },
+            },
+        };
+
+        var result = await svc.ImportCustomAsync(MakeLocaleJson(messages));
+
+        Assert.True(result.Success);
+        Assert.DoesNotContain("AppSettings.Dialog.VersionMismatchPatchNotice", result.PatchedKeys);
+    }
+
+    // Common.SuccessSaveComplete has no placeholder in the built-in text, but one of its callers
+    // passes it through string.Format with an argument, so a brace there would throw at display time.
+    [Theory]
+    [InlineData("Saved {")]
+    [InlineData("Saved {3}")]
+    [InlineData("Saved {0}")]
+    public async Task ImportCustomAsync_BraceInKeyWithoutPlaceholder_PatchesFromFallback(string value)
+    {
+        using var db = TestUnifiedDb.Create();
+        var svc = CreateService(db);
+
+        var messages = new Dictionary<string, object>
+        {
+            ["Common"] = new Dictionary<string, string> { ["SuccessSaveComplete"] = value },
+        };
+
+        var result = await svc.ImportCustomAsync(MakeLocaleJson(messages));
+
+        Assert.True(result.Success);
+        Assert.Contains("Common.SuccessSaveComplete", result.PlaceholderBrokenKeys ?? []);
     }
 
     // ── Successful import ──────────────────────────────────────────────────────────

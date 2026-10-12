@@ -8,7 +8,7 @@ using NaimitsuVault.Helpers;
 namespace NaimitsuVault.Tests;
 
 /// <summary>
-/// "Clipboard auto-erase (30-second timer)" - all 4 cases for ClipboardAutoEraser.
+/// "Clipboard auto-erase (30-second timer)" - all 5 cases for ClipboardAutoEraser and ClipboardHelper.
 ///
 /// Temporarily borrows the real OS clipboard space. <see cref="IDisposable.Dispose"/> always
 /// calls <see cref="ClipboardHelper.Clear"/> to reset the clipboard to a clean slate.
@@ -24,6 +24,11 @@ public sealed class ClipboardAutoEraserTests : IDisposable
     [DllImport("user32.dll")] private static extern bool CloseClipboard();
     [DllImport("user32.dll", CharSet = CharSet.Unicode)]
     private static extern uint RegisterClipboardFormat(string lpszFormat);
+    [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+    private static extern IntPtr CreateWindowEx(uint dwExStyle, string lpClassName, string lpWindowName, uint dwStyle,
+        int x, int y, int nWidth, int nHeight, IntPtr hWndParent, IntPtr hMenu, IntPtr hInstance, IntPtr lpParam);
+    [DllImport("user32.dll")] private static extern bool DestroyWindow(IntPtr hWnd);
+    private static readonly IntPtr HWND_MESSAGE = new(-3);
 
     /// <summary>
     /// If OpenClipboard fails, skip the test as an environment limitation (fail-safe).
@@ -129,13 +134,55 @@ public sealed class ClipboardAutoEraserTests : IDisposable
             Assert.Skip("RegisterClipboardFormat failed (an environment limitation) - skipping this test");
 
         // Act - atomically confirm all 3 flags within a single OpenClipboard session.
-        // Retry inside GetSecurityFlagsPresent, since the Windows Clipboard History service can
-        // temporarily hold the clipboard upon receiving the change notification.
         var (monitor, history, cloud) = ClipboardHelper.GetSecurityFlagsPresent();
 
         // Assert - SetText has set all 3 security flags on the OS clipboard
         Assert.True(monitor, "The history-monitor exclusion flag is not set");
         Assert.True(history, "The Win+V history exclusion flag is not set");
         Assert.True(cloud,   "The cloud-sync exclusion flag is not set");
+    }
+
+    // ── TC-CAE-05 ─────────────────────────────────────────────────────────────────
+
+    // Reproduces another process (clipboard history, a clipboard manager) holding the clipboard for
+    // a moment. The holder must open it with a window of its own: two threads of one process that
+    // both pass a null window handle do not exclude each other. Without the retry in
+    // ClipboardHelper, SetText returns without writing anything.
+    [Fact]
+    public void SetText_WhileAnotherThreadBrieflyHoldsClipboard_SucceedsAfterRetry()
+    {
+        SkipIfClipboardUnavailable();
+
+        // Arrange - a holder thread keeps the clipboard open for 60ms (inside the 125ms retry budget)
+        const string text = "RetriedPassword";
+        bool held = false;
+        using var holding = new ManualResetEventSlim();
+        var holder = new Thread(() =>
+        {
+            var window = CreateWindowEx(0, "STATIC", string.Empty, 0, 0, 0, 0, 0, HWND_MESSAGE, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero);
+            for (int attempt = 0; window != IntPtr.Zero && attempt < 5 && !held; attempt++)
+            {
+                held = OpenClipboard(window);
+                if (!held) Thread.Sleep(50);
+            }
+            holding.Set();
+            if (held)
+            {
+                Thread.Sleep(60);
+                CloseClipboard();
+            }
+            if (window != IntPtr.Zero) DestroyWindow(window);
+        });
+        holder.Start();
+        holding.Wait(TestContext.Current.CancellationToken);
+
+        // Act
+        if (held) ClipboardHelper.SetText(text);
+        holder.Join();
+        if (!held) Assert.Skip("The holder thread could not open the clipboard - skipping this test");
+
+        // Assert
+        var hash = SHA256.HashData(MemoryMarshal.AsBytes(text.AsSpan()));
+        Assert.True(ClipboardHelper.IsClipboardTextHashMatch(hash));
     }
 }

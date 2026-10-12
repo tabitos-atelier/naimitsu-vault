@@ -1,7 +1,7 @@
 {
   "locale": "ja",
   "displayName": "電脳砂漠",
-  "localeVersion": 1,
+  "localeVersion": 2,
   "messages": {
     "Common": {
       "#01-01: 共通操作": {
@@ -107,6 +107,7 @@
         "InfoDeleteComplete": "忘却完了",
         "InfoUnifiedDbAutoRecovered": "知恵の泉を魔力で自動修復した。直前の記憶が失われているやもしれぬ。",
         "InfoVaultDbAutoRecovered": "宝物庫 {0} を自動修復した。直前の記憶が失われているやもしれぬ。",
+        "InfoOrphanedFilesEvacuated": "宝物庫の台帳に名のない品を data\\{0} へ移した。何ひとつ消してはおらぬ。",
         "InfoOversizeFilesSkipped": "{0} つの収蔵品は重すぎる（上限 {1}MB）ため、砂に沈んだ。",
         "InfoFilesQuarantined": "{0} つの収蔵品に呪いの気配（改ざんまたは損傷の疑い）を感知した。博物館の陳列からは除外した。",
         "InfoFilesAddFailed": "{0} つの収蔵品は封印できず、深追いを諦めた。",
@@ -446,7 +447,7 @@
         "ImportPlainText": "無防備な記録を宝物庫へ搬入した（{0} 件）",
         "LocaleImportFailed": "外界の古文書を搬入できなかった",
         "LocaleImportKeyMissing": "言霊「{0}」が見当たらず、既定の呪文で埋めた",
-        "LocaleImportPlaceholderBroken": "言霊「{0}」に刻まれた印が欠けていたため退け、元の呪文を保った",
+        "LocaleImportPlaceholderBroken": "言霊「{0}」に刻まれた印が欠けていたか歪んでいたため退け、元の呪文を保った",
         "LocaleImportSucceeded": "外界の古文書「{0}」を搬入した（{1} 個の言霊を既定の呪文で補った）",
         "LocaleImportValueTooLong": "言霊「{0}」が長すぎたため退け、元の呪文を保った",
         "MoveFileToTrash": "収蔵品「{0}」を忘却の淵へ投げ捨てた",

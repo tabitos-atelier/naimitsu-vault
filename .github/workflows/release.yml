@@ -192,8 +192,7 @@ jobs:
             Replace('{{CHANGES}}', $changes).
             Replace('{{CHECKSUMS}}', $checksums).
             Replace('{{FULL_CHANGELOG}}', $fullChangelog).
-            Replace('{{REPO_URL}}', $repoUrl).
-            Replace('{{TAG}}', $tag).Trim()
+            Replace('{{REPO_URL}}', $repoUrl).Trim()
           $notesFile = Join-Path $env:RUNNER_TEMP 'release-notes.md'
           Set-Content -Path $notesFile -Value $notes -Encoding utf8
           Get-Content $notesFile -Raw -Encoding utf8 >> $env:GITHUB_STEP_SUMMARY

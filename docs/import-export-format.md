@@ -148,7 +148,7 @@ GitHub,1,tabito,KJdWe%oLu7C$vlhjMBa#,https://tabitos-voyage.com,tabito@example.c
 
 ## Category codes
 
-Categories have no dedicated DB table — the locale JSON's (`locale-ja.json`/`locale-en.json`) `Categories.NN` keys (**two-digit sequential codes**) are the sole source of truth. The set of valid codes is not fixed: a custom locale pack can add codes and rename existing ones (see [the locale README](locale/README.md)). Below is the default (Japanese locale) set.
+Categories have no dedicated DB table — the locale JSON's (`locale-ja.json`/`locale-en.json`) `Categories.NN` keys (**two-digit sequential codes**) are the sole source of truth. The set of valid codes is not fixed: a custom locale pack can add codes and rename existing ones (see [the locale guide](locale-guide.md#categories-categories-domain)). Below is the default (Japanese locale) set.
 
 | Code | Meaning              |
 | ---- | -------------------- |

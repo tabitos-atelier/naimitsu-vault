@@ -4,6 +4,7 @@
 using System.IO;
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Logging;
+using NaimitsuVault.Helpers;
 using NaimitsuVault.Services.Interfaces;
 
 namespace NaimitsuVault.Services;
@@ -11,6 +12,11 @@ namespace NaimitsuVault.Services;
 /// <summary>
 /// Manages shadow files under data/.
 /// WriteAll(): on normal completion, duplicates the nkdb + active vault.
+///
+/// A shadow that WriteAll() supersedes is deleted only when it is a plain generation change: its
+/// content lives on in the file it was copied from. Any other shadow that nothing refers to is moved
+/// to an orphaned_* folder (OrphanedFileEvacuator), never deleted - "unreferenced" can also mean that
+/// the unified DB itself was replaced and no longer knows the vaults that are still on disk.
 /// </summary>
 internal sealed class ShadowFileService(
     IVaultConnectionProvider connectionProvider,
@@ -55,13 +61,17 @@ internal sealed class ShadowFileService(
         // exactly one), multiple vaults (1-3) can each have their own shadow, so an orphan can only be
         // told apart from a legitimate other vault's shadow by checking VaultRegistries: any
         // VAULT_SHADOW-tagged file that no vault's ShadowFileKey currently points to is unreferenced
-        // by construction and safe to delete regardless of which vault it used to belong to.
+        // by construction. Of those, only the shadow this vault pointed to until now is deleted (it is
+        // the previous generation of the shadow written below); the rest are moved aside.
+        var evacuator = new OrphanedFileEvacuator(dataDir, logger);
         var vaultPath = connectionProvider.ActiveVaultDbPath;
         string? newVaultShadowPath = null;
+        string? previousVaultShadowName = null;
         if (vaultPath != null && File.Exists(vaultPath))
         {
             try
             {
+                previousVaultShadowName = ReadCurrentShadowFileName(dataDir, currentVaultDbNumber);
                 newVaultShadowPath = WriteShadow(vaultPath, dataDir, VAULT_SHADOW);
                 if (newVaultShadowPath != null)
                     UpdateShadowFileKeyInNkdb(newVaultShadowPath, dataDir, currentVaultDbNumber);
@@ -73,11 +83,14 @@ internal sealed class ShadowFileService(
         }
 
         // nkdb shadow: random 48-character name + NKDB_SHADOW magic. Only one nkdb ever exists, so
-        // every OTHER file already carrying this magic is by definition a stale orphan - delete all
-        // of them, not just when exactly one candidate is found. A single abrupt process kill (crash,
-        // debugger stop, task kill) during a past WriteShadow() can leave more than one such orphan;
-        // the old "only delete when unambiguous" rule then gave up forever and let orphans pile up
-        // indefinitely instead of ever catching up on a later clean exit.
+        // every OTHER file already carrying this magic is superseded - handle all of them, not just
+        // when exactly one candidate is found. A single abrupt process kill (crash, debugger stop,
+        // task kill) during a past WriteShadow() can leave more than one such file; the old "only
+        // when unambiguous" rule then gave up forever and let them pile up indefinitely.
+        // A superseded shadow is deleted only if every registration it holds is still in the live
+        // nkdb. One that knows a vault the live nkdb does not (the live nkdb was replaced, e.g. by an
+        // empty one that then went through first-time setup) may be the last copy of that
+        // registration, so it is moved aside instead.
         // Taken after the vault shadow above, so it captures the live nkdb's just-updated
         // ShadowFileKey rather than a stale reference to the vault shadow this cycle is about to retire.
         try
@@ -90,8 +103,13 @@ internal sealed class ShadowFileService(
                 if (newShadowPath != null)
                 {
                     foreach (var old in oldShadowCandidates)
-                        if (old != newShadowPath)
+                    {
+                        if (old == newShadowPath) continue;
+                        if (IsRegistrationCarriedOver(old, nkdbPath))
                             DeleteFileWithSidecars(old);
+                        else
+                            evacuator.TryEvacuate(old);
+                    }
                 }
             }
         }
@@ -100,27 +118,33 @@ internal sealed class ShadowFileService(
             logger.LogWarning("ShadowFileService.WriteAll: nkdb shadow write failed (non-fatal). [{ExType}]", ex.GetType().Name);
         }
 
-        // Orphaned vault-shadow cleanup: deliberately runs last, after the nkdb shadow above has
-        // already captured the updated ShadowFileKey - so any vault shadow deleted here can no
+        // Unreferenced vault-shadow cleanup: deliberately runs last, after the nkdb shadow above has
+        // already captured the updated ShadowFileKey - so any vault shadow removed here can no
         // longer be referenced by either the live nkdb or its current shadow.
         if (newVaultShadowPath != null)
         {
             try
             {
                 // null means the referenced-name set could not be built reliably (see below) - skip
-                // the deletion scan entirely rather than treating every legitimate other vault's
-                // shadow as an orphan.
+                // the scan entirely rather than treating every legitimate other vault's shadow as
+                // unreferenced.
                 var referenced = GetAllReferencedVaultShadowFileNames(dataDir);
                 if (referenced != null)
                 {
                     foreach (var candidate in FindByMagic(dataDir, VAULT_SHADOW))
-                        if (!referenced.Contains(Path.GetFileName(candidate)))
+                    {
+                        var candidateName = Path.GetFileName(candidate);
+                        if (referenced.Contains(candidateName)) continue;
+                        if (candidateName == previousVaultShadowName)
                             DeleteFileWithSidecars(candidate);
+                        else
+                            evacuator.TryEvacuate(candidate);
+                    }
                 }
             }
             catch (Exception ex)
             {
-                logger.LogWarning("ShadowFileService.WriteAll: vault shadow orphan cleanup failed (non-fatal). [{ExType}]", ex.GetType().Name);
+                logger.LogWarning("ShadowFileService.WriteAll: unreferenced vault shadow cleanup failed (non-fatal). [{ExType}]", ex.GetType().Name);
             }
         }
     }
@@ -161,7 +185,7 @@ internal sealed class ShadowFileService(
 
     // All vault shadow file names (across every vault row, not just the currently active one)
     // that VaultRegistries.ShadowFileKey still points to. A VAULT_SHADOW-magic file whose name is
-    // NOT in this set is unreferenced by any vault and safe to delete (see WriteAll), regardless
+    // NOT in this set is unreferenced by any vault (see WriteAll for what happens to it), regardless
     // of which vault it used to belong to or whether that other vault is currently unlocked.
     // Returns null (rather than falling back to an empty set) when VaultRegistries could not be read
     // reliably. The empty-set fallback used to make WriteAll's orphan scan treat every legitimate
@@ -200,6 +224,43 @@ internal sealed class ShadowFileService(
             return null;
         }
         return names;
+    }
+
+    // The shadow file name the target vault row points to right now, i.e. before this WriteAll()
+    // replaces it. Selects the row the same way UpdateShadowFileKeyInNkdb does. null when there is
+    // none or it cannot be read - the caller then deletes nothing and moves every unreferenced
+    // vault shadow aside.
+    private static string? ReadCurrentShadowFileName(string dataDir, int? dbNumber)
+    {
+        var nkdbPath = Path.Combine(dataDir, NkdbFileName);
+        if (!File.Exists(nkdbPath)) return null;
+        try
+        {
+            var csb = new SqliteConnectionStringBuilder
+            {
+                DataSource  = nkdbPath,
+                Mode        = SqliteOpenMode.ReadOnly,
+                ForeignKeys = false,
+            };
+            using var conn = new SqliteConnection(csb.ToString());
+            conn.Open();
+            using var cmd = conn.CreateCommand();
+            cmd.CommandText = dbNumber.HasValue
+                ? "SELECT ShadowFileKey FROM VaultRegistries WHERE DbNumber = @db"
+                : "SELECT ShadowFileKey FROM VaultRegistries ORDER BY LastAccessedAt DESC LIMIT 1";
+            if (dbNumber.HasValue)
+            {
+                var dbParam = cmd.CreateParameter();
+                dbParam.ParameterName = "@db";
+                dbParam.Value         = dbNumber.Value;
+                cmd.Parameters.Add(dbParam);
+            }
+            return cmd.ExecuteScalar() is byte[] key ? KeyToFileName(key) : null;
+        }
+        catch
+        {
+            return null;
+        }
     }
 
     private static void DeleteFileWithSidecars(string path)
@@ -251,6 +312,155 @@ internal sealed class ShadowFileService(
         {
             logger.LogWarning("ShadowFileService: VaultRegistries.ShadowFileKey UPDATE failed. [{ExType}]", ex.GetType().Name);
         }
+    }
+
+    // ── Registration comparison ─────────────────────────────────────────────
+
+    private const string SlotEntryPrefix  = "slot|";
+    private const string VaultEntryPrefix = "vault|";
+
+    /// <summary>
+    /// Reads what a unified DB file (the live nkdb or one of its shadows) knows about vaults: the
+    /// K_shared slots (UnifiedMetadata 0x0001-0x0003) and each VaultRegistries row's DbNumber +
+    /// EncryptedPayload. LastAccessedAt and ShadowFileKey are left out because ordinary use changes them.
+    /// A missing table counts as "no entries" (a file that was created but never initialized);
+    /// null means the file could not be read.
+    /// </summary>
+    internal static HashSet<string>? ReadRegistrations(string dbPath)
+    {
+        try
+        {
+            var csb = new SqliteConnectionStringBuilder
+            {
+                DataSource  = dbPath,
+                Mode        = SqliteOpenMode.ReadOnly,
+                ForeignKeys = false,
+                // The caller may move or delete this file right afterwards.
+                Pooling     = false,
+            };
+            using var conn = new SqliteConnection(csb.ToString());
+            conn.Open();
+
+            var entries = new HashSet<string>(StringComparer.Ordinal);
+            if (TableExists(conn, "UnifiedMetadata"))
+            {
+                using var cmd = conn.CreateCommand();
+                cmd.CommandText = $"SELECT ConfigKey, ConfigValue FROM UnifiedMetadata WHERE ConfigKey BETWEEN {UnifiedMetadataKey.KSharedSlot_1} AND {UnifiedMetadataKey.KSharedSlot_3}";
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                    entries.Add($"{SlotEntryPrefix}{reader.GetInt64(0)}|{EncodeValue(reader.GetValue(1))}");
+            }
+            if (TableExists(conn, "VaultRegistries"))
+            {
+                using var cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT DbNumber, EncryptedPayload FROM VaultRegistries";
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                    entries.Add($"{VaultEntryPrefix}{reader.GetInt64(0)}|{EncodeValue(reader.GetValue(1))}");
+            }
+            return entries;
+        }
+        catch
+        {
+            return null;
+        }
+    }
+
+    private static bool TableExists(SqliteConnection conn, string tableName)
+    {
+        using var cmd = conn.CreateCommand();
+        cmd.CommandText = "SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = @name";
+        cmd.Parameters.AddWithValue("@name", tableName);
+        return cmd.ExecuteScalar() != null;
+    }
+
+    private static string EncodeValue(object value) => value switch
+    {
+        byte[] bytes => Convert.ToHexString(bytes),
+        DBNull       => string.Empty,
+        _            => "s:" + Convert.ToString(value, System.Globalization.CultureInfo.InvariantCulture),
+    };
+
+    // True only when both files could be read and the live nkdb still holds every registration the
+    // shadow does. Anything else (a difference, or a read failure on either side) is "not carried
+    // over", which makes the caller keep the shadow.
+    private static bool IsRegistrationCarriedOver(string shadowPath, string nkdbPath)
+    {
+        var shadowEntries = ReadRegistrations(shadowPath);
+        if (shadowEntries == null) return false;
+        if (shadowEntries.Count == 0) return true;
+        var liveEntries = ReadRegistrations(nkdbPath);
+        return liveEntries != null && shadowEntries.IsSubsetOf(liveEntries);
+    }
+
+    private static bool HasKSharedSlot(HashSet<string> entries)
+    {
+        foreach (var entry in entries)
+            if (entry.StartsWith(SlotEntryPrefix, StringComparison.Ordinal))
+                return true;
+        return false;
+    }
+
+    // ── Unregistered nkdb detection ─────────────────────────────────────────
+
+    internal enum UnregisteredNkdbRecovery
+    {
+        /// <summary>Nothing to do: the nkdb has a registration, or no shadow has one.</summary>
+        NotApplicable,
+        /// <summary>The nkdb was moved aside and replaced by the shadow.</summary>
+        Restored,
+        /// <summary>The shadow could not be copied over the nkdb; the nkdb was put back.</summary>
+        RestoreFailed,
+        /// <summary>Two or more shadows hold a registration, so the right one cannot be chosen.</summary>
+        Ambiguous,
+    }
+
+    /// <summary>
+    /// Handles an nkdb that is healthy as a file but holds no K_shared slot (the state that leads to
+    /// first-time setup) while a healthy nkdb shadow under data/ does hold one. That combination means
+    /// the nkdb was replaced by a fresh one - for example by copying a newly extracted app folder,
+    /// already launched once, over an existing installation. Setup would then register a new vault
+    /// and leave the existing ones unknown to the app, so the shadow is restored instead. The
+    /// replaced nkdb is moved to an orphaned_* folder, not deleted.
+    /// </summary>
+    internal static async Task<UnregisteredNkdbRecovery> TryRecoverUnregisteredNkdbAsync(
+        string dataDir, string nkdbPath, ILogger logger)
+    {
+        var liveEntries = ReadRegistrations(nkdbPath);
+        if (liveEntries == null || HasKSharedSlot(liveEntries))
+            return UnregisteredNkdbRecovery.NotApplicable;
+
+        var registeredShadows = new List<string>();
+        foreach (var candidate in FindByMagic(dataDir, NKDB_SHADOW))
+        {
+            if (!await IsShadowHealthyAsync(candidate, NKDB_SHADOW)) continue;
+            var entries = ReadRegistrations(candidate);
+            if (entries != null && HasKSharedSlot(entries))
+                registeredShadows.Add(candidate);
+        }
+
+        if (registeredShadows.Count == 0)
+            return UnregisteredNkdbRecovery.NotApplicable;
+        if (registeredShadows.Count >= 2)
+        {
+            logger.LogWarning("The nkdb holds no vault registration and {Count} shadows do. Cannot choose one.", registeredShadows.Count);
+            return UnregisteredNkdbRecovery.Ambiguous;
+        }
+
+        SqliteConnection.ClearAllPools();
+        var evacuator = new OrphanedFileEvacuator(dataDir, logger);
+        if (!evacuator.TryEvacuate(nkdbPath))
+            return UnregisteredNkdbRecovery.NotApplicable;
+
+        if (await TryRestoreFromShadowAsync(registeredShadows[0], nkdbPath, NKDB_ORIGIN))
+        {
+            logger.LogInformation("The nkdb held no vault registration while its shadow did. Restored the nkdb from the shadow.");
+            return UnregisteredNkdbRecovery.Restored;
+        }
+
+        evacuator.TryMoveBack(nkdbPath);
+        logger.LogWarning("The nkdb holds no vault registration and restoring it from the shadow failed.");
+        return UnregisteredNkdbRecovery.RestoreFailed;
     }
 
     // ── Static utilities ────────────────────────────────────────────────────

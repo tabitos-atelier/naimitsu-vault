@@ -148,7 +148,7 @@ GitHub,1,tabito,KJdWe%oLu7C$vlhjMBa#,https://tabitos-voyage.com,tabito@example.c
 
 ## カテゴリコード
 
-カテゴリはアプリ内に専用テーブルを持たず、ロケール JSON（`locale-ja.json`/`locale-en.json`）の `Categories.NN`（**2桁の連番キー**）が唯一の情報源です。有効なコードの集合は固定ではなく、カスタムロケールでコードの追加や既存コードの名前変更ができます（[ロケールの README](locale/README-ja.md) を参照）。以下は既定（日本語ロケール）のセットです。
+カテゴリはアプリ内に専用テーブルを持たず、ロケール JSON（`locale-ja.json`/`locale-en.json`）の `Categories.NN`（**2桁の連番キー**）が唯一の情報源です。有効なコードの集合は固定ではなく、カスタムロケールでコードの追加や既存コードの名前変更ができます（[ロケールガイド](locale-guide-ja.md#カテゴリcategories-ドメイン) を参照）。以下は既定（日本語ロケール）のセットです。
 
 | コード | 意味       |
 | --- | -------- |

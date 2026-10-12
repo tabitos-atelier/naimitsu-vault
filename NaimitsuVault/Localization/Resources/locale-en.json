@@ -1,7 +1,7 @@
 {
   "locale": "en",
   "displayName": "English",
-  "localeVersion": 1,
+  "localeVersion": 2,
   "messages": {
     "Common": {
       "#01-01: Common Actions": {
@@ -107,6 +107,7 @@
         "InfoDeleteComplete": "Deleted",
         "InfoUnifiedDbAutoRecovered": "The app's core data was automatically repaired. Some settings from the last session may not have been saved.",
         "InfoVaultDbAutoRecovered": "Vault {0} was automatically repaired. Some edits from the last session may not have been saved.",
+        "InfoOrphanedFilesEvacuated": "Files that are not registered as a vault were moved to the data\\{0} folder. Nothing was deleted.",
         "InfoOversizeFilesSkipped": "{0} file(s) exceeded the {1}MB limit and were skipped.",
         "InfoFilesQuarantined": "{0} file(s) were excluded from the gallery because they may have been tampered with or corrupted.",
         "InfoFilesAddFailed": "{0} file(s) failed to be added.",
@@ -446,7 +447,7 @@
         "ImportPlainText": "Unencrypted import completed ({0} items)",
         "LocaleImportFailed": "Custom locale import failed",
         "LocaleImportKeyMissing": "Custom locale is missing key \"{0}\" - patched with the default value",
-        "LocaleImportPlaceholderBroken": "Custom locale key \"{0}\" dropped a required placeholder - skipped",
+        "LocaleImportPlaceholderBroken": "Custom locale key \"{0}\" has a missing or invalid placeholder - skipped",
         "LocaleImportSucceeded": "Custom locale \"{0}\" imported ({1} keys patched)",
         "LocaleImportValueTooLong": "Custom locale key \"{0}\" value was too long - skipped",
         "MoveFileToTrash": "Moved file \"{0}\" to trash",

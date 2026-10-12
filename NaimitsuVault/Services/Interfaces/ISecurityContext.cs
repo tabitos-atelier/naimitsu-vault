@@ -26,6 +26,7 @@ public interface ISecurityContext
     int? VaultDbAutoRecoveredNumber { get; set; }
     bool VaultDbUnrecoverable { get; set; }
     int? VaultDbUnrecoverableNumber { get; set; }
+    string? OrphanedFilesEvacuatedTo { get; set; }
 
     // ── PII ──────────────────────────────────────────────────────────
     byte[]? AvatarBytes { get; set; }

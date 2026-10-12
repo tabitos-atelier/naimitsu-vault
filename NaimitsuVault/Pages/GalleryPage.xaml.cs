@@ -37,9 +37,10 @@ public sealed partial class GalleryPage : Page, ISearchFocusable, IPageActivatio
             LocalizationManager.Get("Common.DropTooltip", AppConstants.MaxFilesPerDrop, AppConstants.MaxFileSizeMb));
         Loaded += GalleryPage_Loaded;
         // PreviewKeyDown (tunneling) is received by the root first, so it fires reliably regardless
-        // of whether GalleryGrid or any of its item containers currently holds keyboard focus - see
-        // design/appendix/A-winui3-implementation-patterns.md section 40 for why a bubbling KeyDown
-        // (which depends on that focus) is not reliable here. Same pattern as SecretsPage/TimeMachinePage.
+        // of whether GalleryGrid or any of its item containers currently holds keyboard focus. A
+        // bubbling KeyDown on GalleryGrid depends on that focus and is not reliable here, because
+        // GridView never takes keyboard focus itself (only its realized item containers do). Same
+        // pattern as SecretsPage/TimeMachinePage.
         // CONFIRMED VIA LOG (2026-08-29): when a click leaves nothing focused anywhere in the page,
         // PreviewKeyDown/KeyDown never fire AT ALL for subsequent key presses - not even here. WinUI's
         // routed keyboard events require an existing focus target to route through; there is no way
@@ -61,8 +62,9 @@ public sealed partial class GalleryPage : Page, ISearchFocusable, IPageActivatio
     // App.xaml only overrides SystemFillColorCriticalBrush/SystemFillColorCautionBrush in the Light
     // theme dictionary (dark mode keeps WinUI's own softer built-in reds/golds, #FF99A4/#FCE100,
     // which already read fine against a dark background - see App.xaml Technique 4/5). Mirrors
-    // ProfilePage.GetAlertForeground / SecretsPage.GetExpiryAlertForeground (see design/03-05-01-00
-    // §24 for why the light-mode value can't be used unconditionally). No "normal, no alert" branch
+    // ProfilePage.GetAlertForeground / SecretsPage.GetExpiryAlertForeground. The light-mode value
+    // can't be used unconditionally: it was strengthened for a light background, and in dark mode it
+    // looks oversaturated next to elements that use the softer defaults. No "normal, no alert" branch
     // is needed here, unlike those two: this filter ToggleButton is only ever visible (bound to
     // ViewModel.HasCertExpiryAlert) while at least one certificate is alerting.
     private static readonly SolidColorBrush _certAlertForegroundLight   = new(Windows.UI.Color.FromArgb(0xFF, 0xE8, 0x11, 0x23));
@@ -216,9 +218,10 @@ public sealed partial class GalleryPage : Page, ISearchFocusable, IPageActivatio
     // All Gallery keyboard shortcuts live here (tunneling), not as a bubbling KeyDown on GalleryGrid:
     // GridView only ever gives keyboard focus to a realized item container, never to itself, and a
     // click on blank space (inside or outside the grid's own bounds) can leave nothing focused at
-    // all - see design/appendix/A-winui3-implementation-patterns.md section 40 for the failed
-    // attempts at chasing that focus. Acting on ViewModel.SelectedFile/GalleryGrid.SelectedIndex
-    // directly sidesteps the whole problem: these shortcuts work no matter what currently has focus.
+    // all. Chasing that focus (focusing the item container instead of the grid, deferring Focus() to
+    // the next dispatcher pass) did not make a bubbling handler reliable. Acting on
+    // ViewModel.SelectedFile/GalleryGrid.SelectedIndex directly sidesteps the whole problem: these
+    // shortcuts work no matter what currently has focus.
     private void Page_KeyDown(object sender, KeyRoutedEventArgs e)
     {
         bool ctrl = IsCtrlDown();

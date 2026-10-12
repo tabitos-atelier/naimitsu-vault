@@ -189,9 +189,8 @@ public partial class App : Application
     }
 
     // SetForegroundWindow's P/Invoke declaration is centralized in Win32InputSender (shared with
-    // DirectInjectionDialog and WindowService's viewer-window foregrounding - see
-    // design/03-06-06-01-direct-injection-design.md §3.1); this class only keeps ShowWindow, which
-    // isn't part of that centralized surface.
+    // DirectInjectionDialog and WindowService's viewer-window foregrounding); this class only keeps
+    // ShowWindow, which isn't part of that centralized surface.
     [DllImport("user32.dll")]
     private static extern bool ShowWindow(nint hWnd, int nCmdShow);
 
@@ -253,6 +252,23 @@ public partial class App : Application
                     Logger.LogWarning("nkdb is corrupted with no shadow, multiple shadows, or a corrupted shadow. Freezing the unified DB.");
                     appSessionOnStartup.IsUnifiedDbCorrupted = true;
                     _wasCorruptedOnStartup = true;
+                }
+            }
+            else
+            {
+                // A healthy nkdb with no vault registration next to a shadow that has one: the nkdb
+                // was replaced by a fresh file. Restore the shadow instead of showing first-time setup.
+                switch (await ShadowFileService.TryRecoverUnregisteredNkdbAsync(dataDir, dbPath, Logger))
+                {
+                    case ShadowFileService.UnregisteredNkdbRecovery.Restored:
+                        appSessionOnStartup.UnifiedDbAutoRecovered = true;
+                        break;
+                    case ShadowFileService.UnregisteredNkdbRecovery.RestoreFailed:
+                    case ShadowFileService.UnregisteredNkdbRecovery.Ambiguous:
+                        Logger.LogWarning("The nkdb has no vault registration and could not be restored from a shadow. Freezing the unified DB.");
+                        appSessionOnStartup.IsUnifiedDbCorrupted = true;
+                        _wasCorruptedOnStartup = true;
+                        break;
                 }
             }
 

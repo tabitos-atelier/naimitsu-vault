@@ -21,7 +21,7 @@ public class LocalizationService(
     IDbContextFactory<UnifiedDbContext> factory,
     ILogger<LocalizationService> logger) : ILocalizationService
 {
-    public const int CurrentLocaleVersion = 1;
+    public const int CurrentLocaleVersion = 2;
 
     public string CurrentLocale { get; private set; } = "ja";
     public bool HasCustomLocale { get; private set; }
@@ -308,9 +308,16 @@ public class LocalizationService(
         => span.Length >= 3 && span[0] == 0xEF && span[1] == 0xBB && span[2] == 0xBF
             ? span[3..] : span;
 
-    // Third-line-of-defense helper: checks whether a placeholder required by the fallback is missing
-    // from the imported value, or whether the imported value contains a format (out-of-range index,
-    // unclosed { , etc.) that would throw a FormatException at runtime.
+    // Third-line-of-defense helper. A brace may appear in an imported value only as a plain "{N}"
+    // whose index the built-in text also uses. Everything else is treated as broken:
+    //   - a fallback {N} missing from the import
+    //   - an index the caller passes no argument for ({5} where the fallback stops at {1})
+    //   - an unclosed or stray brace, and the "{{" / "}}" escapes
+    //   - an alignment or format component: "{0,9999999}" pads the output to that width and "{0:Q}"
+    //     throws for a numeric argument. A trial Format with dummy string arguments detects neither,
+    //     which is why the value is scanned instead.
+    // Keys whose fallback has no placeholder get the same rule (no brace at all), because some of
+    // them are still passed through string.Format by their callers.
     private static bool HasBrokenPlaceholders(string fallbackValue, string importedValue)
     {
         // (1) A fallback {N} is missing from the import → broken
@@ -322,15 +329,16 @@ public class LocalizationService(
             if (!importedValue.Contains($"{{{i}}}", StringComparison.Ordinal))
                 return true;
         }
-        // (2) Only when the fallback has placeholders: run a trial Format with the same number of dummy
-        //    arguments to detect an out-of-range index ({10}, etc.) or malformed syntax (unclosed { , etc.).
-        //    Keys with argCount == 0 go through Get(key)'s args.Length == 0 path and are never Formatted, so they're excluded.
-        if (argCount > 0)
+        // (2) Every brace must belong to a "{d}" item with a single digit below argCount
+        for (int i = 0; i < importedValue.Length; i++)
         {
-            var dummies = new object[argCount];
-            for (int i = 0; i < argCount; i++) dummies[i] = "_";
-            try { string.Format(System.Globalization.CultureInfo.InvariantCulture, importedValue, dummies); }
-            catch (FormatException) { return true; }
+            char c = importedValue[i];
+            if (c == '}') return true;
+            if (c != '{') continue;
+            if (i + 2 >= importedValue.Length || importedValue[i + 2] != '}') return true;
+            int index = importedValue[i + 1] - '0';
+            if (index < 0 || index >= argCount) return true;
+            i += 2;
         }
         return false;
     }

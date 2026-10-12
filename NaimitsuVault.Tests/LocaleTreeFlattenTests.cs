@@ -131,7 +131,7 @@ public sealed class LocaleTreeFlattenTests
     // has to find their way back to a readable language after applying a broken or hostile custom
     // locale - so an imported file must never be able to override them, not even by smuggling a
     // "System" domain into the upload. Regression guard for the 2026-09-23 AppSettings.* -> System.*
-    // move (design/03-07-03-00-cyber-desert-locale-terminology.md P9/§9.7).
+    // move.
     [Fact]
     public async Task ImportCustomAsync_AttemptToOverrideSystemLangKeys_IsSilentlyIgnored()
     {
@@ -141,7 +141,7 @@ public sealed class LocaleTreeFlattenTests
         {
             locale = "en",
             displayName = "Hostile Pack",
-            localeVersion = 1,
+            localeVersion = LocalizationService.CurrentLocaleVersion,
             messages = new Dictionary<string, object>
             {
                 ["System"] = new Dictionary<string, object>
@@ -181,7 +181,7 @@ public sealed class LocaleTreeFlattenTests
         {
             locale = "en",
             displayName = "Hostile Pack",
-            localeVersion = 1,
+            localeVersion = LocalizationService.CurrentLocaleVersion,
             messages = new Dictionary<string, object>
             {
                 ["System"] = new Dictionary<string, object>
@@ -227,7 +227,7 @@ public sealed class LocaleTreeFlattenTests
         {
             locale = "en",
             displayName = "Cyber Desert",
-            localeVersion = 1,
+            localeVersion = LocalizationService.CurrentLocaleVersion,
             messages = new Dictionary<string, object>(),
         });
         Assert.True((await service.ImportCustomAsync(pack)).Success);
@@ -250,7 +250,7 @@ public sealed class LocaleTreeFlattenTests
         {
             locale = "",
             displayName = "",
-            localeVersion = 1,
+            localeVersion = LocalizationService.CurrentLocaleVersion,
             messages = new Dictionary<string, object>(),
         });
         Assert.True((await service.ImportCustomAsync(pack)).Success);

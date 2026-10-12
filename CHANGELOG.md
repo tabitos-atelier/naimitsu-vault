@@ -5,6 +5,26 @@ Changes that users of Naimitsu Vault can notice, newest version first.
 Each version has a `## v<version>` heading that matches its release tag. The release workflow copies
 the text under that heading into the GitHub release notes, and fails if the heading is missing.
 
+## v1.0.2
+
+> **Known issue: Smart App Control may block the app for a while after a new release.** The app is not code-signed, so on PCs with Smart App Control turned on, `NaimitsuVault.exe` can be blocked until Windows has evaluated the new file. In our test the app started about an hour after the first attempt. This affects both the installer version and the portable version. PCs with Smart App Control turned off are not affected. See the FAQ for what you can do.
+
+### Fixed
+
+- **Existing vaults could be deleted after an update of the portable version.** If the newly extracted folder had been launched once before it was copied over the existing folder, the app's list of vaults was replaced by an empty one and the first-time setup screen appeared. Completing that setup made the app delete the existing vaults and their internal backup copies, without asking, when it was closed and unlocked again. The app now detects this state at startup and restores the list of vaults automatically, so the usual unlock screen appears.
+- **The app no longer deletes vault files it does not recognize.** Files in the `data` folder that the app cannot match to a registered vault are moved to a `data\orphaned_<date>_<time>` folder instead, and the dashboard shows a notice when that happens.
+- **A custom language file with malformed curly braces could break a message.** For example, after a restore from a backup had finished, the app could show an error and stay on the restore screen. On import, the app now replaces a text with the built-in one when it contains a curly brace that is not one of the placeholders (`{0}`, `{1}`, …) of the built-in text. This includes an unclosed `{`, an added placeholder, and forms such as `{0:N0}` or `{0,10}`. Language files that are already imported are not checked again; import the file again to apply the check.
+- **A copy or the automatic clearing of the clipboard could silently do nothing.** This could happen when another program, such as the Windows clipboard history, was using the clipboard at that moment. A value copied from the app could then stay in the clipboard after the 30 seconds. The app now retries for up to about 0.1 seconds.
+
+### Improved
+
+- The FAQ describes how to update the portable version safely and how to recover on v1.0.1 or earlier.
+- The FAQ describes what to do when Smart App Control blocks the app.
+
+### Changed
+
+- The language file version is now 2, because a message was added. A custom language file made for an earlier version can still be imported: the app shows a version notice and uses the built-in text for the new message.
+
 ## v1.0.1
 
 > **Known issue: Smart App Control may block the app for a while after a new release.** The app is not code-signed, so on PCs with Smart App Control turned on, `NaimitsuVault.exe` can be blocked until Windows has evaluated the new file. In our test the app started about an hour after the first attempt. This affects both the installer version and the portable version. PCs with Smart App Control turned off are not affected. See the FAQ for what you can do.

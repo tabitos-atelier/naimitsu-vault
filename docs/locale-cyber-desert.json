@@ -1,7 +1,7 @@
 {
   "locale": "en",
   "displayName": "Cyber Desert",
-  "localeVersion": 1,
+  "localeVersion": 2,
   "messages": {
     "Common": {
       "#01-01: Common Actions": {
@@ -107,6 +107,7 @@
         "InfoDeleteComplete": "Returned to oblivion",
         "InfoUnifiedDbAutoRecovered": "The Well of Wisdom was automatically restored by magic. Some recent memories may be lost.",
         "InfoVaultDbAutoRecovered": "Treasury {0} was automatically restored. Recent edits may be lost.",
+        "InfoOrphanedFilesEvacuated": "Items not listed in the treasury ledger were moved to data\\{0}. Nothing was destroyed.",
         "InfoOversizeFilesSkipped": "{0} exhibit(s) were too heavy (limit {1}MB) and sank into the sand.",
         "InfoFilesQuarantined": "A curse was sensed on {0} exhibit(s) (possible tampering or damage). They have been withheld from the Museum.",
         "InfoFilesAddFailed": "{0} exhibit(s) resisted sealing and were left behind.",
@@ -446,7 +447,7 @@
         "ImportPlainText": "Imported defenseless records into treasury ({0} items)",
         "LocaleImportFailed": "Failed to import the outlander's scripture",
         "LocaleImportKeyMissing": "Word-spirit \"{0}\" was not found - patched with the default incantation",
-        "LocaleImportPlaceholderBroken": "Word-spirit \"{0}\" was missing its carved rune - turned away, the original incantation kept",
+        "LocaleImportPlaceholderBroken": "Word-spirit \"{0}\" bore a missing or malformed rune - turned away, the original incantation kept",
         "LocaleImportSucceeded": "Imported the outlander's scripture \"{0}\" ({1} word-spirits patched with the default incantation)",
         "LocaleImportValueTooLong": "Word-spirit \"{0}\" was too long - turned away, the original incantation kept",
         "MoveFileToTrash": "Cast exhibit \"{0}\" into the abyss",

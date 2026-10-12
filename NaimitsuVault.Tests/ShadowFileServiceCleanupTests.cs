@@ -17,8 +17,9 @@ namespace NaimitsuVault.Tests;
 /// magic, WriteAll() gave up on cleanup permanently - every future successful call added yet
 /// another shadow without ever clearing the backlog (reproduced for real: 3 VLSH-magic files
 /// found under a single-vault dev data/ folder on 2026-08-20). These tests confirm the fix:
-/// WriteAll() now deletes every stale candidate it finds, regardless of how many accumulated
-/// (TC-SHI-05..06). TC-SHI-07 covers the opposite, fail-safe direction: when VaultRegistries can't
+/// WriteAll() now clears every stale candidate it finds out of data/'s top level, regardless of how
+/// many accumulated (TC-SHI-05..06). Since Rev.16 a stale candidate is deleted only when it is a plain
+/// generation change and is otherwise moved to an orphaned_* folder (OrphanedFileEvacuationTests). TC-SHI-07 covers the opposite, fail-safe direction: when VaultRegistries can't
 /// be read, WriteAll() skips the deletion scan entirely and leaves every existing shadow untouched.
 /// </summary>
 [Collection("SequentialSqlitePool")]
@@ -76,12 +77,13 @@ public sealed class ShadowFileServiceCleanupTests : IDisposable
     }
 
     // ── TC-SHI-06 ─────────────────────────────────────────────────────────────
-    // A vault shadow that VaultRegistries no longer references (whether it was the previously-
-    // current one, now superseded, or a plain leftover orphan) is deleted; only the freshly-written
-    // shadow survives, and VaultRegistries.ShadowFileKey correctly points to it afterward.
+    // A vault shadow that VaultRegistries no longer references leaves the top level of data/: the
+    // previously-current one (now superseded) is deleted, and a plain leftover is moved to an
+    // orphaned_* folder (see OrphanedFileEvacuationTests TC-OFE-06). Only the freshly-written shadow
+    // remains as a candidate, and VaultRegistries.ShadowFileKey correctly points to it afterward.
 
     [Fact]
-    public async Task WriteAll_UnreferencedVaultShadows_AreDeletedAndRegistryPointsToNewShadow()
+    public async Task WriteAll_UnreferencedVaultShadows_LeaveDataDirAndRegistryPointsToNewShadow()
     {
         var nkdbPath  = Path.Combine(_testDir, NkdbName);
         var vaultPath = Path.Combine(_testDir, "vault_origin_for_test.db");

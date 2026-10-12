@@ -1,7 +1,7 @@
 ﻿{
   "locale": "ja",
   "displayName": "日本語",
-  "localeVersion": 1,
+  "localeVersion": 2,
   "messages": {
     "Common": {
       "#01-01: 共通操作": {
@@ -107,6 +107,7 @@
         "InfoDeleteComplete": "削除完了",
         "InfoUnifiedDbAutoRecovered": "アプリの基本データを自動修復しました。前回の設定が保存されていない可能性があります。",
         "InfoVaultDbAutoRecovered": "保管庫 {0} を自動修復しました。前回の編集が保存されていない可能性があります。",
+        "InfoOrphanedFilesEvacuated": "保管庫として登録されていないファイルを data\\{0} フォルダへ移動しました。削除はしていません。",
         "InfoOversizeFilesSkipped": "{0} 件のファイルが上限（{1}MB）を超えるため除外されました。",
         "InfoFilesQuarantined": "{0} 件のファイルに改ざんまたは破損の疑いがあるため、ギャラリー表示から除外されています。",
         "InfoFilesAddFailed": "{0} 件のファイルの追加に失敗しました。",
@@ -446,7 +447,7 @@
         "ImportPlainText": "暗号化されていないファイルからインポートを実行（{0} 件）",
         "LocaleImportFailed": "カスタムロケールのインポートに失敗",
         "LocaleImportKeyMissing": "カスタムロケールにキー「{0}」が存在しないため既定値で補完",
-        "LocaleImportPlaceholderBroken": "カスタムロケールのキー「{0}」でプレースホルダーが欠落しているためスキップ",
+        "LocaleImportPlaceholderBroken": "カスタムロケールのキー「{0}」でプレースホルダーが欠落または不正なためスキップ",
         "LocaleImportSucceeded": "カスタムロケール「{0}」をインポート（{1} 件を補完）",
         "LocaleImportValueTooLong": "カスタムロケールのキー「{0}」の値が長すぎるためスキップ",
         "MoveFileToTrash": "ファイル「{0}」をゴミ箱へ移動",

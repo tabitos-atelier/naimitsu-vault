@@ -67,6 +67,15 @@
                         Severity="Warning"
                         Visibility="{x:Bind ViewModel.HasAutoRecoveryWarning, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
 
+                    <!-- Unregistered-file notice (shown when vault files unknown to the unified DB were moved to data/orphaned_* during unlock)-->
+                    <InfoBar
+                        x:Name="OrphanedFilesNoticeBar"
+                        IsClosable="False"
+                        IsOpen="{x:Bind ViewModel.HasOrphanedFilesNotice, Mode=OneWay}"
+                        Message="{x:Bind ViewModel.OrphanedFilesMessage, Mode=OneWay}"
+                        Severity="Warning"
+                        Visibility="{x:Bind ViewModel.HasOrphanedFilesNotice, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+
                     <!-- Quarantine notice (shown when a StoredFile's ContentType no longer matches its FileName extension)-->
                     <InfoBar
                         x:Name="QuarantineWarningBar"

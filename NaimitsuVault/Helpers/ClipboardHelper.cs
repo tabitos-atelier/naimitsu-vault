@@ -21,6 +21,24 @@ public static class ClipboardHelper
     internal const string FormatHistory = "CanIncludeInClipboardHistory";
     internal const string FormatCloud   = "CanUploadToCloudClipboard";
 
+    // Another process (the Windows clipboard history service, a clipboard manager, security
+    // software) can hold the clipboard for a few milliseconds, most often right after its content
+    // changed. A single failed OpenClipboard must not make a copy or the auto-clear silently do
+    // nothing, so every operation opens the clipboard through TryOpenClipboard.
+    // Worst case: (OpenAttempts - 1) * OpenRetryIntervalMs = 125ms of waiting on the calling thread.
+    private const int OpenAttempts        = 6;
+    private const int OpenRetryIntervalMs = 25;
+
+    private static bool TryOpenClipboard()
+    {
+        for (int attempt = 0; attempt < OpenAttempts; attempt++)
+        {
+            if (OpenClipboard(nint.Zero)) return true;
+            if (attempt < OpenAttempts - 1) Thread.Sleep(OpenRetryIntervalMs);
+        }
+        return false;
+    }
+
     public static void SetText(string text) => SetText(text.AsSpan());
 
     /// <summary>
@@ -30,7 +48,7 @@ public static class ClipboardHelper
     public static void SetText(ReadOnlySpan<char> text)
     {
         if (text.IsEmpty) return;
-        if (!OpenClipboard(nint.Zero)) return;
+        if (!TryOpenClipboard()) return;
         try
         {
             EmptyClipboard();
@@ -83,7 +101,7 @@ public static class ClipboardHelper
     // Unit test use only. Must not be used in production — the string persists as unmanaged plaintext outside GC control, so never use it to read sensitive data.
     internal static string? GetText()
     {
-        if (!OpenClipboard(nint.Zero)) return null;
+        if (!TryOpenClipboard()) return null;
         try
         {
             var hMem = GetClipboardData(CF_UNICODETEXT);
@@ -98,7 +116,7 @@ public static class ClipboardHelper
 
     public static void Clear()
     {
-        if (!OpenClipboard(nint.Zero)) return;
+        if (!TryOpenClipboard()) return;
         try   { EmptyClipboard(); }
         finally { CloseClipboard(); }
     }
@@ -109,7 +127,7 @@ public static class ClipboardHelper
     /// </summary>
     public static bool IsClipboardTextHashMatch(ReadOnlySpan<byte> expectedHash)
     {
-        if (!OpenClipboard(nint.Zero)) return false;
+        if (!TryOpenClipboard()) return false;
         try
         {
             var hMem = GetClipboardData(CF_UNICODETEXT);
@@ -149,8 +167,6 @@ public static class ClipboardHelper
     /// <summary>
     /// Atomically checks whether the three security format flags are present on the OS clipboard,
     /// within a single <see cref="OpenClipboard"/> session.
-    /// Retries up to 5 times at 50ms intervals to handle the race where the clipboard history
-    /// service temporarily takes ownership of the clipboard after receiving a change notification.
     /// </summary>
     internal static (bool Monitor, bool History, bool Cloud) GetSecurityFlagsPresent()
     {
@@ -158,23 +174,16 @@ public static class ClipboardHelper
         uint fHistory = RegisterClipboardFormat(FormatHistory);
         uint fCloud   = RegisterClipboardFormat(FormatCloud);
 
-        for (int attempt = 0; attempt < 5; attempt++)
+        if (!TryOpenClipboard()) return (false, false, false);
+        try
         {
-            if (OpenClipboard(nint.Zero))
-            {
-                try
-                {
-                    return (
-                        GetClipboardData(fMonitor) != nint.Zero,
-                        GetClipboardData(fHistory) != nint.Zero,
-                        GetClipboardData(fCloud)   != nint.Zero
-                    );
-                }
-                finally { CloseClipboard(); }
-            }
-            if (attempt < 4) Thread.Sleep(50);
+            return (
+                GetClipboardData(fMonitor) != nint.Zero,
+                GetClipboardData(fHistory) != nint.Zero,
+                GetClipboardData(fCloud)   != nint.Zero
+            );
         }
-        return (false, false, false);
+        finally { CloseClipboard(); }
     }
 
     private static void SetDword(string formatName, uint value)

@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Version>1.0.1</Version>
+    <Version>1.0.2</Version>
     <Authors>Tabito's Works</Authors>
     <Company>Tabito's Works</Company>
     <Copyright>Copyright (c) 2026 Tabito's Works</Copyright>

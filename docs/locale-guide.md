@@ -53,7 +53,7 @@ Settings → Language → "Export" exports the JSON for your current language (J
 {
   "locale": "en",
   "displayName": "Your Theme Name",
-  "localeVersion": 1,
+  "localeVersion": 2,
   "messages": {
     "Common": {
       "#01-01: Common Actions": {
@@ -137,7 +137,9 @@ The example is an excerpt; `15` is a newly added category, not part of the defau
 
 Any text containing `{0}`, `{1}`, etc. has a dynamic value inserted there. **Leave these exactly as they are** (you may move them to a different position within the sentence).
 
-If you delete a `{0}`-style placeholder or break its syntax (for example, an unclosed `{`), then to prevent broken screens **that one entry will not use your wording and falls back to the standard text of the base language** (the language set in `locale`: Japanese or English). All other entries are imported normally.
+Curly braces can only be used for these placeholders. Do not add a placeholder that the base-language text does not have, do not add anything inside the braces (such as `{0:N0}` or `{0,10}`), and do not use `{` or `}` as ordinary characters (`{{` and `}}` are not accepted either).
+
+If you delete a `{0}`-style placeholder or break one of the rules above (for example, an unclosed `{`), then to prevent broken screens **that one entry will not use your wording and falls back to the standard text of the base language** (the language set in `locale`: Japanese or English). All other entries are imported normally.
 
 ```json
 "SuccessExportedToPath": "Etched into the parchment at \"{0}\"."

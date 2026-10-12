@@ -168,6 +168,8 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
     public string AutoRecoveryMessage     => _session.UnifiedDbAutoRecovered
         ? LocalizationManager.Get("Common.InfoUnifiedDbAutoRecovered")
         : string.Format(LocalizationManager.Get("Common.InfoVaultDbAutoRecovered"), _session.VaultDbAutoRecoveredNumber);
+    public bool   HasOrphanedFilesNotice => _session.OrphanedFilesEvacuatedTo != null;
+    public string OrphanedFilesMessage   => string.Format(LocalizationManager.Get("Common.InfoOrphanedFilesEvacuated"), _session.OrphanedFilesEvacuatedTo);
     public bool   HasQuarantineWarning => _galleryVm.QuarantinedCount > 0;
     public string QuarantineMessage    => string.Format(LocalizationManager.Get("Common.InfoFilesQuarantined"), _galleryVm.QuarantinedCount);
     public int?   VaultNumber    => _session.DisplayedVaultNumber;

@@ -5,6 +5,18 @@ Changes that users of Naimitsu Vault can notice, newest version first.
 Each version has a `## v<version>` heading that matches its release tag. The release workflow copies
 the text under that heading into the GitHub release notes, and fails if the heading is missing.
 
+## v1.0.3
+
+> **Known issue: Smart App Control may block the app for a while after a new release.** The app is not code-signed, so on PCs with Smart App Control turned on, `NaimitsuVault.exe` can be blocked until Windows has evaluated the new file. In our test the app started about an hour after the first attempt. This affects both the installer version and the portable version. PCs with Smart App Control turned off are not affected. See the FAQ for what you can do.
+
+### Fixed
+
+- **A generated password was sometimes shown without the gap after every four characters.** This happened when the generated password contained only one kind of symbol and that symbol occurred two or more times, because the enlarged preview treats such a value as a license key or a passphrase. The password generator now generates another password in that case.
+
+### Improved
+
+- The feature list describes the gaps in the enlarged view, including the values that are shown without gaps.
+
 ## v1.0.2
 
 > **Known issue: Smart App Control may block the app for a while after a new release.** The app is not code-signed, so on PCs with Smart App Control turned on, `NaimitsuVault.exe` can be blocked until Windows has evaluated the new file. In our test the app started about an hour after the first attempt. This affects both the installer version and the portable version. PCs with Smart App Control turned off are not affected. See the FAQ for what you can do.

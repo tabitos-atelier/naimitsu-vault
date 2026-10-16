@@ -59,7 +59,7 @@ The enlarged password view inserts a gap after every four characters. A value th
 
 A value in which the symbol occurs only once, a value with two or more kinds of symbol, and a value in which the symbol is at the start, at the end, or doubled are treated as ordinary passwords and split into groups of four.
 
-A password that matches the shape above is shown without gaps. This is not a defect. A password made by the app's password generator can happen to have this shape.
+A password made by the app's password generator is always shown in groups of four (v1.0.3 and later: when the generator produces a value that would be shown without gaps, the app generates another one automatically). A password you typed yourself that matches the shape above is shown without gaps. This is not a defect.
 
 ---
 

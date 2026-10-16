@@ -67,7 +67,7 @@ ID 列の `—` は、そのクラスにケース ID を割り当てていない
 | PasswordEvaluationServiceTests.cs | `PasswordEvaluationServiceTests` | TC-PE-01〜12 | `PasswordEvaluationService` によるパスワード強度評価ロジックを検証する |
 | PasswordGeneratorEntropyTests.cs | `PasswordGeneratorEntropyTests` | TC-PG-01〜20 | `PasswordGenerator` のエントロピー・境界値・文字種保証を検証する |
 | PasswordGeneratorStrengthTests.cs | `PasswordGeneratorStrengthTests` | TC-PGS-01, TC-PGS-03 | パスワード生成ボタン押下後の `EditingSecret` 強度プロパティ更新と呼び出し回数を検証する |
-| PasswordGeneratorTests.cs | `PasswordGeneratorTests` | TC-PWG-01〜06 | `PasswordGenerator` のパスワード生成ロジックを全6ケースで検証する |
+| PasswordGeneratorTests.cs | `PasswordGeneratorTests` | TC-PWG-01〜08 | `PasswordGenerator` のパスワード生成ロジックを全8ケースで検証する。TC-PWG-07 は、生成したパスワードが必ず拡大表示で4文字ごとに区切られる値であること（含まれる記号が1種類だけで2回以上現れる値は生成し直す）を、TC-PWG-08 は、その再生成に上限があることを検証する |
 | PasswordPreviewGroupingTests.cs | `PasswordPreviewGroupingTests` | TC-PPG-01〜04 | パスワード拡大表示で4文字ごとの区切りを入れるかを決める `PasswordPreviewGrouping.ShouldGroup` の検証。通常のパスワードは区切る。空白（全角スペースを含む）を含む値は区切らない。英数字を1種類の記号で区切り、その記号が2回以上現れる値（ライセンスキー・シークレットキーの形式、記号でつないだパスフレーズ）は区切らない。その形に当たらない記号（1回だけ、記号が2種類以上、先頭・連続・末尾の記号）では区切りを維持する |
 | PostUnlockMaintenanceServiceTests.cs | `PostUnlockMaintenanceServiceTests` | TC-PUM-01〜07 | 30日経過したソフト削除済みの機密情報・添付ファイルのパージと FileModifiedAt バックフィルが、実際の呼び出し経路（`App.xaml.cs` がアンロック後に呼ぶ `PostUnlockMaintenanceService.RunAsync`）を通しても確実に発火することを検証する回帰テスト。 詳細は[備考](#postunlockmaintenanceservicetests)を参照。 |
 | ProfileServiceTests.cs | `ProfileServiceTests` | TC-PS-01〜03 | 2026-09-17是正の回帰テスト。`ParseIso(char[]?)` のゼロアロケーション化と、`ScanDisplayName` の stackalloc バッファへの明示的なゼロ化を検証する。 詳細は[備考](#profileservicetests)を参照。 |

@@ -3695,10 +3695,23 @@ public static class PasswordGenerator
     private const string Lower  = "abcdefghijklmnopqrstuvwxyz";
     private const string Digits = "0123456789";
 
+    // Upper bound for regeneration. A draw is rejected with a probability of about 3% under the
+    // default settings and stays well below 1 even with a single custom symbol, so the bound is
+    // not reached in practice. It only guarantees termination for a symbol set that can never
+    // produce an accepted value (for example one that consists of whitespace).
+    private const int MaxAttempts = 100;
+
     /// <summary>
     /// Writes in-place into a POH-pinned Span&lt;char&gt; provided by the caller.
     /// Allocation-free since no raw char[] is returned (no return value).
     /// </summary>
+    /// <remarks>
+    /// A value that the enlarged password preview would take for a key format or a symbol-joined
+    /// passphrase (its only symbol is one kind of character, used two or more times between
+    /// letters/digits) is discarded and generated again, because the preview shows such a value
+    /// without the gap after every four characters. Each draw is independent, so the result stays
+    /// uniformly distributed over the accepted values.
+    /// </remarks>
     public static void Generate(Span<char> output, bool useUpper = true, bool useLower = true, bool useDigits = true, bool useSymbols = true, string? customSymbols = null)
     {
         if (output.IsEmpty) return;
@@ -3711,6 +3724,16 @@ public static class PasswordGenerator
         if (pool.Length == 0)
             throw new ArgumentException("At least one character class must be enabled.");
 
+        for (int attempt = 0; attempt < MaxAttempts; attempt++)
+        {
+            // Every position of output is overwritten, so a rejected value leaves nothing behind.
+            GenerateOnce(output, pool, symbols, useUpper, useLower, useDigits, useSymbols);
+            if (PasswordPreviewGrouping.ShouldGroup(output)) return;
+        }
+    }
+
+    private static void GenerateOnce(Span<char> output, string pool, string symbols, bool useUpper, bool useLower, bool useDigits, bool useSymbols)
+    {
         // Write at least one character from each enabled character class directly to the start of output
         int pos = 0;
         if (useUpper   && pos < output.Length) output[pos++] = PickOne(Upper);

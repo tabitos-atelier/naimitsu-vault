@@ -1,12 +1,13 @@
 // Copyright (c) 2026 Tabito's Works
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
+using NaimitsuVault.Helpers;
 using NaimitsuVault.ViewModels;
 
 namespace NaimitsuVault.Tests;
 
 /// <summary>
-/// "Password generation" - all 6 cases for PasswordGenerator.
+/// "Password generation" - all 8 cases for PasswordGenerator.
 /// </summary>
 public sealed class PasswordGeneratorTests
 {
@@ -111,5 +112,47 @@ public sealed class PasswordGeneratorTests
             var str = new string(buf);
             Assert.True(seen.Add(str), $"Duplicate password generated at iteration {i}: '{str}'");
         }
+    }
+
+    // ── TC-PWG-07 ─────────────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// A generated password is always one that the enlarged preview divides into groups of four.
+    /// Without regeneration, a value whose only symbol is one kind of character used two or more
+    /// times between letters/digits is shown undivided. A single custom symbol makes that shape
+    /// frequent, so the missing regeneration would fail this test almost certainly.
+    /// </summary>
+    [Theory]
+    [InlineData(null)]   // default symbol set
+    [InlineData("-")]    // only one kind of symbol can occur
+    [InlineData("-_")]
+    public void Generate_ManyIterations_ResultIsAlwaysGroupedInPreview(string? customSymbols)
+    {
+        var buf = new char[20];
+        for (int i = 0; i < 2000; i++)
+        {
+            PasswordGenerator.Generate(buf, true, true, true, true, customSymbols);
+            Assert.True(PasswordPreviewGrouping.ShouldGroup(buf),
+                $"Generated a password that the preview does not group at iteration {i}: '{new string(buf)}'");
+            Assert.Contains(buf, c => !char.IsLetterOrDigit(c));
+        }
+    }
+
+    // ── TC-PWG-08 ─────────────────────────────────────────────────────────────────
+
+    /// <summary>
+    /// Regeneration is bounded: a symbol set that can never produce a grouped value (whitespace
+    /// only, which the UI filters out before it reaches the generator) still returns a full-length
+    /// value instead of looping forever.
+    /// </summary>
+    [Fact]
+    public void Generate_SymbolSetThatIsNeverGrouped_ReturnsWithoutHanging()
+    {
+        var buf = new char[12];
+
+        PasswordGenerator.Generate(buf, true, true, true, true, " ");
+
+        Assert.DoesNotContain('\0', buf);
+        Assert.Contains(' ', buf);
     }
 }

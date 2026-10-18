@@ -1,7 +1,7 @@
 {
   "locale": "en",
   "displayName": "Cyber Desert",
-  "localeVersion": 2,
+  "localeVersion": 3,
   "messages": {
     "Common": {
       "#01-01: Common Actions": {
@@ -394,7 +394,12 @@
         "NotScannedYet": "Ritual Pending",
         "WeakPasswords": "Fragile Incantations",
         "ReusedPasswords": "Duplicate Incantations",
-        "NoIssuesFound": "No barrier rifts detected"
+        "NoIssuesFound": "No barrier rifts detected",
+        "BackupNotConfigured": "No law of automatic memory trace has been set. Lest a sandstorm take your treasury, set a law to keep a trace in another land.",
+        "BackupFolderMissing": "The land for memory traces cannot be found. Depart now, and no memory trace will form.",
+        "BackupSameDisk": "Your memory traces rest in the same land as your treasury. Should that land crumble, both treasury and trace are lost.",
+        "BackupCloudSync": "Your memory traces are bound to OneDrive above the clouds. Should the land crumble, they can be recovered from the clouds, yet a broken treasury may also be carried there. Consider keeping a trace in another land as well.",
+        "OpenBackupSettings": "Open the laws"
       }
     },
     "AuditLog": {
@@ -429,10 +434,13 @@
         "DeleteTimeMachineSlot": "Returned past memory to sand",
         "DeletedItemPlaceholder": "(lost to oblivion)",
         "ExecuteAutoBackup": "A memory trace formed on its own",
+        "FailAutoBackup": "A memory trace failed to form on its own",
+        "SkipAutoBackupFolderMissing": "No memory trace formed; the designated land was not found",
         "ExecuteEmergencyAccessRecovery": "Breached treasury via emergency beacon",
         "ExecuteLogRotation": "Swept away old footprints in the wind",
         "ExecuteManualBackup": "Created manual memory trace",
         "ExecuteManualRestore": "Overwrote world from past memories",
+        "FailManualBackup": "Failed to create manual memory trace",
         "ExecuteSilentSelfHealing": "Automatic magical restoration executed",
         "SelfHealNoOpDraft": "Discarded {0} unfinished scroll(s) identical to the record",
         "SelfHealUnifiedDb": "The Well of Wisdom was auto-restored from its shadow copy",
@@ -536,6 +544,7 @@
         "SuccessBackupSavedToPath": "Memory trace entrusted to {0}.",
         "WarningAutoBackupContext": "Auto-Trace Ritual",
         "WarningLastExitBackupFailedAlert": "Auto-trace failed on last departure. Check designated land in Laws.",
+        "WarningLastExitBackupSkippedAlert": "On last departure, no memory trace formed; the designated land was not found.",
         "WarningNoFolderAutoBackupDisabled": "Auto-trace deactivated because no domain was set.",
         "WarningBackupBlockedReadOnlyAlert": "Memory trace is forbidden while unsealed via the emergency beacon.",
         "Dialog": {
@@ -598,7 +607,8 @@
         "SuccessImportedCountReport": "Imported {0} scroll(s) into the treasury.",
         "SuccessImportDetailsReport": " (Renamed for duplicates: {0}, Moved to uncategorized: {1})",
         "SuccessImportFailedCountReport": " ({0} cargo item(s) could not be deciphered - see the trail of footprints for details)",
-        "ErrorImportExceptionReport": "Import failed: {0}"
+        "ErrorImportExceptionReport": "Import failed: {0}",
+        "ErrorBackupFailedAlert": "The memory trace could not be formed. Make sure the designated land can be inscribed."
       },
       "#15-06: Common (Confirmation Dialogs)": {
         "Dialog": {

@@ -8,7 +8,7 @@ namespace NaimitsuVault.Tests;
 
 /// <summary>
 /// Verifies every AuditEventCode has an actual call site (LogAsync / LogSettingAsync /
-/// LogSettingChanged / RestoreAuditMarker.Write) in production code. A newly added enum value
+/// LogSettingChanged / RestoreAuditMarker.Write / BackupAuditMarker.Write) in production code. A newly added enum value
 /// that nobody wires up fails this test immediately instead of surviving until a manual audit
 /// stumbles onto it. A value with no production feature to wire it up to yet should not be added
 /// to the enum in the first place - it should stay out until the feature exists.
@@ -34,8 +34,9 @@ public sealed class AuditWiringTests
     // Matches a call to a known audit-log sink (or a wrapper named LogSettingAsync*/LogSettingChanged*)
     // with AuditEventCode.<Name> as the first argument, or within the first couple of simple
     // (non-nested) leading arguments - e.g. RestoreAuditMarker.Write(dataDir, AuditEventCode.X, ...).
+    // BackupAuditMarker.Write is a sink too: it defers an exit-time automatic backup entry to the next unlock.
     private static readonly Regex CallSitePattern = new(
-        @"(?:\bLogAsync|\bLogSettingAsync\w*|\bLogSettingChanged\w*|RestoreAuditMarker\.Write)\s*\(\s*(?:[\w.]+\s*,\s*){0,2}AuditEventCode\.(\w+)\b",
+        @"(?:\bLogAsync|\bLogSettingAsync\w*|\bLogSettingChanged\w*|RestoreAuditMarker\.Write|BackupAuditMarker\.Write)\s*\(\s*(?:[\w.]+\s*,\s*){0,2}AuditEventCode\.(\w+)\b",
         RegexOptions.Compiled);
 
     // AuthFailed is the one exception: its Payload is always NULL, so AuditLogService exposes a
@@ -54,7 +55,7 @@ public sealed class AuditWiringTests
         Assert.True(
             missing.Count == 0,
             "The following AuditEventCode values have no LogAsync/LogSettingAsync/LogSettingChanged/"
-            + "RestoreAuditMarker.Write call site anywhere in production code:\n"
+            + "RestoreAuditMarker.Write/BackupAuditMarker.Write call site anywhere in production code:\n"
             + string.Join("\n", missing.Select(m => $"  {m}")));
     }
 

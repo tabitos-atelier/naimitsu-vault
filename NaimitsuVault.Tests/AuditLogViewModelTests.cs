@@ -374,5 +374,7 @@ public sealed class AuditLogViewModelTests : IDisposable
         public Task FlushPreAuthFailuresAsync(int count, CancellationToken ct = default) => throw new NotSupportedException();
         public Task FlushPendingRestoreAuditAsync(DekScope dek, int currentDbNumber, string dataDir, CancellationToken ct = default)
             => throw new NotSupportedException();
+        public Task FlushPendingBackupAuditAsync(DekScope dek, string dataDir, CancellationToken ct = default)
+            => throw new NotSupportedException();
     }
 }

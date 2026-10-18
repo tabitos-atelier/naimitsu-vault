@@ -5,6 +5,25 @@ Changes that users of Naimitsu Vault can notice, newest version first.
 Each version has a `## v<version>` heading that matches its release tag. The release workflow copies
 the text under that heading into the GitHub release notes, and fails if the heading is missing.
 
+## v1.0.4
+
+> **Important: update if you use backups.** In v1.0.0 to v1.0.3, a backup could delete other folders inside the backup folder. See the first item under "Fixed".
+
+> **Known issue: Smart App Control may block the app for a while after a new release.** The app is not code-signed, so on PCs with Smart App Control turned on, `NaimitsuVault.exe` can be blocked until Windows has evaluated the new file. In our test the app started about an hour after the first attempt. This affects both the installer version and the portable version. PCs with Smart App Control turned off are not affected. See the FAQ for what you can do.
+
+### Fixed
+
+- **A backup deleted the other folders inside the backup folder.** After a manual backup succeeded, or when the automatic backup ran at exit, the step that removes old backups also deleted every folder directly inside the backup folder whose name was not that of a backup (`Naimitsu_<date>_<time>`), together with its contents. Choosing a folder such as Desktop or Documents as the backup folder could therefore delete the folders in it. Files directly inside the backup folder were not affected. The app now deletes only the backup folders it created itself. See the FAQ if folders have disappeared.
+- **After you changed the backup folder or turned automatic backup on, the new folder stayed empty until you edited a vault.** The automatic backup at exit ran only when vault content had changed since the last backup. It now also runs when the backup folder holds no backup yet, for example after switching to a new folder or a new USB drive.
+- **After a manual backup failed, the next start said that the automatic backup at the last exit had failed.** That notice now appears only after an automatic backup.
+- **On the Secrets and Time Machine pages, the vertical scrollbar appeared away from the right edge of the window.** On the Secrets page it overlapped the buttons at the right end of the form, such as the auto-type button and the password generator button, which made them hard to click. The scrollbar now appears at the right edge of the window, as on the Profile page. In the same way, the scrollbar of the file list on the Gallery page now appears next to the divider of the right pane.
+
+### Improved
+
+- **A failed manual backup now explains what went wrong.** Before, it showed only "An error occurred". The message now says that the backup failed and asks you to check that you can write to the backup folder. The audit log also records the failure now.
+- **The audit log now records when the automatic backup at exit fails, or does not run because the backup folder cannot be found.** Before, only successful automatic backups were recorded. A run that is skipped because the folder is missing is recorded only when your vaults changed since the last backup. The next start also shows a notice in that case, as it already did for a failed backup. Your changes are not lost: they are backed up at the next exit when the backup folder is available.
+- **The dashboard now tells you when your vaults are not safely backed up.** It shows a warning when automatic backup is not set up, or when the backup folder is on the same physical disk as your vaults, because one disk failure would then lose both. A button opens the settings. When the backup folder cannot be found (for example, an external disk is unplugged), it shows a note that the automatic backup will not run at exit. When the backup folder is in OneDrive on the same disk, it shows a note instead of a warning: the backup can be recovered from OneDrive if the PC fails, but a damaged vault can also be synced, so a backup to another disk is still suggested. Network folders and folders on another disk show nothing.
+
 ## v1.0.3
 
 > **Known issue: Smart App Control may block the app for a while after a new release.** The app is not code-signed, so on PCs with Smart App Control turned on, `NaimitsuVault.exe` can be blocked until Windows has evaluated the new file. In our test the app started about an hour after the first attempt. This affects both the installer version and the portable version. PCs with Smart App Control turned off are not affected. See the FAQ for what you can do.

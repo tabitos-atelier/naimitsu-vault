@@ -56,11 +56,13 @@ public static class LK
     // ── VaultSettings (0x0E) ──
     public static int VaultSettings_VaultManagement                      => LocalizationManager.GetCode("VaultSettings.VaultManagement");
     public static int VaultSettings_ErrorImportExceptionReport           => LocalizationManager.GetCode("VaultSettings.ErrorImportExceptionReport");
+    public static int VaultSettings_ErrorBackupFailedAlert               => LocalizationManager.GetCode("VaultSettings.ErrorBackupFailedAlert");
     public static int VaultSettings_SuccessBackupSavedToPath             => LocalizationManager.GetCode("VaultSettings.SuccessBackupSavedToPath");
     public static int VaultSettings_SuccessImportDetailsReport           => LocalizationManager.GetCode("VaultSettings.SuccessImportDetailsReport");
     public static int VaultSettings_SuccessImportedCountReport           => LocalizationManager.GetCode("VaultSettings.SuccessImportedCountReport");
     public static int VaultSettings_WarningAutoBackupContext             => LocalizationManager.GetCode("VaultSettings.WarningAutoBackupContext");
     public static int VaultSettings_WarningLastExitBackupFailedAlert     => LocalizationManager.GetCode("VaultSettings.WarningLastExitBackupFailedAlert");
+    public static int VaultSettings_WarningLastExitBackupSkippedAlert    => LocalizationManager.GetCode("VaultSettings.WarningLastExitBackupSkippedAlert");
     public static int VaultSettings_Dialog_EmergencyAccessSetup          => LocalizationManager.GetCode("VaultSettings.Dialog.EmergencyAccessSetup");
     public static int VaultSettings_Dialog_EmergencyCodeRemainsValid     => LocalizationManager.GetCode("VaultSettings.Dialog.EmergencyCodeRemainsValid");
     public static int VaultSettings_Dialog_MasterPasswordChangedSuccessfully => LocalizationManager.GetCode("VaultSettings.Dialog.MasterPasswordChangedSuccessfully");

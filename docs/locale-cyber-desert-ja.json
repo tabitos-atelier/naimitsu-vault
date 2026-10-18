@@ -1,7 +1,7 @@
 {
   "locale": "ja",
   "displayName": "電脳砂漠",
-  "localeVersion": 2,
+  "localeVersion": 3,
   "messages": {
     "Common": {
       "#01-01: 共通操作": {
@@ -394,7 +394,12 @@
         "NotScannedYet": "儀式未了",
         "WeakPasswords": "脆い呪文",
         "ReusedPasswords": "使い回された呪文",
-        "NoIssuesFound": "結界に綻びは視当たらない"
+        "NoIssuesFound": "結界に綻びは視当たらない",
+        "BackupNotConfigured": "記憶の自動写しの掟が定められていない。砂嵐で宝物庫を失わぬよう、別の地に写しを残す掟を定めよ。",
+        "BackupFolderMissing": "記憶の写しを納める地が見当たらない。このまま去れば、記憶の写しは生まれない。",
+        "BackupSameDisk": "記憶の写しが宝物庫と同じ地に納められている。その地が崩れれば、宝物庫も写しも共に失われる。",
+        "BackupCloudSync": "記憶の写しは雲の上の OneDrive と結ばれている。地が崩れても雲から取り戻せるが、壊れた宝物庫もまた雲へ運ばれうる。別の地にも写しを残すことを考えよ。",
+        "OpenBackupSettings": "掟を開く"
       }
     },
     "AuditLog": {
@@ -429,10 +434,13 @@
         "DeleteTimeMachineSlot": "過去の記憶をひとつ砂に還した",
         "DeletedItemPlaceholder": "（忘却の彼方）",
         "ExecuteAutoBackup": "記憶の写しが自ずと生まれた",
+        "FailAutoBackup": "記憶の写しが自ずと生まれ損ねた",
+        "SkipAutoBackupFolderMissing": "託す地が見当たらず、記憶の写しは生まれなかった",
         "ExecuteEmergencyAccessRecovery": "最後の狼煙で宝物庫をこじ開けた",
         "ExecuteLogRotation": "古き足跡を風に流した",
         "ExecuteManualBackup": "記憶の写しを手動で創り出した",
         "ExecuteManualRestore": "過去の記憶から世界を上書きした",
+        "FailManualBackup": "記憶の写しを創り出せなかった",
         "ExecuteSilentSelfHealing": "魔力による自動修復が走った",
         "SelfHealNoOpDraft": "記録と瓜二つの書きかけの羊皮紙を自動で処分した（{0} 件）",
         "SelfHealUnifiedDb": "知恵の泉を影の写しから自動修復した",
@@ -536,6 +544,7 @@
         "SuccessBackupSavedToPath": "{0} へ記憶を託した。",
         "WarningAutoBackupContext": "自動退避の儀",
         "WarningLastExitBackupFailedAlert": "前回オアシスを去る際、記憶の退避に失敗している。世界の理で託す地を確認せよ。",
+        "WarningLastExitBackupSkippedAlert": "前回オアシスを去る際、託す地が見当たらず、記憶の写しは生まれなかった。",
         "WarningNoFolderAutoBackupDisabled": "記憶を託す地が定められていないため、自動退避の掟を破棄した。",
         "WarningBackupBlockedReadOnlyAlert": "最後の狼煙で覗く間は、記憶の退避は許されぬ。",
         "Dialog": {
@@ -598,7 +607,8 @@
         "SuccessImportedCountReport": "{0} 件の羊皮紙を宝物庫へ搬入した。",
         "SuccessImportDetailsReport": "（称号の衝突による改名: {0} 件、棚が見当たらず未分類: {1} 件）",
         "SuccessImportFailedCountReport": "（{0} 件の荷は読み解けなかった。詳細は探求の足跡を見よ）",
-        "ErrorImportExceptionReport": "搬入に失敗した: {0}"
+        "ErrorImportExceptionReport": "搬入に失敗した: {0}",
+        "ErrorBackupFailedAlert": "記憶の写しを創り出せなかった。託す地に刻めるかを確かめよ。"
       },
       "#15-06: 共通（確認ダイアログ）": {
         "Dialog": {

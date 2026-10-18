@@ -1,7 +1,7 @@
 ﻿{
   "locale": "ja",
   "displayName": "日本語",
-  "localeVersion": 2,
+  "localeVersion": 3,
   "messages": {
     "Common": {
       "#01-01: 共通操作": {
@@ -107,7 +107,7 @@
         "InfoDeleteComplete": "削除完了",
         "InfoUnifiedDbAutoRecovered": "アプリの基本データを自動修復しました。前回の設定が保存されていない可能性があります。",
         "InfoVaultDbAutoRecovered": "保管庫 {0} を自動修復しました。前回の編集が保存されていない可能性があります。",
-        "InfoOrphanedFilesEvacuated": "保管庫として登録されていないファイルを data\\{0} フォルダへ移動しました。削除はしていません。",
+        "InfoOrphanedFilesEvacuated": "保管庫として登録されていないファイルを data\\{0} フォルダーへ移動しました。削除はしていません。",
         "InfoOversizeFilesSkipped": "{0} 件のファイルが上限（{1}MB）を超えるため除外されました。",
         "InfoFilesQuarantined": "{0} 件のファイルに改ざんまたは破損の疑いがあるため、ギャラリー表示から除外されています。",
         "InfoFilesAddFailed": "{0} 件のファイルの追加に失敗しました。",
@@ -137,12 +137,12 @@
         "ErrorPartialLoadTitle": "一部の項目を読み込めませんでした",
         "ErrorPartialLoadText": "全{1}件中{0}件のデータが破損しているため、一覧に表示できませんでした。",
         "ErrorLockBlockedRunningTask": "処理が完了するまでロックできません。",
-        "ErrorWriteAccessDenied": "選択したフォルダに書き込み権限がありません。別のフォルダを選択してください。",
+        "ErrorWriteAccessDenied": "選択したフォルダーに書き込み権限がありません。別のフォルダーを選択してください。",
         "ErrorInvalidEncoding": "ファイルの文字コードが正しくありません。メモ帳などのテキストエディタで開き、「UTF-8」を選んで保存し直してください。"
       },
       "#01-13: 共通ショートカット・その他": {
-        "BrowseFolder": "バックアップ先フォルダを参照",
-        "ClearFolder": "バックアップ先フォルダをクリア",
+        "BrowseFolder": "バックアップ先フォルダーを参照",
+        "ClearFolder": "バックアップ先フォルダーをクリア",
         "CopyToClipboard": "クリップボードにコピー",
         "DeleteField": "この項目を削除",
         "FocusSearchBar": "検索バーにフォーカス",
@@ -394,7 +394,12 @@
         "NotScannedYet": "診断未実行",
         "WeakPasswords": "脆弱なパスワード",
         "ReusedPasswords": "重複パスワード",
-        "NoIssuesFound": "セキュリティリスクは検出されませんでした"
+        "NoIssuesFound": "セキュリティリスクは検出されませんでした",
+        "BackupNotConfigured": "自動バックアップが設定されていません。PC の故障などで保管庫を失わないよう、別のディスクへのバックアップを設定してください。",
+        "BackupFolderMissing": "バックアップ先のフォルダーが見つかりません。このまま終了すると、自動バックアップは行われません。",
+        "BackupSameDisk": "バックアップ先が保管庫と同じディスクにあります。ディスクが故障すると、保管庫とバックアップを同時に失います。",
+        "BackupCloudSync": "バックアップ先は OneDrive と同期しているフォルダーです。PC が故障しても OneDrive から取り戻せますが、保管庫が壊れた状態も同期されることがあります。別のディスクへのバックアップも検討してください。",
+        "OpenBackupSettings": "設定を開く"
       }
     },
     "AuditLog": {
@@ -429,10 +434,13 @@
         "DeleteTimeMachineSlot": "タイムマシンスロットを削除",
         "DeletedItemPlaceholder": "（削除済み）",
         "ExecuteAutoBackup": "自動バックアップを実行",
+        "FailAutoBackup": "自動バックアップに失敗",
+        "SkipAutoBackupFolderMissing": "バックアップ先が見つからず、自動バックアップを実行できませんでした",
         "ExecuteEmergencyAccessRecovery": "緊急アクセスコードで復旧を実行",
         "ExecuteLogRotation": "保存期間を過ぎた監査ログを削除",
         "ExecuteManualBackup": "バックアップを実行",
         "ExecuteManualRestore": "復元を実行",
+        "FailManualBackup": "バックアップに失敗",
         "ExecuteSilentSelfHealing": "自動修復を実行",
         "SelfHealNoOpDraft": "データと同一の下書きを自動破棄（{0} 件）",
         "SelfHealUnifiedDb": "アプリの基本データを予備データから自動修復",
@@ -531,15 +539,16 @@
         "RestoreRequiresMasterPasswordNotice": "他の端末で復元するにはマスターパスワードが必要です（Windows Hello は他の端末では無効）。",
         "BackupDatabaseAction": "暗号化されたデータベースファイルを任意の場所に保存します。",
         "AutoBackupOnExit": "終了時に自動バックアップ",
-        "AutoBackupInstructions": "アプリ終了時に指定フォルダへデータを自動保存します。",
-        "BackupTargetFolder": "バックアップ先フォルダ",
+        "AutoBackupInstructions": "アプリ終了時に指定フォルダーへデータを自動保存します。",
+        "BackupTargetFolder": "バックアップ先フォルダー",
         "SuccessBackupSavedToPath": "{0} に保存しました。",
         "WarningAutoBackupContext": "自動バックアップ",
-        "WarningLastExitBackupFailedAlert": "前回の終了時に自動バックアップが失敗しました。設定画面でバックアップ先フォルダを確認してください。",
-        "WarningNoFolderAutoBackupDisabled": "バックアップ先フォルダが設定されていないため、自動バックアップをオフにしました。",
+        "WarningLastExitBackupFailedAlert": "前回の終了時に自動バックアップが失敗しました。設定画面でバックアップ先フォルダーを確認してください。",
+        "WarningLastExitBackupSkippedAlert": "前回の終了時に、バックアップ先のフォルダーが見つからなかったため、自動バックアップを行いませんでした。",
+        "WarningNoFolderAutoBackupDisabled": "バックアップ先フォルダーが設定されていないため、自動バックアップをオフにしました。",
         "WarningBackupBlockedReadOnlyAlert": "緊急アクセスコードで開いた閲覧専用モードでは、バックアップを実行できません。",
         "Dialog": {
-          "ClearBackupPathConfirmText": "バックアップ先フォルダの設定を削除します。\nよろしいですか？"
+          "ClearBackupPathConfirmText": "バックアップ先フォルダーの設定を削除します。\nよろしいですか？"
         }
       },
       "#15-01: ページ全般": {
@@ -598,7 +607,8 @@
         "SuccessImportedCountReport": "{0} 件をインポートしました。",
         "SuccessImportDetailsReport": "（タイトル重複で改名: {0} 件、カテゴリ不一致で未分類: {1} 件）",
         "SuccessImportFailedCountReport": "（読み込みに失敗: {0} 件。詳細は監査ログを参照）",
-        "ErrorImportExceptionReport": "インポートに失敗しました: {0}"
+        "ErrorImportExceptionReport": "インポートに失敗しました: {0}",
+        "ErrorBackupFailedAlert": "バックアップに失敗しました。バックアップ先のフォルダーに書き込めるかを確かめてください。"
       },
       "#15-06: 共通（確認ダイアログ）": {
         "Dialog": {
@@ -622,9 +632,9 @@
         "AuthPasswordPlaceholder": "マスターパスワード",
         "AuthButton": "認証",
         "OverwriteWarningTitle": "保管庫データを上書き復元しますか？",
-        "OverwriteWarningMessage": "現在の保管庫データはすべて上書きされ、バックアップファイル（{0} 作成）の状態に置き換わります。\n\n※安全のため、現在のデータは退避フォルダへ自動保存されます。\n\n※Windows Hello（生体認証/PIN）は無効化されるため、復元後にマスターパスワードでロック解除し、再設定を行ってください。",
+        "OverwriteWarningMessage": "現在の保管庫データはすべて上書きされ、バックアップファイル（{0} 作成）の状態に置き換わります。\n\n※安全のため、現在のデータは退避フォルダーへ自動保存されます。\n\n※Windows Hello（生体認証/PIN）は無効化されるため、復元後にマスターパスワードでロック解除し、再設定を行ってください。",
         "OverwriteConfirmButton": "復元して上書き",
-        "NoFilesFoundAlert": "コピーできるファイルが見つかりませんでした。バックアップフォルダの内容を確認してください。",
+        "NoFilesFoundAlert": "コピーできるファイルが見つかりませんでした。バックアップフォルダーの内容を確認してください。",
         "ErrorInvalidBackupFileAborted": "バックアップファイル「{0}」が破損しているか無効な形式のため、復元を中止しました。ローカルのデータは変更されていません。",
         "ErrorActiveDbSelected": "現在使用中のアプリの基本データは選択できません。"
       }

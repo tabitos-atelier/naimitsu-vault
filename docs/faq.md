@@ -51,6 +51,18 @@ It holds files that were not registered as a vault, which the app moved there in
 
 Once you have confirmed that all your vaults are present and working, you can delete the whole folder. If a vault is missing, keep the folder.
 
+## Q. Folders inside the folder I chose as the backup folder have disappeared (v1.0.3 or earlier).
+
+In v1.0.0 to v1.0.3, the step that cleans up old backups after a backup **also deleted the other folders directly inside the backup folder, together with their contents**. This is fixed in v1.0.4. **Update to v1.0.4 or later.**
+
+- **When it happens**: when a manual backup ("Backup") succeeds, or when the automatic backup runs at exit
+- **What is deleted**: folders directly inside the folder you chose as the backup folder, with their contents. Backup folders named `Naimitsu_<date>_<time>` and files directly inside the backup folder are not affected
+- **When you are not affected**: when you chose an empty folder used only for backups
+
+Deleted folders do not go to the Recycle Bin. If you had another backup, for example in OneDrive or Windows File History, you may be able to restore them from there.
+
+If you keep using v1.0.3 or earlier, choose an empty folder used only for backups as the backup folder.
+
 ## Q. Why does a full-width space show up as `\uXXXX` in exported JSON?
 
 This is expected, not a bug. .NET's JSON encoder always escapes certain whitespace characters (including the full-width space) this way regardless of settings, while other CJK characters (kanji, hiragana, katakana) are exported as literal, readable text. The exported JSON is fully valid and re-imports correctly either way.

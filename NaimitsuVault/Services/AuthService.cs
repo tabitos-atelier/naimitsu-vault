@@ -459,6 +459,17 @@ public partial class AuthService(
             // Write the auto-recovery audit log entry (at the end, after success, once the DEK is confirmed)
             await WriteAutoRecoveryAuditLogAsync();
 
+            // If the app last exited from the lock screen, write that exit's automatic backup result now
+            // (same as the password path in EnterVaultCoreAsync)
+            try
+            {
+                await auditLog.FlushPendingBackupAuditAsync(session.GetKey(), dataDir);
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning("FlushPendingBackupAudit failed (non-fatal). [{ExType}]", ex.GetType().Name);
+            }
+
             logger.LogInformation("Entered Vault {N} via Windows Hello.", dbNumber);
             await TryLogAuthSucceededAsync();
             return true;
@@ -1323,6 +1334,16 @@ public partial class AuthService(
                 {
                     logger.LogWarning("FlushPendingRestoreAudit failed (non-fatal). [{ExType}]", ex.GetType().Name);
                 }
+            }
+
+            // If the app last exited from the lock screen, write that exit's automatic backup result now
+            try
+            {
+                await auditLog.FlushPendingBackupAuditAsync(session.GetKey(), dataDir);
+            }
+            catch (Exception ex)
+            {
+                logger.LogWarning("FlushPendingBackupAudit failed (non-fatal). [{ExType}]", ex.GetType().Name);
             }
 
             // Clear the auto-recovery/unrecoverable flags since this went through the recovery path

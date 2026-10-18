@@ -121,6 +121,12 @@ public enum AuditEventCode
         // vault's own log ever gets. Payload = NULL (the fact of creation needs no further detail).
     BackupExecuted               = 0x7F00,   // Critical op × Other × 00
     RestoreExecuted              = 0x7F01,   // Critical op × Other × 01
+    BackupFailed                 = 0x7F02,   // Critical op × Other × 02: a user-initiated (manual) backup
+        // failed. No Payload: the destination path may contain the OS user name, and the exception
+        // type name goes to the log file only. Not raised when the folder picker is cancelled or the
+        // backup is refused in restricted read-only mode (no backup was attempted).
+        // (0x7F04 was ReconstructExecuted, removed before v1.0.0 and never written by a released
+        // version, so it is free for a future event.)
 
     // ── System (0xF000) ─────────────────────────────────────────────────
     // Only backend-autonomous/automatic processing. User-initiated actions must not appear here
@@ -141,6 +147,13 @@ public enum AuditEventCode
     AutoBackupExecuted     = 0xFF03,   // System × Other × 03: the shutdown-time automatic backup created a
         // new generation. System-autonomous (unlike BackupExecuted=0x7F00, which is the user-initiated
         // manual backup), so it lives here rather than in the Critical operation band. Not raised when
-        // the automatic backup was skipped because the staged snapshot was unchanged from the newest
-        // existing generation, or when it was disabled/skipped/failed.
+        // the automatic backup was skipped because no confirmed content changed since the last backup,
+        // or when it was disabled/skipped/failed (failure and a missing folder have their own codes below).
+    AutoBackupFailed       = 0xFF04,   // System × Other × 04: the shutdown-time automatic backup failed
+        // (e.g. an I/O error while copying). No Payload: the exception message may contain paths and the
+        // OS user name, so only its type name goes to the log file.
+    AutoBackupSkippedFolderMissing = 0xFF05,   // System × Other × 05: confirmed vault content had changed
+        // since the last backup, but the backup folder did not exist at exit (e.g. an unplugged USB drive),
+        // so no backup was made. Not raised when nothing changed, or when automatic backup is disabled or
+        // has no folder set - those are settings states that the dashboard notice covers instead.
 }

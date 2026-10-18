@@ -150,17 +150,20 @@ public sealed class AutoBackupUnifiedBackupTests : IDisposable
     }
 
     // TC-AB-04
-    // Folders that violate the naming convention, folders missing an nkdb, and folders with a
-    // 0-byte nkdb are excluded from the generation count and physically deleted immediately
+    // Folders this app created and that are no longer useful - a leftover staging folder (tmp_ + 32 hex
+    // digits), a generation folder missing its nkdb, and one with a 0-byte nkdb - are excluded from the
+    // generation count and deleted immediately. (Rewritten 2026-10-19: this case used to assert that any
+    // folder violating the naming convention was deleted, which pinned the bug of deleting the user's
+    // unrelated folders - see TC-AB-13.)
 
     [Fact]
-    public void RotateGenerations_RemovesCorruptOrMisnamedFolders_RegardlessOfCount()
+    public void RotateGenerations_RemovesOwnLeftoverAndCorruptFolders_RegardlessOfCount()
     {
         var backupDir = Path.Combine(_tmpRoot, "backup_corrupt_rotate");
         Directory.CreateDirectory(backupDir);
 
-        // Violates the naming convention (simulating leftover old tmp_ debris)
-        Directory.CreateDirectory(Path.Combine(backupDir, "tmp_orphaned1234567890123456789012"));
+        // Leftover staging folder, in exactly the shape NewTempFolderName() produces
+        Directory.CreateDirectory(Path.Combine(backupDir, "tmp_" + Guid.NewGuid().ToString("N")));
         // No nkdb present
         Directory.CreateDirectory(Path.Combine(backupDir, "Naimitsu_20260101_000000"));
         // nkdb is 0 bytes
@@ -175,6 +178,61 @@ public sealed class AutoBackupUnifiedBackupTests : IDisposable
 
         var remaining = Directory.GetDirectories(backupDir).Select(d => Path.GetFileName(d)!).ToArray();
         Assert.Equal(["Naimitsu_20260103_000000"], remaining);
+    }
+
+    // TC-AB-13
+    // Regression for the v1.0.0-v1.0.3 bug: the backup folder may be Desktop or Documents, so folders
+    // the app did not create must survive rotation with their contents, including names that merely
+    // resemble the app's own (tmp_ without the 32-hex-digit GUID, Naimitsu without the timestamp).
+    // Files directly in the backup folder are never touched either.
+
+    [Theory]
+    [InlineData("Photos")]
+    [InlineData("tmp_notes")]
+    [InlineData("tmp_orphaned1234567890123456789012")]
+    [InlineData("Naimitsu")]
+    [InlineData("Naimitsu_backup_old")]
+    public void RotateGenerations_KeepsUnrelatedFoldersAndTheirContents(string unrelatedName)
+    {
+        var backupDir = Path.Combine(_tmpRoot, "backup_unrelated");
+        Directory.CreateDirectory(backupDir);
+
+        var unrelated = Directory.CreateDirectory(Path.Combine(backupDir, unrelatedName)).FullName;
+        File.WriteAllText(Path.Combine(unrelated, "keep.txt"), "user data");
+        Directory.CreateDirectory(Path.Combine(unrelated, "nested"));
+        File.WriteAllText(Path.Combine(backupDir, "readme.txt"), "user file");
+        CreateHealthyGeneration(backupDir, "Naimitsu_20260101_000000");
+
+        var svc = new AutoBackupService(NullLogger<AutoBackupService>.Instance);
+        svc.RotateGenerations(backupDir);
+
+        Assert.True(File.Exists(Path.Combine(unrelated, "keep.txt")));
+        Assert.True(Directory.Exists(Path.Combine(unrelated, "nested")));
+        Assert.True(File.Exists(Path.Combine(backupDir, "readme.txt")));
+        Assert.True(Directory.Exists(Path.Combine(backupDir, "Naimitsu_20260101_000000")));
+    }
+
+    // TC-AB-14
+    // Unrelated folders are not counted as generations: with four healthy generations and an
+    // unrelated folder, only the oldest generation is removed and the unrelated folder stays.
+
+    [Fact]
+    public void RotateGenerations_DoesNotCountUnrelatedFoldersAsGenerations()
+    {
+        var backupDir = Path.Combine(_tmpRoot, "backup_unrelated_count");
+        Directory.CreateDirectory(backupDir);
+
+        Directory.CreateDirectory(Path.Combine(backupDir, "Documents"));
+        CreateHealthyGeneration(backupDir, "Naimitsu_20260101_000000");
+        CreateHealthyGeneration(backupDir, "Naimitsu_20260102_000000");
+        CreateHealthyGeneration(backupDir, "Naimitsu_20260103_000000");
+        CreateHealthyGeneration(backupDir, "Naimitsu_20260104_000000");
+
+        var svc = new AutoBackupService(NullLogger<AutoBackupService>.Instance);
+        svc.RotateGenerations(backupDir);
+
+        var remaining = Directory.GetDirectories(backupDir).Select(d => Path.GetFileName(d)!).OrderBy(n => n, StringComparer.Ordinal).ToArray();
+        Assert.Equal(["Documents", "Naimitsu_20260102_000000", "Naimitsu_20260103_000000", "Naimitsu_20260104_000000"], remaining);
     }
 
     // TC-AB-05
@@ -281,6 +339,8 @@ public sealed class AutoBackupUnifiedBackupTests : IDisposable
     // earlier content-comparison approach: no confirmed Secret/StoredFile/Profile save or delete means
     // nothing worth protecting has changed, regardless of what else happened (settings changes, audit
     // log writes, favicon prefetch, shadow-file rewrites, etc. never touch the flag).
+    // (2026-10-19: the backup folder now holds a healthy generation in this case. An empty backup folder
+    // is backed up even without a change - see TC-AB-15-17.)
 
     [Fact]
     public void RunBackup_WhenNoContentChangeWasMarked_SkipsWithoutStagingAnything()
@@ -291,6 +351,7 @@ public sealed class AutoBackupUnifiedBackupTests : IDisposable
 
         var backupDir = Path.Combine(_tmpRoot, "backup_no_flag");
         Directory.CreateDirectory(backupDir);
+        CreateHealthyGeneration(backupDir, "Naimitsu_20260101_000000");
 
         var svc = new TestableAutoBackupService(dbPath, Path.Combine(_tmpRoot, "flag_no_flag"), dataDir: dataDir)
         {
@@ -299,7 +360,87 @@ public sealed class AutoBackupUnifiedBackupTests : IDisposable
         };
 
         Assert.Equal(AutoBackupService.AutoBackupResult.SkippedNoChange, svc.RunBackup());
-        Assert.Empty(Directory.GetDirectories(backupDir));
+        Assert.Equal(["Naimitsu_20260101_000000"], Directory.GetDirectories(backupDir).Select(d => Path.GetFileName(d)!).ToArray());
+    }
+
+    // TC-AB-15
+    // An empty backup folder is backed up even when nothing was marked: switching to a new folder or
+    // turning automatic backup on does not mark a change, and the user expects a backup to appear there.
+
+    [Fact]
+    public void RunBackup_NoChangeMarked_EmptyBackupFolder_CreatesGeneration()
+    {
+        var dataDir = Path.Combine(_tmpRoot, "data_empty_dest");
+        Directory.CreateDirectory(dataDir);
+        var dbPath = CreateRealSqliteFile(Path.Combine(dataDir, "NaimitsuVault.nkdb"));
+
+        var backupDir = Path.Combine(_tmpRoot, "backup_empty_dest");
+        Directory.CreateDirectory(backupDir);
+
+        var svc = new TestableAutoBackupService(dbPath, Path.Combine(_tmpRoot, "flag_empty_dest"), dataDir: dataDir)
+        {
+            IsEnabled = true,
+            Folder    = backupDir,
+        };
+
+        Assert.Equal(AutoBackupService.AutoBackupResult.Created, svc.RunBackup());
+        Assert.Single(Directory.GetDirectories(backupDir));
+        // A second exit with nothing changed now finds the healthy generation and skips
+        Assert.Equal(AutoBackupService.AutoBackupResult.SkippedNoChange, svc.RunBackup());
+        Assert.Single(Directory.GetDirectories(backupDir));
+    }
+
+    // TC-AB-16
+    // A folder holding only a corrupt generation (empty nkdb) does not count: a backup is created, and
+    // rotation then removes the corrupt one.
+
+    [Fact]
+    public void RunBackup_NoChangeMarked_OnlyCorruptGeneration_CreatesGeneration()
+    {
+        var dataDir = Path.Combine(_tmpRoot, "data_corrupt_dest");
+        Directory.CreateDirectory(dataDir);
+        var dbPath = CreateRealSqliteFile(Path.Combine(dataDir, "NaimitsuVault.nkdb"));
+
+        var backupDir = Path.Combine(_tmpRoot, "backup_corrupt_dest");
+        var corrupt = Directory.CreateDirectory(Path.Combine(backupDir, "Naimitsu_20260101_000000")).FullName;
+        File.WriteAllBytes(Path.Combine(corrupt, "NaimitsuVault.nkdb"), []);
+
+        var svc = new TestableAutoBackupService(dbPath, Path.Combine(_tmpRoot, "flag_corrupt_dest"), dataDir: dataDir)
+        {
+            IsEnabled = true,
+            Folder    = backupDir,
+        };
+
+        Assert.Equal(AutoBackupService.AutoBackupResult.Created, svc.RunBackup());
+        var remaining = Directory.GetDirectories(backupDir).Select(d => Path.GetFileName(d)!).ToArray();
+        Assert.Single(remaining);
+        Assert.NotEqual("Naimitsu_20260101_000000", remaining[0]);
+    }
+
+    // TC-AB-17
+    // Unrelated folders are not generations: a folder holding only the user's own folders is backed up,
+    // and those folders are left untouched.
+
+    [Fact]
+    public void RunBackup_NoChangeMarked_OnlyUnrelatedFolders_CreatesGenerationAndKeepsThem()
+    {
+        var dataDir = Path.Combine(_tmpRoot, "data_unrelated_dest");
+        Directory.CreateDirectory(dataDir);
+        var dbPath = CreateRealSqliteFile(Path.Combine(dataDir, "NaimitsuVault.nkdb"));
+
+        var backupDir = Path.Combine(_tmpRoot, "backup_unrelated_dest");
+        var photos = Directory.CreateDirectory(Path.Combine(backupDir, "Photos")).FullName;
+        File.WriteAllText(Path.Combine(photos, "keep.txt"), "user data");
+
+        var svc = new TestableAutoBackupService(dbPath, Path.Combine(_tmpRoot, "flag_unrelated_dest"), dataDir: dataDir)
+        {
+            IsEnabled = true,
+            Folder    = backupDir,
+        };
+
+        Assert.Equal(AutoBackupService.AutoBackupResult.Created, svc.RunBackup());
+        Assert.True(File.Exists(Path.Combine(photos, "keep.txt")));
+        Assert.Equal(2, Directory.GetDirectories(backupDir).Length);
     }
 
     // TC-AB-08

@@ -367,7 +367,7 @@ public sealed class SelfHealingIntegrationTests : IDisposable
     }
 
     private DashboardViewModel MakeDashboardVm()
-        => new(null!, null!, null!, null!, null!, null!, null!, _session, _auditSpy, null!, null!, null!, NullLogger<DashboardViewModel>.Instance);
+        => new(null!, null!, null!, null!, null!, null!, null!, _session, _auditSpy, null!, null!, null!, null!, NullLogger<DashboardViewModel>.Instance);
 }
 
 // ── Test-only IAuditLogService spy ───────────────────────────────────────
@@ -404,6 +404,9 @@ internal sealed class SelfHealingAuditSpy : IAuditLogService
         => Task.CompletedTask;
 
     public Task FlushPendingRestoreAuditAsync(DekScope dek, int currentDbNumber, string dataDir, CancellationToken ct = default)
+        => Task.CompletedTask;
+
+    public Task FlushPendingBackupAuditAsync(DekScope dek, string dataDir, CancellationToken ct = default)
         => Task.CompletedTask;
 
     public Task<bool> HasAnyLogsAsync(CancellationToken ct = default)

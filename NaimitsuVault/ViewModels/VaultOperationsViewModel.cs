@@ -697,7 +697,8 @@ public partial class VaultOperationsViewModel : ObservableObject, IDisposable
 
             if (!backupSuccess)
             {
-                _notification.Show(LK.Common_Error, LK.Common_GeneralError, NotificationSeverity.Error, TimeSpan.FromSeconds(5));
+                await LogSettingAsync(AuditEventCode.BackupFailed, null);
+                _notification.Show(LK.Common_Error, LK.VaultSettings_ErrorBackupFailedAlert, NotificationSeverity.Error, TimeSpan.FromSeconds(5));
                 return;
             }
 
@@ -716,7 +717,8 @@ public partial class VaultOperationsViewModel : ObservableObject, IDisposable
         catch (Exception ex)
         {
             _logger.LogError("BackupDatabaseAsync failed. [{ExType}]", ex.GetType().Name);
-            _notification.Show(LK.Common_Error, LK.Common_GeneralError, NotificationSeverity.Error, TimeSpan.FromSeconds(5));
+            await LogSettingAsync(AuditEventCode.BackupFailed, null);
+            _notification.Show(LK.Common_Error, LK.VaultSettings_ErrorBackupFailedAlert, NotificationSeverity.Error, TimeSpan.FromSeconds(5));
         }
         finally
         {

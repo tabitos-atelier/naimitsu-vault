@@ -347,6 +347,16 @@ public partial class AuthService
             logger.LogWarning("FlushPendingRestoreAudit failed (non-fatal). [{ExType}]", ex.GetType().Name);
         }
 
+        // If the app last exited from the lock screen, write that exit's automatic backup result now
+        try
+        {
+            await auditLog.FlushPendingBackupAuditAsync(session.GetKey(), dataDir);
+        }
+        catch (Exception ex)
+        {
+            logger.LogWarning("FlushPendingBackupAudit failed (non-fatal). [{ExType}]", ex.GetType().Name);
+        }
+
         // Update LastAccessedAt
         registry.LastAccessedAt = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         await udb.SaveChangesAsync();

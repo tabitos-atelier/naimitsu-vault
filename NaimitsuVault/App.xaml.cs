@@ -288,13 +288,9 @@ public partial class App : Application
                 _wasCorruptedOnStartup = true;
             }
 
-            // Check the auto-backup failure flag from the previous shutdown (the flag is deleted immediately after checking)
-            bool autoBackupFailed = false;
-            if (File.Exists(AutoBackupService.FailureFlagPath))
-            {
-                autoBackupFailed = true;
-                try { File.Delete(AutoBackupService.FailureFlagPath); } catch { }
-            }
+            // Check the auto-backup failure flag from the previous shutdown (the flag is deleted immediately after checking).
+            // Its content tells a failure apart from a run skipped because the backup folder was missing.
+            bool autoBackupFailed = AutoBackupService.TryConsumeFailureFlag(out bool autoBackupFolderMissing);
 
             var loc = Services.GetRequiredService<ILocalizationService>();
             await loc.LoadForStartupAsync();
@@ -351,7 +347,9 @@ public partial class App : Application
             if (autoBackupFailed)
             {
                 var notification = Services.GetRequiredService<IAppNotificationService>();
-                notification.Show(LK.VaultSettings_WarningAutoBackupContext, LK.VaultSettings_WarningLastExitBackupFailedAlert, NotificationSeverity.Warning, TimeSpan.FromSeconds(10));
+                notification.Show(LK.VaultSettings_WarningAutoBackupContext,
+                    autoBackupFolderMissing ? LK.VaultSettings_WarningLastExitBackupSkippedAlert : LK.VaultSettings_WarningLastExitBackupFailedAlert,
+                    NotificationSeverity.Warning, TimeSpan.FromSeconds(10));
             }
         }
         catch (Exception ex)
@@ -426,11 +424,29 @@ public partial class App : Application
         var autoBackup = Services.GetRequiredService<AutoBackupService>();
         autoBackup.IsReadOnlyRestricted = session.IsReadOnlyRestricted;
         var backupResult = autoBackup.RunBackup();
-        if (backupResult == AutoBackupService.AutoBackupResult.Created)
+        // The DEK is live here unless the app is exiting from the lock screen (session.Lock() has
+        // already run); then the entry waits in BackupAuditMarker until the next unlock.
+        if (session.IsUnlocked)
         {
-            // The DEK is still live here (session.Lock() has not run on this exit path), so the entry can be sealed normally.
-            try { await Services.GetRequiredService<IAuditLogService>().LogAsync(AuditEventCode.AutoBackupExecuted, null, session.GetKey()); }
+            var auditLog = Services.GetRequiredService<IAuditLogService>();
+            try
+            {
+                await (backupResult switch
+                {
+                    AutoBackupService.AutoBackupResult.Created
+                        => auditLog.LogAsync(AuditEventCode.AutoBackupExecuted, null, session.GetKey()),
+                    AutoBackupService.AutoBackupResult.Failed
+                        => auditLog.LogAsync(AuditEventCode.AutoBackupFailed, null, session.GetKey()),
+                    AutoBackupService.AutoBackupResult.SkippedFolderMissing
+                        => auditLog.LogAsync(AuditEventCode.AutoBackupSkippedFolderMissing, null, session.GetKey()),
+                    _ => Task.CompletedTask,
+                });
+            }
             catch (Exception ex) { Logger.LogWarning("Failed to log the automatic backup. [{ExType}]", ex.GetType().Name); }
+        }
+        else
+        {
+            DeferAutoBackupAudit(backupResult);
         }
         try
         {
@@ -442,6 +458,40 @@ public partial class App : Application
     }
 
     public void Lock() => _ = LockAsync();
+
+    private static string DataDir => Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data");
+
+    /// <summary>
+    /// Leaves an automatic backup result in BackupAuditMarker for the next unlock to write, for exits
+    /// taken while the DEK is already zeroed. Codes are passed as literals so AuditWiringTests can see them.
+    /// </summary>
+    private static void DeferAutoBackupAudit(AutoBackupService.AutoBackupResult result)
+    {
+        switch (result)
+        {
+            case AutoBackupService.AutoBackupResult.Created:
+                BackupAuditMarker.Write(DataDir, AuditEventCode.AutoBackupExecuted);
+                break;
+            case AutoBackupService.AutoBackupResult.Failed:
+                BackupAuditMarker.Write(DataDir, AuditEventCode.AutoBackupFailed);
+                break;
+            case AutoBackupService.AutoBackupResult.SkippedFolderMissing:
+                BackupAuditMarker.Write(DataDir, AuditEventCode.AutoBackupSkippedFolderMissing);
+                break;
+        }
+    }
+
+    /// <summary>
+    /// Runs the exit-time automatic backup on the exit paths taken while locked (re-authentication
+    /// cancelled, or the database failing to initialize after unlock). The DEK is already zeroed there,
+    /// so the result is left in BackupAuditMarker and written to the audit log at the next unlock.
+    /// </summary>
+    private void RunBackupWhileLocked()
+    {
+        var autoBackup = Services.GetRequiredService<AutoBackupService>();
+        autoBackup.IsReadOnlyRestricted = Services.GetRequiredService<AppSession>().IsReadOnlyRestricted;
+        DeferAutoBackupAudit(autoBackup.RunBackup());
+    }
 
     /// <summary>
     /// A forced lock after a plaintext export completes or a new vault is created.
@@ -585,7 +635,7 @@ public partial class App : Application
                     Logger.LogError("DB initialization failed after unlocking. Exiting safely. [{ExType}]", dbEx.GetType().Name);
                     Services.GetRequiredService<IWindowService>().CloseAllViewers();
                     _trayIcon?.Dispose(); _trayIcon = null;
-                    Services.GetRequiredService<AutoBackupService>().RunBackup();
+                    RunBackupWhileLocked();
                     Exit();
                     return;
                 }
@@ -620,7 +670,7 @@ public partial class App : Application
                 Services.GetRequiredService<IWindowService>().CloseAllViewers();
                 _trayIcon?.Dispose();
                 _trayIcon = null;
-                Services.GetRequiredService<AutoBackupService>().RunBackup();
+                RunBackupWhileLocked();
                 Exit();
             }
         }

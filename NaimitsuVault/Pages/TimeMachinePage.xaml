@@ -151,8 +151,14 @@
             </ListView>
         </Grid>
 
-        <Grid Grid.Column="1" Padding="24,16,24,16">
-            <Grid Visibility="{x:Bind ViewModel.SelectedSecret, Mode=OneWay, Converter={StaticResource InverseNullToVisibilityConverter}}">
+        <!--
+            No right padding here: the 24px right gutter is applied inside each child instead
+            (RowsList padding, header/footer margins), so that the list's ScrollViewer reaches
+            the page's right edge and its scrollbar sits in the gutter rather than over the
+            right-most column.
+        -->
+        <Grid Grid.Column="1" Padding="24,16,0,16">
+            <Grid Margin="0,0,24,0" Visibility="{x:Bind ViewModel.SelectedSecret, Mode=OneWay, Converter={StaticResource InverseNullToVisibilityConverter}}">
                 <Image
                     Width="220"
                     Height="220"
@@ -180,7 +186,7 @@
 
                 <InfoBar
                     Grid.Row="0"
-                    Margin="0,0,0,12"
+                    Margin="0,0,24,12"
                     IsClosable="False"
                     IsOpen="{x:Bind ViewModel.IsDeleted, Mode=OneWay}"
                     Message="{x:Bind ViewModel.DeletedInfoMessage, Mode=OneWay}"
@@ -188,7 +194,7 @@
 
                 <Grid
                     Grid.Row="1"
-                    Margin="0,0,0,4"
+                    Margin="0,0,24,4"
                     VerticalAlignment="Center"
                     ColumnSpacing="8">
                     <Grid.ColumnDefinitions>
@@ -304,6 +310,7 @@
                 <ListView
                     x:Name="RowsList"
                     Grid.Row="2"
+                    Padding="0,0,24,0"
                     ItemsSource="{x:Bind ViewModel.Rows, Mode=OneWay}"
                     SelectionMode="None"
                     Tag="{x:Bind ViewModel}">
@@ -515,7 +522,7 @@
                     </ListView.ItemTemplate>
                 </ListView>
 
-                <Grid Grid.Row="3" Margin="0,12,0,0">
+                <Grid Grid.Row="3" Margin="0,12,24,0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />

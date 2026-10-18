@@ -100,6 +100,39 @@
                         Message="{loc:Msg Key=Restore.Dialog.VaultDbIntegrityIssueAlert}"
                         Severity="Error"
                         Visibility="{x:Bind ViewModel.VaultDbIntegrityWarning, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+
+                    <!-- Backup notice (automatic backup not set up, or on the same physical disk as the vaults)-->
+                    <InfoBar
+                        x:Name="BackupWarningBar"
+                        IsClosable="False"
+                        IsOpen="{x:Bind ViewModel.HasBackupWarning, Mode=OneWay}"
+                        Message="{x:Bind ViewModel.BackupWarningMessage, Mode=OneWay}"
+                        Severity="Warning"
+                        Visibility="{x:Bind ViewModel.HasBackupWarning, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                        <InfoBar.ActionButton>
+                            <Button Command="{x:Bind ViewModel.OpenBackupSettingsCommand}" Content="{loc:Msg Key=Dashboard.OpenBackupSettings}" />
+                        </InfoBar.ActionButton>
+                    </InfoBar>
+                    <!-- Backup folder not found (informational: an unplugged external disk is a legitimate setup)-->
+                    <InfoBar
+                        x:Name="BackupFolderMissingBar"
+                        IsClosable="False"
+                        IsOpen="{x:Bind ViewModel.HasBackupFolderMissingNotice, Mode=OneWay}"
+                        Message="{loc:Msg Key=Dashboard.BackupFolderMissing}"
+                        Severity="Informational"
+                        Visibility="{x:Bind ViewModel.HasBackupFolderMissingNotice, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}" />
+                    <!-- Backup folder inside OneDrive on the same disk (informational: recoverable from the cloud, but another disk is still suggested)-->
+                    <InfoBar
+                        x:Name="BackupCloudSyncBar"
+                        IsClosable="False"
+                        IsOpen="{x:Bind ViewModel.HasBackupCloudSyncNotice, Mode=OneWay}"
+                        Message="{loc:Msg Key=Dashboard.BackupCloudSync}"
+                        Severity="Informational"
+                        Visibility="{x:Bind ViewModel.HasBackupCloudSyncNotice, Converter={StaticResource BoolToVisibilityConverter}, Mode=OneWay}">
+                        <InfoBar.ActionButton>
+                            <Button Command="{x:Bind ViewModel.OpenBackupSettingsCommand}" Content="{loc:Msg Key=Dashboard.OpenBackupSettings}" />
+                        </InfoBar.ActionButton>
+                    </InfoBar>
                 </StackPanel>
 
                 <!-- 2. Expiry alert (inline row list) -->

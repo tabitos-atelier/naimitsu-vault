@@ -53,7 +53,7 @@ Settings → Language → "Export" exports the JSON for your current language (J
 {
   "locale": "en",
   "displayName": "Your Theme Name",
-  "localeVersion": 2,
+  "localeVersion": 3,
   "messages": {
     "Common": {
       "#01-01: Common Actions": {

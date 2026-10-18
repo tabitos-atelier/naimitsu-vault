@@ -10,6 +10,7 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using Microsoft.Extensions.Logging;
 using NaimitsuVault.Common;
+using NaimitsuVault.Helpers;
 using NaimitsuVault.Localization;
 using NaimitsuVault.Models;
 using NaimitsuVault.Repositories;
@@ -32,6 +33,7 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
     private readonly IVaultConnectionProvider    _connectionProvider;
     private readonly ICryptoService              _crypto;
     private readonly IWindowService              _windowService;
+    private readonly AutoBackupService           _autoBackup;
     private readonly ILogger<DashboardViewModel> _logger;
 
     // Flag indicating the initial automatic scan after app launch has completed
@@ -50,6 +52,7 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
         IVaultConnectionProvider connectionProvider,
         ICryptoService crypto,
         IWindowService windowService,
+        AutoBackupService autoBackup,
         ILogger<DashboardViewModel> logger)
     {
         _evaluator          = evaluator;
@@ -64,6 +67,7 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
         _connectionProvider = connectionProvider;
         _crypto             = crypto;
         _windowService      = windowService;
+        _autoBackup         = autoBackup;
         _logger             = logger;
 
         // Keeps "recent activity" live while Dashboard is the active page, without waiting for a
@@ -179,6 +183,45 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
     partial void OnHasScanResultChanged(bool value)   => OnPropertyChanged(nameof(HasNoIssues));
     partial void OnSecurityScanRowsChanged(ObservableCollection<SecurityScanRowItem> value) => OnPropertyChanged(nameof(HasSecurityScanRows));
 
+    // ── Backup notice ────────────────────────────────────────────
+    // Warns when automatic backup is not set up or the backup folder shares a physical disk with the
+    // vault data folder (one disk failure would lose both). Not closable: it disappears once the
+    // setting is fixed. Undeterminable locations show nothing (see BackupLocationInspector).
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(HasBackupWarning), nameof(HasBackupFolderMissingNotice), nameof(HasBackupCloudSyncNotice), nameof(BackupWarningMessage))]
+    public partial BackupLocationStatus BackupStatus { get; set; } = BackupLocationStatus.Unknown;
+
+    public bool HasBackupWarning => !_session.IsReadOnlyRestricted
+        && BackupStatus is BackupLocationStatus.NotConfigured or BackupLocationStatus.SameDiskAsVault;
+
+    // Informational only: keeping an external backup disk unplugged is a legitimate practice.
+    public bool HasBackupFolderMissingNotice => !_session.IsReadOnlyRestricted
+        && BackupStatus == BackupLocationStatus.FolderMissing;
+
+    // Informational: on the same disk as the vaults, but inside OneDrive, so it can be recovered from the
+    // cloud after a disk failure. Still suggests another disk, because a damaged vault can be synced too.
+    public bool HasBackupCloudSyncNotice => !_session.IsReadOnlyRestricted
+        && BackupStatus == BackupLocationStatus.CloudSyncFolder;
+
+    public string BackupWarningMessage => BackupStatus == BackupLocationStatus.SameDiskAsVault
+        ? LocalizationManager.Get("Dashboard.BackupSameDisk")
+        : LocalizationManager.Get("Dashboard.BackupNotConfigured");
+
+    [RelayCommand]
+    private void OpenBackupSettings()
+    {
+        WeakReferenceMessenger.Default.Send(new NavigateToTagMessage("settings"));
+    }
+
+    private async Task LoadBackupStatusAsync()
+    {
+        bool enabled = _autoBackup.IsEnabled;
+        string? folder = _autoBackup.Folder;
+        string vaultDataDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "data");
+        // Off the UI thread: Directory.Exists on an unreachable network path can block for tens of seconds.
+        BackupStatus = await Task.Run(() => BackupLocationInspector.Inspect(enabled, folder, vaultDataDir));
+    }
+
     // ─────────────────────────────────────────────────────────────
 
     /// <summary>Updates only basic status and expiry alerts. Runs automatically when the page is displayed.</summary>
@@ -204,6 +247,7 @@ public partial class DashboardViewModel : ObservableObject, IDisposable
         ExpiryAlertRows = new ObservableCollection<ExpiryAlertItem>(rows);
 
         await LoadRecentAuditLogsAsync();
+        await LoadBackupStatusAsync();
     }
 
     private async Task<(List<ExpiryAlertItem> Expired, List<ExpiryAlertItem> Soon)> LoadSecretExpiryItemsAsync()

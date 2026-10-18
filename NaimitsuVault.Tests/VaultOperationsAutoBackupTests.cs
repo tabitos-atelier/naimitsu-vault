@@ -2,6 +2,7 @@
 // Licensed under the MIT License. See LICENSE file in the project root for full license information.
 
 using Microsoft.Extensions.Logging.Abstractions;
+using NaimitsuVault.Models;
 using NaimitsuVault.Repositories;
 using NaimitsuVault.Services;
 using NaimitsuVault.Services.Interfaces;
@@ -20,6 +21,8 @@ namespace NaimitsuVault.Tests;
 /// TC-VOB-01: AddVaultAsync success marks the pending-backup flag.
 /// TC-VOB-02: AddVaultAsync failure (CreateNewVaultAsync returns false) does not mark it.
 /// TC-VOB-03: ImportSecretsAsync success (>=1 record imported) marks the pending-backup flag.
+/// TC-VOB-04: a failed manual backup is recorded as BackupFailed (0x7F02), and BackupExecuted is not.
+/// TC-VOB-05: cancelling the folder picker records nothing (no backup was attempted).
 /// </summary>
 public sealed class VaultOperationsAutoBackupTests
 {
@@ -59,6 +62,7 @@ public sealed class VaultOperationsAutoBackupTests
     private sealed class StubFilePicker : IFilePickerService
     {
         public string? OpenAsyncPath { get; init; }
+        public string? OpenFolderPath { get; init; }
 
         public Task<SecureCharBuffer?> SaveAsync(string _, IReadOnlyList<(string, string)> __)
             => Task.FromResult<SecureCharBuffer?>(null);
@@ -74,7 +78,12 @@ public sealed class VaultOperationsAutoBackupTests
         public Task<IReadOnlyList<SecureCharBuffer>> OpenMultipleAsync(IReadOnlyList<(string, string)> _)
             => Task.FromResult<IReadOnlyList<SecureCharBuffer>>([]);
         public Task<SecureCharBuffer?> OpenFolderAsync()
-            => Task.FromResult<SecureCharBuffer?>(null);
+        {
+            if (OpenFolderPath == null) return Task.FromResult<SecureCharBuffer?>(null);
+            var buf = new SecureCharBuffer();
+            buf.SetFromSpan(OpenFolderPath.AsSpan());
+            return Task.FromResult<SecureCharBuffer?>(buf);
+        }
     }
 
     private static readonly ICryptoService NullCrypto = new IdentityCryptoService();
@@ -205,5 +214,67 @@ public sealed class VaultOperationsAutoBackupTests
         {
             File.Delete(importPath);
         }
+    }
+
+    // ─────────────────────────────────────────────────────────────────────────
+    // TC-VOB-04/05: BackupDatabaseAsync (manual backup) audit log
+    // ─────────────────────────────────────────────────────────────────────────
+
+    private static VaultOperationsViewModel MakeBackupVm(AutoBackupService autoBackup, StubFilePicker picker, StubAuditLogService audit)
+    {
+        var session = new AppSession();
+        session.SetKey(new byte[32]);
+        return new VaultOperationsViewModel(
+            vaultFactory:       null!,
+            auth:               new StubAuthService(),
+            connectionProvider: null!,
+            secrets:            null!,
+            secretHistory:      null!,
+            crypto:             NullCrypto,
+            session:            session,
+            notification:       new NullNotificationService(),
+            dialog:             new StubDialogService(),
+            appService:         null!,
+            autoBackup:         autoBackup,
+            filePicker:         picker,
+            auditLog:           audit,
+            autoLock:           new IdleTimeoutService(), logger: NullLogger<VaultOperationsViewModel>.Instance);
+    }
+
+    [Fact]
+    public async Task BackupDatabaseAsync_Failure_LogsBackupFailed()
+    {
+        var backupDir = Directory.CreateDirectory(Path.Combine(Path.GetTempPath(), $"naimitsu_test_manual_backup_{Guid.NewGuid():N}")).FullName;
+        try
+        {
+            // Pre-place the tmp_ path as a file so PerformUnifiedBackup fails at its first step.
+            const string fixedTmpName = "tmp_blocked";
+            File.WriteAllText(Path.Combine(backupDir, fixedTmpName), "blocked");
+            using var autoBackup = new TestableAutoBackupService(
+                "unused", Path.Combine(backupDir, "backup_failed.flag"), fixedTempFolderName: fixedTmpName);
+            var audit = new StubAuditLogService();
+            var vm = MakeBackupVm(autoBackup, new StubFilePicker { OpenFolderPath = backupDir }, audit);
+
+            await vm.BackupDatabaseCommand.ExecuteAsync(null);
+
+            Assert.Contains(audit.Calls, c => c.Code == AuditEventCode.BackupFailed);
+            Assert.DoesNotContain(audit.Calls, c => c.Code == AuditEventCode.BackupExecuted);
+        }
+        finally
+        {
+            Directory.Delete(backupDir, recursive: true);
+        }
+    }
+
+    [Fact]
+    public async Task BackupDatabaseAsync_FolderPickerCancelled_LogsNothing()
+    {
+        using var autoBackup = new TestableAutoBackupService("unused", "unused");
+        var audit = new StubAuditLogService();
+        var vm = MakeBackupVm(autoBackup, new StubFilePicker(), audit);
+
+        await vm.BackupDatabaseCommand.ExecuteAsync(null);
+
+        Assert.Empty(audit.Calls);
     }
 }

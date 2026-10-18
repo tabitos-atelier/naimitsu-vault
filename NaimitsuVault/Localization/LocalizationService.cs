@@ -21,7 +21,7 @@ public class LocalizationService(
     IDbContextFactory<UnifiedDbContext> factory,
     ILogger<LocalizationService> logger) : ILocalizationService
 {
-    public const int CurrentLocaleVersion = 2;
+    public const int CurrentLocaleVersion = 3;
 
     public string CurrentLocale { get; private set; } = "ja";
     public bool HasCustomLocale { get; private set; }

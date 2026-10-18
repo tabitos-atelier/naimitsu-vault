@@ -1,7 +1,7 @@
 {
   "locale": "en",
   "displayName": "English",
-  "localeVersion": 2,
+  "localeVersion": 3,
   "messages": {
     "Common": {
       "#01-01: Common Actions": {
@@ -394,7 +394,12 @@
         "NotScannedYet": "Not scanned yet",
         "WeakPasswords": "Weak Passwords",
         "ReusedPasswords": "Duplicate Passwords",
-        "NoIssuesFound": "No security risks detected"
+        "NoIssuesFound": "No security risks detected",
+        "BackupNotConfigured": "Automatic backup is not set up. To avoid losing your vaults if your PC fails, set up a backup to another disk.",
+        "BackupFolderMissing": "The backup folder cannot be found. If you exit now, the automatic backup will not run.",
+        "BackupSameDisk": "The backup folder is on the same disk as your vaults. If that disk fails, you lose both your vaults and the backup.",
+        "BackupCloudSync": "The backup folder is synced with OneDrive. You can recover your vaults from OneDrive if your PC fails, but a damaged vault can also be synced. Consider also backing up to another disk.",
+        "OpenBackupSettings": "Open settings"
       }
     },
     "AuditLog": {
@@ -429,10 +434,13 @@
         "DeleteTimeMachineSlot": "Time Machine slot deleted",
         "DeletedItemPlaceholder": "(deleted)",
         "ExecuteAutoBackup": "Automatic backup executed",
+        "FailAutoBackup": "Automatic backup failed",
+        "SkipAutoBackupFolderMissing": "Automatic backup did not run because the backup folder was not found",
         "ExecuteEmergencyAccessRecovery": "Recovery executed via emergency access code",
         "ExecuteLogRotation": "Deleted audit logs past the retention period",
         "ExecuteManualBackup": "Backup executed",
         "ExecuteManualRestore": "Restore executed",
+        "FailManualBackup": "Backup failed",
         "ExecuteSilentSelfHealing": "Automatic repair completed",
         "SelfHealNoOpDraft": "Auto-discarded {0} draft(s) identical to the saved data",
         "SelfHealUnifiedDb": "App core data automatically repaired from a spare copy",
@@ -536,6 +544,7 @@
         "SuccessBackupSavedToPath": "Saved to {0}.",
         "WarningAutoBackupContext": "Auto Backup",
         "WarningLastExitBackupFailedAlert": "Auto backup failed on the last exit. Please check the backup folder in Settings.",
+        "WarningLastExitBackupSkippedAlert": "On the last exit, the automatic backup did not run because the backup folder was not found.",
         "WarningNoFolderAutoBackupDisabled": "Auto backup has been turned off because no backup folder was configured.",
         "WarningBackupBlockedReadOnlyAlert": "Backup cannot be run in the read-only mode opened with an emergency access code.",
         "Dialog": {
@@ -598,7 +607,8 @@
         "SuccessImportedCountReport": "Imported {0} item(s).",
         "SuccessImportDetailsReport": " (Renamed for duplicates: {0}, Moved to uncategorized: {1})",
         "SuccessImportFailedCountReport": " (Failed to import: {0} - see audit log for details)",
-        "ErrorImportExceptionReport": "Import failed: {0}"
+        "ErrorImportExceptionReport": "Import failed: {0}",
+        "ErrorBackupFailedAlert": "The backup failed. Check that you can write to the backup folder."
       },
       "#15-06: Common (Confirmation Dialogs)": {
         "Dialog": {

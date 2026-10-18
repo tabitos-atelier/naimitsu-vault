@@ -84,4 +84,13 @@ public interface IAuditLogService
     /// </summary>
     Task FlushPendingRestoreAuditAsync(DekScope dek, int currentDbNumber, string dataDir, CancellationToken ct = default);
 
+    /// <summary>
+    /// Writes the automatic backup result left in <see cref="BackupAuditMarker"/> by an exit that
+    /// happened while locked (no DEK to seal the entry with), stamped with the original exit time.
+    /// Written to whichever vault is unlocked next: the automatic backup copies every vault at once,
+    /// so it does not belong to one specific vault (unlike <see cref="FlushPendingRestoreAuditAsync"/>).
+    /// Call right after vault entry completes (while the DEK is available).
+    /// </summary>
+    Task FlushPendingBackupAuditAsync(DekScope dek, string dataDir, CancellationToken ct = default);
+
 }

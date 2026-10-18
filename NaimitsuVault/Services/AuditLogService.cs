@@ -95,6 +95,24 @@ public class AuditLogService(
         RestoreAuditMarker.RemoveAndRewrite(dataDir, entry, currentDbNumber);
     }
 
+    public async Task FlushPendingBackupAuditAsync(DekScope dek, string dataDir, CancellationToken ct = default)
+    {
+        if (BackupAuditMarker.TryRead(dataDir) is not { } entry) return;
+
+        // DekScope is consumed synchronously (completed before the await). These codes carry no Payload.
+        var blob = SerializePayload(entry.Code, null, dek);
+        await repo.InsertAsync(new AuditLog
+        {
+            CreatedAt  = entry.TimestampUnix,
+            EventCode  = (int)entry.Code,
+            EventLevel = GetEventLevel(entry.Code),
+            Payload    = blob,
+        }, ct);
+        WeakReferenceMessenger.Default.Send(new AuditLogWrittenMessage(entry.Code, GetEventLevel(entry.Code)));
+
+        BackupAuditMarker.Delete(dataDir);
+    }
+
     // ── Read layer ───────────────────────────────────────────────────
 
     public async Task<IReadOnlyList<AuditLogDisplayItem>> GetRecentAsync(
@@ -596,6 +614,8 @@ public class AuditLogService(
                 L("AuditLog.RevokeEmergencyCode"),
             AuditEventCode.BackupExecuted =>
                 L("AuditLog.ExecuteManualBackup"),
+            AuditEventCode.BackupFailed =>
+                L("AuditLog.FailManualBackup"),
             AuditEventCode.RestoreExecuted =>
                 L("AuditLog.ExecuteManualRestore"),
 
@@ -618,6 +638,10 @@ public class AuditLogService(
                 L("AuditLog.ExecuteSilentSelfHealing"),
             AuditEventCode.AutoBackupExecuted =>
                 L("AuditLog.ExecuteAutoBackup"),
+            AuditEventCode.AutoBackupFailed =>
+                L("AuditLog.FailAutoBackup"),
+            AuditEventCode.AutoBackupSkippedFolderMissing =>
+                L("AuditLog.SkipAutoBackupFolderMissing"),
 
             // Fail-safe fallback (for undefined codes / data corruption protection)
             _ => $"[Code: 0x{(int)code:X4}]",
@@ -652,6 +676,9 @@ public class AuditLogService(
         AuditEventCode.LocaleImportFailed             => 1,
         AuditEventCode.LocaleImportValueTooLong       => 1,
         AuditEventCode.LocaleImportPlaceholderBroken  => 1,
+        AuditEventCode.AutoBackupFailed               => 1,
+        AuditEventCode.BackupFailed                   => 1,
+        AuditEventCode.AutoBackupSkippedFolderMissing => 1,
         _                                            => 0,
     };
 }

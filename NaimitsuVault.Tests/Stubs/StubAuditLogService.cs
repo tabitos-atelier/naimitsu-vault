@@ -65,4 +65,7 @@ internal sealed class StubAuditLogService : IAuditLogService
 
     public Task FlushPendingRestoreAuditAsync(DekScope dek, int currentDbNumber, string dataDir, CancellationToken ct = default)
         => Task.CompletedTask;
+
+    public Task FlushPendingBackupAuditAsync(DekScope dek, string dataDir, CancellationToken ct = default)
+        => Task.CompletedTask;
 }
